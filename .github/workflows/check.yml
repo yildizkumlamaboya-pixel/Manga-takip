@@ -1,0 +1,57 @@
+name: Yeni bölüm kontrolü
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: manga-check
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Veri dalını al
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: store
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Bağımlılıklar
+        run: npm install --no-audit --no-fund
+
+      - name: Siteleri kontrol et
+        run: node scripts/check.mjs store
+        env:
+          VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ vars.VAPID_SUBJECT }}
+
+      - name: Değişiklikleri kaydet
+        working-directory: store
+        run: |
+          git config user.name "manga-takip-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Değişiklik yok"
+            exit 0
+          fi
+          git commit -m "Kontrol $(date -u +'%Y-%m-%d %H:%M')"
+          for i in 1 2 3; do
+            git pull --rebase origin data && git push origin HEAD:data && exit 0
+            sleep 5
+          done
+          exit 1

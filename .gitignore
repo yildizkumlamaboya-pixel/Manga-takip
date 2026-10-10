@@ -1,0 +1,4 @@
+node_modules
+.env
+store/
+public/url.js

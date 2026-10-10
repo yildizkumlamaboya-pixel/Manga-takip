@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14121a">
+<title>Manga Takip</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Manga Takip</h1>
+    <p id="lastRun" class="muted small"></p>
+  </div>
+  <div class="top-actions">
+    <button id="btnCheck" class="icon-btn" title="Şimdi kontrol et" aria-label="Şimdi kontrol et">
+      <svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v4h-4" /></svg>
+    </button>
+    <button id="btnSettings" class="icon-btn" title="Ayarlar" aria-label="Ayarlar">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div id="banner" class="banner" hidden></div>
+
+  <div class="filters" role="tablist">
+    <button class="chip active" data-filter="all">Tümü</button>
+    <button class="chip" data-filter="unread">Yeni bölümü olanlar</button>
+  </div>
+
+  <ul id="list" class="list"></ul>
+  <p id="empty" class="empty" hidden>Henüz manga eklemedin.<br>Aşağıdaki <b>+</b> ile bir seri linki yapıştır.</p>
+</main>
+
+<button id="btnAdd" class="fab" aria-label="Manga ekle">+</button>
+
+<!-- Ekleme -->
+<dialog id="dlgAdd" class="sheet">
+  <form method="dialog" id="formAdd">
+    <h2>Manga ekle</h2>
+    <label>Seri linki
+      <input name="url" type="url" inputmode="url" required placeholder="https://site.com/manga/seri-adi">
+    </label>
+    <label>Kaldığın bölüm <small>(boş bırakırsan güncel sayılır)</small>
+      <input name="lastRead" inputmode="decimal" placeholder="ör. 905">
+    </label>
+    <p class="hint">Bölüm linki yapıştırsan da olur, seriyi kendim bulurum. Bölümler yaklaşık 1 dakika içinde gelir.</p>
+    <p class="err" id="addErr" hidden></p>
+    <div class="row">
+      <button type="button" class="ghost" data-close>Vazgeç</button>
+      <button type="submit" class="primary" id="addSubmit">Ekle</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Seri detayı -->
+<dialog id="dlgSeries" class="sheet tall">
+  <div class="detail-head">
+    <img id="dCover" alt="" referrerpolicy="no-referrer">
+    <div>
+      <h2 id="dTitle" tabindex="-1" autofocus></h2>
+      <a id="dHost" target="_blank" rel="noopener"></a>
+      <p id="dStatus" class="muted"></p>
+    </div>
+  </div>
+  <div class="row wrap">
+    <a id="dNext" class="primary btn" target="_blank" rel="noopener">Sıradakini oku</a>
+    <button id="dAllRead" class="ghost">Hepsini okudum</button>
+  </div>
+  <p class="hint">Bir bölüme dokununca sitesinde açılır ve o bölüme kadar okundu sayılır.</p>
+  <ul id="dChapters" class="chapters"></ul>
+  <button id="dMore" class="ghost wide" hidden>Daha eski bölümler</button>
+  <div class="row">
+    <button id="dDelete" class="danger">Takipten çıkar</button>
+    <button class="ghost" data-close>Kapat</button>
+  </div>
+</dialog>
+
+<!-- Ayarlar -->
+<dialog id="dlgSettings" class="sheet">
+  <form method="dialog" id="formSettings">
+    <h2>Ayarlar</h2>
+    <label>GitHub erişim anahtarı
+      <input name="token" type="password" autocomplete="off" required placeholder="github_pat_…">
+    </label>
+    <details class="howto">
+      <summary>Anahtarı nasıl alırım?</summary>
+      <ol>
+        <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Bu sayfayı aç</a> (GitHub'a giriş yapmış olman gerekir).</li>
+        <li>Ad: <b>manga-takip</b>, süre: <b>No expiration</b> veya 1 yıl.</li>
+        <li><b>Repository access</b> → <b>Only select repositories</b> → <b>manga-takip</b>.</li>
+        <li><b>Permissions</b> → <b>Contents: Read and write</b> ve <b>Actions: Read and write</b>.</li>
+        <li><b>Generate token</b>, çıkan anahtarı kopyalayıp buraya yapıştır.</li>
+      </ol>
+      <p class="muted">Anahtar sadece bu telefonda saklanır, hiçbir yere gönderilmez (sadece GitHub'a).</p>
+    </details>
+    <div class="setting">
+      <div>
+        <b>Bildirimler</b>
+        <p class="muted" id="pushState">Kapalı</p>
+      </div>
+      <button type="button" id="btnPush" class="ghost">Aç</button>
+    </div>
+    <div class="row">
+      <button type="button" class="ghost" data-close>Kapat</button>
+      <button type="submit" class="primary">Kaydet</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="./app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "manga-takip",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Farklı sitelerdeki mangaları tek yerden takip eden, yeni bölüm gelince bildirim yollayan PWA (GitHub Pages + Actions)",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check": "node scripts/check.mjs store",
+    "try": "node scripts/try-url.mjs"
+  },
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}
