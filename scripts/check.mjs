@@ -5,6 +5,7 @@
 import { readFile, writeFile, appendFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fetchSeries, clearCache } from '../lib/fetch-series.js';
+import { mergeChapters, fillGaps } from '../lib/chapters.js';
 
 const dir = process.argv[2] || 'store';
 const read = async (f, def) => {
@@ -32,6 +33,7 @@ await pool(list, 4, async (item) => {
   const prev = oldState[item.url];
   try {
     const d = await fetchSeries(item.url);
+    d.chapters = fillGaps(mergeChapters(d.chapters, prev?.chapters));
     const top = d.chapters[0];
     state[item.url] = {
       title: d.title || prev?.title || item.url,

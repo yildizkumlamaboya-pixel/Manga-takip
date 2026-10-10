@@ -89,3 +89,24 @@ test('bölüm linki yapıştırılınca seri linkine çevrilir', () => {
   assert.equal(normalizeUrl('https://ragnarscans.net/manga/buyu-imparatoru/'), 'https://ragnarscans.net/manga/buyu-imparatoru');
   assert.throws(() => normalizeUrl('merhaba'));
 });
+
+import { mergeChapters, fillGaps } from '../lib/chapters.js';
+test('sayfada olmayan ara bölümler kalıptan tamamlanır', () => {
+  const base = 'https://ornek.site/manga/seri/bolum-';
+  const page = [315, 300, 299, 292, 1].map((n) => ({ num: n, url: `${base}${n}/` }));
+  const full = fillGaps(page);
+  assert.equal(full.length, 315);
+  assert.equal(full.find((c) => c.num === 115).url, `${base}115/`);
+  // kesirli bölümler kalıba karışmaz, boşluk doldurmayı bozmaz
+  const uzay = [{ num: 921, url: 'https://u.com/manga/s/921-bolum-oku' }, { num: 889.1, url: 'https://u.com/manga/s/889-1-bolum-oku' }, { num: 880, url: 'https://u.com/manga/s/880-bolum-oku' }];
+  const f2 = fillGaps(uzay);
+  assert.equal(f2.find((c) => c.num === 900).url, 'https://u.com/manga/s/900-bolum-oku');
+  assert.ok(f2.some((c) => c.num === 889.1));
+  // kalıp yoksa dokunmaz
+  const odd = [{ num: 5, url: 'https://x.com/s/abc' }, { num: 1, url: 'https://x.com/s/def' }];
+  assert.equal(fillGaps(odd).length, 2);
+});
+test('eski bölümler unutulmaz', () => {
+  const m = mergeChapters([{ num: 316, url: 'u316' }, { num: 315, url: 'u315-yeni' }], [[315, 'u315'], [200, 'u200']]);
+  assert.deepEqual(m.map((c) => [c.num, c.url]), [[316, 'u316'], [315, 'u315-yeni'], [200, 'u200']]);
+});

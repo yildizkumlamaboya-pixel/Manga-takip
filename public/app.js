@@ -308,7 +308,9 @@ function renderDetail(reset = true) {
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
     : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error ? ` · ⚠️ ${v.st.error}` : '');
 
-  if (reset) shownCount = Math.min(PAGE, chapters.length);
+  // Sıradaki bölüm listenin derinlerindeyse oraya kadar göster
+  const nextIdx = v.base == null ? -1 : chapters.findLastIndex(([n]) => n > v.base);
+  if (reset) shownCount = Math.min(Math.max(PAGE, nextIdx + 15), chapters.length);
   const ul = $('#dChapters');
   ul.replaceChildren(
     ...chapters.slice(0, shownCount).map(([num, url]) => {
@@ -319,6 +321,7 @@ function renderDetail(reset = true) {
       a.target = '_blank';
       a.rel = 'noopener';
       a.textContent = `Bölüm ${fmt(num)}`;
+      li.dataset.num = num;
       a.onclick = () => { setRead(num).catch((e) => toast(e.message)); };
       li.append(a);
       return li;
@@ -345,6 +348,11 @@ function openSeries(url) {
   current = url;
   renderDetail(true);
   $('#dlgSeries').showModal();
+  // Kaldığın yere kaydır
+  const v = view(list.find((i) => i.url === url));
+  const next = v.base == null ? null : [...(v.st?.chapters || [])].reverse().find(([n]) => n > v.base);
+  const li = next && document.querySelector(`#dChapters li[data-num="${next[0]}"]`);
+  if (li) requestAnimationFrame(() => li.scrollIntoView({ block: 'center' }));
 }
 
 $('#dMore').onclick = () => {
