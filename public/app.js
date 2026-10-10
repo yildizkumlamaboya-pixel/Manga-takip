@@ -162,7 +162,7 @@ function render() {
       li.querySelector('h3').textContent = r.title;
       li.querySelector('.meta').textContent = r.pending
         ? 'Bölümler okunuyor…'
-        : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}`;
+        : r.st.latest == null ? `Okuduğun ${fmt(r.base)} · henüz okunamadı` : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}`;
       if (r.st?.error) {
         const e = li.querySelector('.err-line');
         e.textContent = r.st.error;
@@ -170,6 +170,7 @@ function render() {
       }
       const b = li.querySelector('.badge');
       if (r.pending) { b.textContent = '…'; b.classList.add('zero'); }
+      else if (r.st?.error && !r.st.chapters?.length) { b.textContent = '!'; b.classList.add('warn'); }
       else if (r.unread) b.textContent = r.unread;
       else { b.textContent = '✓'; b.classList.add('zero'); }
       li.onclick = () => openSeries(r.url);

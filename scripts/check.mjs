@@ -41,6 +41,7 @@ await pool(list, 4, async (item) => {
       chapters: d.chapters.map((c) => [c.num, c.url]),
       error: null,
       errorSince: null,
+      via: d.via,
     };
     if (prev && prev.latest != null) {
       const fresh = d.chapters.filter((c) => c.num > prev.latest);
@@ -96,6 +97,7 @@ const lines = [
   `- Kontrol edilen: ${list.length} seri`,
   `- Yeni bölüm: ${news.map((n) => `${n.title} (${n.fresh.length})`).join(', ') || 'yok'}`,
   `- Gönderilen bildirim: ${sent}`,
+  ...Object.entries(state).filter(([, v]) => v.via && v.via !== 'direct').map(([u, v]) => `- ℹ️ ${u}: ${v.via} yoluyla okundu`),
   ...errors.map((e) => `- ⚠️ ${e.url}: ${e.error}`),
 ];
 console.log(lines.join('\n'));
