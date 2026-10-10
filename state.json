@@ -410,5 +410,116 @@
   "chapters": [],
   "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
   "errorSince": "2026-10-10T19:16:11.851Z"
+ },
+ "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc": {
+  "title": "Secret Class",
+  "cover": "https://siyahmelek.my/wp-content/uploads/2025/12/Secret-Class.jpg",
+  "latest": 315,
+  "first": 315,
+  "chapters": [
+   [
+    315,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-315-0/"
+   ],
+   [
+    314,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-314-0/"
+   ],
+   [
+    313,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-313-0/"
+   ],
+   [
+    312,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-312-0/"
+   ],
+   [
+    311,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-311-0/"
+   ],
+   [
+    310,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-310-0/"
+   ],
+   [
+    309,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-309/"
+   ],
+   [
+    308,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-308/"
+   ],
+   [
+    307,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-307/"
+   ],
+   [
+    306,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-306/"
+   ],
+   [
+    305,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-305/"
+   ],
+   [
+    304,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-304/"
+   ],
+   [
+    303,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-303/"
+   ],
+   [
+    302,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-302/"
+   ],
+   [
+    301,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-301/"
+   ],
+   [
+    300,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-300/"
+   ],
+   [
+    299,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-299/"
+   ],
+   [
+    298,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-298/"
+   ],
+   [
+    297,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-297/"
+   ],
+   [
+    296,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-296/"
+   ],
+   [
+    295,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-295/"
+   ],
+   [
+    294,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-294/"
+   ],
+   [
+    293,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-293/"
+   ],
+   [
+    292,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-292/"
+   ],
+   [
+    1,
+    "https://siyahmelek.my/manga/secret-class-manhwa-aa0bbc/bolum-1/"
+   ]
+  ],
+  "error": null,
+  "errorSince": null,
+  "via": "direct"
  }
 }
