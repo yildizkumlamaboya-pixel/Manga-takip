@@ -23,26 +23,36 @@ const fmt = (n) => (n == null ? '–' : String(Number(n)));
 const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
 
 /* ---------- GitHub ---------- */
+class GhError extends Error {}
+
 async function gh(path, { method = 'GET', body, accept = 'application/vnd.github+json' } = {}) {
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}${path}`, {
-    method,
-    cache: 'no-store',
-    headers: {
-      Authorization: `Bearer ${token()}`,
-      Accept: accept,
-      'X-GitHub-Api-Version': '2022-11-28',
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  if (res.status === 401 || res.status === 403) {
-    openSettings('GitHub anahtarı geçersiz ya da yetkisi eksik');
-    throw new Error('Yetki hatası');
+  let res;
+  try {
+    res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}${path}`, {
+      method,
+      cache: 'no-store',
+      headers: {
+        Authorization: `Bearer ${token()}`,
+        Accept: accept,
+        'X-GitHub-Api-Version': '2022-11-28',
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new GhError('GitHub\'a bağlanılamadı (internet?)');
   }
   if (!res.ok && res.status !== 404) {
     const t = await res.json().catch(() => ({}));
-    const err = new Error(t.message || `GitHub ${res.status}`);
+    const area = path.startsWith('/actions') ? 'Actions' : 'Contents';
+    let msg;
+    if (res.status === 401) msg = 'Anahtar geçersiz. Eksik ya da yanlış kopyalanmış olabilir.';
+    else if (res.status === 403 && /rate limit/i.test(t.message || '')) msg = 'GitHub istek sınırı doldu, biraz sonra dene.';
+    else if (res.status === 403) msg = `Anahtarda "${area}: Read and write" izni eksik.`;
+    else msg = t.message || `GitHub ${res.status}`;
+    const err = new GhError(msg);
     err.status = res.status;
+    err.area = area;
     throw err;
   }
   return res;
@@ -183,7 +193,8 @@ async function load({ quiet = false } = {}) {
     showLastRun();
     if (list.some((i) => !state[i.url])) startPolling();
   } catch (e) {
-    if (!quiet) toast(e.message);
+    if (e.status === 401 || e.status === 403) openSettings(e.message);
+    else if (!quiet) toast(e.message);
   }
 }
 
@@ -196,7 +207,9 @@ async function showLastRun() {
       ? `Son kontrol ${ago(r.updated_at)}` + (r.conclusion === 'success' ? '' : ' · hata oldu')
       : 'Kontrol ediliyor…';
     $('#btnCheck').classList.toggle('spin', r.status !== 'completed');
-  } catch {}
+  } catch (e) {
+    $('#lastRun').textContent = e.status === 403 ? 'Kontrol durumu okunamadı (Actions izni eksik)' : '';
+  }
 }
 
 // Kontrol bitene kadar 15 sn'de bir bakar (en fazla 4 dk)
@@ -374,12 +387,36 @@ function openSettings(msg) {
   if (!$('#dlgSettings').open) $('#dlgSettings').showModal();
 }
 $('#btnSettings').onclick = () => openSettings();
+$('#btnTest').onclick = testToken;
 $('#formSettings').addEventListener('submit', (e) => {
   e.preventDefault();
   store.set(TOKEN_KEY, e.target.token.value.trim());
   $('#dlgSettings').close();
   load();
 });
+
+async function testToken() {
+  const out = $('#tokenTest');
+  const typed = $('#formSettings').token.value.trim();
+  if (!typed) { out.textContent = 'Önce anahtarı yapıştır.'; return; }
+  store.set(TOKEN_KEY, typed);
+  out.textContent = 'Deneniyor…';
+  const lines = [];
+  const step = async (label, fn) => {
+    try { await fn(); lines.push(`✓ ${label}`); return true; }
+    catch (e) { lines.push(`✗ ${label}: ${e.message}`); return false; }
+  };
+  const ok1 = await step('Repo okunabiliyor', async () => {
+    const r = await gh('/contents/list.json?ref=' + DATA_BRANCH);
+    if (r.status === 404) throw new Error('data dalı ya da list.json bulunamadı');
+  });
+  if (ok1) {
+    await step('Yazma izni (Contents)', () => mutate('list.json', [], (l) => l, 'Bağlantı testi'));
+  }
+  await step('Kontrol durumu (Actions)', () => lastRun());
+  out.textContent = lines.join('\n');
+  if (lines.every((l) => l.startsWith('✓'))) load({ quiet: true });
+}
 
 /* ---------- Bildirimler ---------- */
 function keyBytes(b64) {
