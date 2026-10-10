@@ -81,7 +81,29 @@ public final class Parser {
         }
         t = Pattern.compile("\\s*[-–—|]\\s*(Türkçe\\s+)?(Manga|Webtoon|Manhwa)\\s+Oku.*$", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(t).replaceAll("");
         t = t.replaceAll("\\s*[-–—|]\\s*$", "").trim();
+        t = Pattern.compile("\\s+(Türkçe\\s+)?Oku\\s*$", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(t).replaceAll("").trim();
         return t.isEmpty() ? raw.trim() : t;
+    }
+
+    /** Sayfada seri adıyla etiketlenmiş resim (asıl gösterilen kapak). */
+    static String imageWithAlt(String html, String title, URL base) {
+        if (title == null || title.length() < 3) return null;
+        Locale tr = new Locale("tr");
+        String want = title.toLowerCase(tr);
+        Matcher m = Pattern.compile("<img\\b[^>]*>", Pattern.CASE_INSENSITIVE).matcher(html);
+        Pattern altP = Pattern.compile("\\balt\\s*=\\s*[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE);
+        Pattern srcP = Pattern.compile("\\b(?:data-src|src)\\s*=\\s*[\"']([^\"']+)[\"']", Pattern.CASE_INSENSITIVE);
+        while (m.find()) {
+            String tag = m.group();
+            Matcher a = altP.matcher(tag);
+            if (!a.find()) continue;
+            String alt = decodeEntities(a.group(1)).trim().toLowerCase(tr);
+            if (alt.isEmpty() || !alt.startsWith(want)) continue;
+            Matcher sm = srcP.matcher(tag);
+            if (!sm.find() || sm.group(1).startsWith("data:")) continue;
+            try { return new URL(base, decodeEntities(sm.group(1))).toString(); } catch (Exception ignored) { }
+        }
+        return null;
     }
 
     public static Double numFromPath(String rest) {
@@ -109,18 +131,32 @@ public final class Parser {
         String prefix = seriesPath(pageUrl);
         String siteName = meta(html, "og:site_name");
 
-        String title = cleanTitle(meta(html, "og:title"), siteName);
-        if (title == null) {
+        // Paylaşım bilgisi başka adrese aitse (içerik JavaScript ile yükleniyor) başlık/kapak alma
+        String ogUrl = meta(html, "og:url");
+        if (ogUrl == null) {
+            Matcher cm = Pattern.compile("<link[^>]+rel=[\"']canonical[\"'][^>]*href=[\"']([^\"']+)[\"']", Pattern.CASE_INSENSITIVE).matcher(html);
+            if (cm.find()) ogUrl = cm.group(1);
+        }
+        boolean generic = false;
+        if (ogUrl != null) {
+            try { generic = !new URL(base, decodeEntities(ogUrl)).getPath().replaceAll("/+$", "").startsWith(prefix); } catch (Exception ignored) { }
+        }
+
+        String title = generic ? null : cleanTitle(meta(html, "og:title"), siteName);
+        if (title == null && !generic) {
             Matcher h1 = Pattern.compile("<h1[^>]*>(.*?)</h1>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(html);
             if (h1.find()) title = cleanTitle(stripTags(h1.group(1)), siteName);
         }
-        if (title == null) {
+        if (title == null && !generic) {
             Matcher tt = Pattern.compile("<title>(.*?)</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(html);
             if (tt.find()) title = cleanTitle(stripTags(tt.group(1)), siteName);
         }
         s.title = title;
-        s.cover = meta(html, "og:image");
-        if (s.cover == null) s.cover = meta(html, "twitter:image");
+        if (!generic) {
+            s.cover = imageWithAlt(html, title, base);
+            if (s.cover == null) s.cover = meta(html, "og:image");
+            if (s.cover == null) s.cover = meta(html, "twitter:image");
+        }
 
         Map<Double, Chapter> byNum = new LinkedHashMap<>();
         Matcher m = ANCHOR.matcher(html);

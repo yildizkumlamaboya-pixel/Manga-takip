@@ -119,3 +119,21 @@ test('link biçimi değişen sitede boşluklar alttaki kalıpla dolar', () => {
   assert.equal(f.find((c) => c.num === 313).url, b + 'bolum-313-0/');
   assert.equal(f.length, 315);
 });
+
+test('kapak: sayfadaki başlıklı resim tercih edilir', () => {
+  const html = page('Efsanevi Büyü İmparatoru', '', `<img alt="logo" src="/logo.png">
+    <img alt="Efsanevi Büyü İmparatoru" src="/upload/thumbnail/abc.avif?w=512">
+    <a href="/manga/efsanevi/1-bolum-oku">1</a>`);
+  const r = parseSeriesPage(html, 'https://uzaymanga.com/manga/efsanevi');
+  assert.equal(r.cover, 'https://uzaymanga.com/upload/thumbnail/abc.avif?w=512');
+});
+
+test('kapak: genel site bilgisi seri sanılmaz, " Oku" atılır', () => {
+  const g = `<html><head><meta property="og:url" content="https://mangawt.com/">
+    <meta property="og:title" content="Mangawt - Turkce Manga Oku"><meta property="og:image" content="/favicon.ico"></head>
+    <body><a href="/manga/seri/bolum-1">1</a></body></html>`;
+  const r = parseSeriesPage(g, 'https://mangawt.com/manga/seri');
+  assert.equal(r.title, null);
+  assert.equal(r.cover, null);
+  assert.equal(cleanTitle('Tüccar Grubunun En Genç Oğlu Oku'), 'Tüccar Grubunun En Genç Oğlu');
+});

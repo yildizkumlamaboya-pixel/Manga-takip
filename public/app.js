@@ -154,7 +154,7 @@ function render() {
       const li = document.createElement('li');
       li.className = 'card';
       li.innerHTML = `
-        <img alt="" loading="lazy" referrerpolicy="no-referrer">
+        <div class="cover"><span></span><img alt="" loading="lazy" referrerpolicy="no-referrer"></div>
         <div>
           <div class="site"></div>
           <h3></h3>
@@ -162,7 +162,7 @@ function render() {
           <div class="err-line" hidden></div>
         </div>
         <div class="badge"></div>`;
-      if (r.st?.cover) li.querySelector('img').src = r.st.cover;
+      setCover(li.querySelector('.cover'), r.st?.cover, r.title);
       li.querySelector('.site').textContent = host(r.url);
       li.querySelector('h3').textContent = r.title;
       li.querySelector('.meta').textContent = r.pending
@@ -309,8 +309,7 @@ function renderDetail(reset = true) {
   $('#dTitle').textContent = v.title;
   $('#dHost').textContent = host(v.url) + ' ↗';
   $('#dHost').href = v.url;
-  const img = $('#dCover');
-  if (v.st?.cover) img.src = v.st.cover; else img.removeAttribute('src');
+  setCover($('#dCoverBox'), v.st?.cover, v.title);
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
     : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.error}` : '') + (v.st.via === 'phone' ? ' · telefondan okundu' : '');
@@ -549,3 +548,17 @@ try {
   if (c) { list = c.list; state = c.state; render(); }
 } catch {}
 load();
+
+// Kapak resmi: yoksa ya da yüklenemezse baş harfli renkli kutu görünür
+function setCover(box, src, title) {
+  const span = box.querySelector('span');
+  const img = box.querySelector('img');
+  const words = String(title || '?').trim().split(/\s+/).filter(Boolean);
+  span.textContent = ((words[0]?.[0] || '?') + (words[1]?.[0] || '')).toLocaleUpperCase('tr');
+  let h = 0;
+  for (const ch of String(title || '')) h = (h * 31 + ch.codePointAt(0)) % 360;
+  box.style.setProperty('--hue', h);
+  img.onerror = () => { img.hidden = true; };
+  img.onload = () => { img.hidden = false; };
+  if (src) { img.hidden = false; img.src = src; } else { img.hidden = true; img.removeAttribute('src'); }
+}

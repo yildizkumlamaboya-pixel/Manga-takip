@@ -7,6 +7,8 @@ import { join } from 'node:path';
 import { fetchSeries, clearCache } from '../lib/fetch-series.js';
 import { mergeChapters, fillGaps } from '../lib/chapters.js';
 
+const titleFromSlug = (url) => new URL(url).pathname.replace(/\/+$/, '').split('/').pop().split('-').filter(Boolean).map((w) => w.charAt(0).toLocaleUpperCase('tr') + w.slice(1)).join(' ');
+
 const dir = process.argv[2] || 'store';
 const read = async (f, def) => {
   try { return JSON.parse(await readFile(join(dir, f), 'utf8')); } catch { return def; }
@@ -36,8 +38,8 @@ await pool(list, 4, async (item) => {
     d.chapters = fillGaps(mergeChapters(d.chapters, prev?.chapters));
     const top = d.chapters[0];
     state[item.url] = {
-      title: d.title || prev?.title || item.url,
-      cover: d.cover || prev?.cover || null,
+      title: d.title || titleFromSlug(item.url),
+      cover: d.cover || null,
       latest: top.num,
       first: prev?.first ?? top.num,          // eklendiği andaki son bölüm
       chapters: d.chapters.map((c) => [c.num, c.url]),

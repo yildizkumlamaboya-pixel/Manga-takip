@@ -134,11 +134,8 @@ public final class Checker {
         Parser.Chapter top = chapters.get(0);
 
         JSONObject e = new JSONObject();
-        String prevTitle = prev == null ? null : prev.optString("title", null);
-        String title = s.title != null ? s.title
-            : (prevTitle != null && !prevTitle.equals(url) ? prevTitle : Parser.titleFromSlug(url));
-        e.put("title", title);
-        String cover = s.cover != null ? s.cover : (prev == null ? null : prev.optString("cover", null));
+        e.put("title", s.title != null ? s.title : Parser.titleFromSlug(url));
+        String cover = s.cover;
         e.put("cover", cover == null ? JSONObject.NULL : cover);
         e.put("latest", top.num);
         e.put("first", prev != null && !prev.isNull("first") && prev.has("first") ? prev.getDouble("first") : top.num);
