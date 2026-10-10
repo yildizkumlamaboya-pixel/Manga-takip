@@ -14,6 +14,11 @@ let filter = 'all';
 let current = null;
 let pollTimer = null;
 
+// Android uygulaması içinde açıldıysa telefondaki kontrol işine köprü
+const NATIVE = window.MangaApp && window.MangaApp.isApp ? window.MangaApp : null;
+const PHONE_FRESH_MS = 3 * 60 * 60 * 1000;
+const phoneFresh = (st) => st?.via === 'phone' && st.phoneAt && Date.now() - new Date(st.phoneAt) < PHONE_FRESH_MS;
+
 const store = {
   get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
   set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
@@ -162,15 +167,15 @@ function render() {
       li.querySelector('h3').textContent = r.title;
       li.querySelector('.meta').textContent = r.pending
         ? 'Bölümler okunuyor…'
-        : r.st.latest == null ? `Okuduğun ${fmt(r.base)} · henüz okunamadı` : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}`;
-      if (r.st?.error) {
+        : r.st.latest == null ? `Okuduğun ${fmt(r.base)} · henüz okunamadı` : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}` + (r.st.via === 'phone' ? ' · 📱' : '');
+      if (r.st?.error && !phoneFresh(r.st)) {
         const e = li.querySelector('.err-line');
         e.textContent = r.st.error;
         e.hidden = false;
       }
       const b = li.querySelector('.badge');
       if (r.pending) { b.textContent = '…'; b.classList.add('zero'); }
-      else if (r.st?.error && !r.st.chapters?.length) { b.textContent = '!'; b.classList.add('warn'); }
+      else if (r.st?.error && !phoneFresh(r.st) && !r.st.chapters?.length) { b.textContent = '!'; b.classList.add('warn'); }
       else if (r.unread) b.textContent = r.unread;
       else { b.textContent = '✓'; b.classList.add('zero'); }
       li.onclick = () => openSeries(r.url);
@@ -185,6 +190,7 @@ function render() {
 
 async function load({ quiet = false } = {}) {
   if (!token()) return openSettings('Başlamak için GitHub anahtarını gir');
+  if (NATIVE) NATIVE.setToken(token());
   try {
     const [l, s] = await Promise.all([readFile('list.json', []), readFile('state.json', {})]);
     list = l.data;
@@ -267,6 +273,7 @@ $('#formAdd').addEventListener('submit', async (e) => {
     }, `Eklendi: ${url}`);
     $('#dlgAdd').close();
     render();
+    if (NATIVE) NATIVE.checkNow();
     await runCheck();
     toast('Eklendi. Bölümler 1 dakika içinde gelecek.');
     startPolling();
@@ -306,7 +313,7 @@ function renderDetail(reset = true) {
   if (v.st?.cover) img.src = v.st.cover; else img.removeAttribute('src');
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
-    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error ? ` · ⚠️ ${v.st.error}` : '');
+    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.error}` : '') + (v.st.via === 'phone' ? ' · telefondan okundu' : '');
 
   // Sıradaki bölüm listenin derinlerindeyse oraya kadar göster
   const nextIdx = v.base == null ? -1 : chapters.findLastIndex(([n]) => n > v.base);
@@ -380,6 +387,7 @@ $('#dDelete').onclick = async () => {
 $('#btnCheck').onclick = async () => {
   if ($('#btnCheck').classList.contains('spin')) return toast('Kontrol zaten sürüyor');
   try {
+    if (NATIVE) NATIVE.checkNow();
     await runCheck();
     $('#btnCheck').classList.add('spin');
     $('#lastRun').textContent = 'Kontrol başlatıldı…';
@@ -400,6 +408,7 @@ $('#btnTest').onclick = testToken;
 $('#formSettings').addEventListener('submit', (e) => {
   e.preventDefault();
   store.set(TOKEN_KEY, e.target.token.value.trim());
+  if (NATIVE) NATIVE.setToken(token());
   $('#dlgSettings').close();
   load();
 });
@@ -442,6 +451,12 @@ async function currentSub() {
 async function updatePushState() {
   const st = $('#pushState');
   const btn = $('#btnPush');
+  if (NATIVE) {
+    st.textContent = 'Açık · bildirimleri bu uygulama gösteriyor';
+    btn.hidden = true;
+    $('#banner').hidden = true;
+    return;
+  }
   if (!('PushManager' in window)) {
     st.textContent = 'Bu tarayıcı desteklemiyor. Chrome ile aç ve ana ekrana ekle.';
     btn.disabled = true;
@@ -493,6 +508,11 @@ $('#btnPush').onclick = async () => {
 };
 
 /* ---------- Başlangıç ---------- */
+window.__nativeCheckDone = (summary) => {
+  load({ quiet: true });
+  if (summary) toast(summary);
+};
+
 document.querySelectorAll('[data-close]').forEach((b) => (b.onclick = () => b.closest('dialog').close()));
 document.querySelectorAll('dialog').forEach((d) => d.addEventListener('click', (e) => { if (e.target === d) d.close(); }));
 
