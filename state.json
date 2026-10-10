@@ -357,6 +357,15 @@
   "errorSince": null,
   "via": "direct"
  },
+ "https://eskimangalar.com/manga/gecmise-donen-polisin-ikinci-sansi": {
+  "title": "https://eskimangalar.com/manga/gecmise-donen-polisin-ikinci-sansi",
+  "cover": null,
+  "latest": null,
+  "first": null,
+  "chapters": [],
+  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
+  "errorSince": "2026-10-10T19:14:34.236Z"
+ },
  "https://golgebahcesi.com/manga/barbarin-fantezi-dunyasi": {
   "title": "https://golgebahcesi.com/manga/barbarin-fantezi-dunyasi",
   "cover": null,
@@ -366,15 +375,6 @@
   "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
   "errorSince": "2026-10-10T19:10:44.959Z"
  },
- "https://golgebahcesi.com/manga/tang-klaninin-gunceleri": {
-  "title": "https://golgebahcesi.com/manga/tang-klaninin-gunceleri",
-  "cover": null,
-  "latest": null,
-  "first": null,
-  "chapters": [],
-  "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-10T19:12:04.073Z"
- },
  "https://golgebahcesi.com/manga/olumun-oglu": {
   "title": "https://golgebahcesi.com/manga/olumun-oglu",
   "cover": null,
@@ -383,5 +383,14 @@
   "chapters": [],
   "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
   "errorSince": "2026-10-10T19:14:03.527Z"
+ },
+ "https://golgebahcesi.com/manga/tang-klaninin-gunceleri": {
+  "title": "https://golgebahcesi.com/manga/tang-klaninin-gunceleri",
+  "cover": null,
+  "latest": null,
+  "first": null,
+  "chapters": [],
+  "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
+  "errorSince": "2026-10-10T19:12:04.073Z"
  }
 }
