@@ -1,0 +1,55 @@
+name: Test APK derle
+
+on:
+  push:
+    branches: [main]
+    paths: ['android-test/**', '.github/workflows/android-test.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: APK derle
+        working-directory: android-test
+        run: |
+          set -o pipefail
+          gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee ../build.log
+
+      - name: İndirme bağlantısına koy
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: test-apk
+          name: Manga Takip – bağlantı testi
+          body: Telefondan engelli sitelere erişimi ölçen test uygulaması.
+          prerelease: true
+          make_latest: false
+          files: android-test/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Hata kaydını sakla
+        if: failure()
+        run: |
+          git config user.name "manga-takip-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          tail -n 400 build.log > /tmp/last-build.log || echo "kayıt yok" > /tmp/last-build.log
+          git checkout --orphan build-logs
+          git rm -rf --cached . -q
+          cp /tmp/last-build.log last-build.log
+          git add last-build.log
+          git commit -m "Son derleme hatası"
+          git push -f origin build-logs
