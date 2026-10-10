@@ -401,5 +401,14 @@
   "chapters": [],
   "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
   "errorSince": "2026-10-10T19:15:04.285Z"
+ },
+ "https://tenshimanga.com/manga/tanri-arenasinda-bir-oyuncu": {
+  "title": "https://tenshimanga.com/manga/tanri-arenasinda-bir-oyuncu",
+  "cover": null,
+  "latest": null,
+  "first": null,
+  "chapters": [],
+  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
+  "errorSince": "2026-10-10T19:16:11.851Z"
  }
 }
