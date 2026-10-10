@@ -110,3 +110,12 @@ test('eski bölümler unutulmaz', () => {
   const m = mergeChapters([{ num: 316, url: 'u316' }, { num: 315, url: 'u315-yeni' }], [[315, 'u315'], [200, 'u200']]);
   assert.deepEqual(m.map((c) => [c.num, c.url]), [[316, 'u316'], [315, 'u315-yeni'], [200, 'u200']]);
 });
+
+test('link biçimi değişen sitede boşluklar alttaki kalıpla dolar', () => {
+  const b = 'https://siyahmelek.my/manga/s/';
+  const page = [[315, 'bolum-315-0/'], [312, 'bolum-312-0/'], [293, 'bolum-293/'], [292, 'bolum-292/'], [1, 'bolum-1/']].map(([n, p]) => ({ num: n, url: b + p }));
+  const f = fillGaps(page);
+  assert.equal(f.find((c) => c.num === 115).url, b + 'bolum-115/');
+  assert.equal(f.find((c) => c.num === 313).url, b + 'bolum-313-0/');
+  assert.equal(f.length, 315);
+});
