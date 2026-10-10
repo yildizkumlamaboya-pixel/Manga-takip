@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.yildiz.mangarafi'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.yildiz.mangarafi'
+        minSdk 24
+        targetSdk 34
+        // Her derleme bir öncekinin üstüne kurulabilsin diye sürüm artar
+        versionCode((System.getenv('GITHUB_RUN_NUMBER') ?: '1') as int)
+        versionName "1.0.${System.getenv('GITHUB_RUN_NUMBER') ?: '0'}"
+    }
+
+    // Kişisel kullanım için sabit imza: güncellemeler eski sürümün üstüne kurulur
+    signingConfigs {
+        release {
+            storeFile file('../manga.keystore')
+            storePassword 'mangatakip'
+            keyAlias 'manga'
+            keyPassword 'mangatakip'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

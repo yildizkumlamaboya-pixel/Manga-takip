@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14121a">
+<title>Manga Rafı</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Manga Rafı</h1>
+    <p id="lastRun" class="muted small"></p>
+  </div>
+  <div class="top-actions">
+    <button id="btnCheck" class="icon-btn" title="Şimdi kontrol et" aria-label="Şimdi kontrol et">
+      <svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v4h-4" /></svg>
+    </button>
+    <button id="btnSettings" class="icon-btn" title="Ayarlar" aria-label="Ayarlar">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div id="banner" class="banner" hidden></div>
+
+  <div class="filters" role="tablist">
+    <button class="chip active" data-filter="all">Tümü</button>
+    <button class="chip" data-filter="unread">Yeni bölümü olanlar</button>
+    <button class="chip" data-filter="news">🔔 Bildirimler <span id="newsCount" class="count" hidden></span></button>
+  </div>
+
+  <ul id="list" class="list"></ul>
+  <div id="news" hidden>
+    <div class="news-head"><span class="muted small"><b>Yeni bölüm bildirimleri</b> · son 30 gün</span><button id="newsAllRead" class="link-btn" hidden>Hepsini görüldü say</button></div>
+    <ul id="newsList" class="news-list"></ul>
+    <p id="newsEmpty" class="empty" hidden>Henüz yeni bölüm bildirimi yok.<br>Takip ettiğin serilere bölüm gelince burada listelenecek.</p>
+  </div>
+  <p id="empty" class="empty" hidden>Henüz manga eklemedin.<br>Aşağıdaki <b>+</b> ile bir seri linki yapıştır.</p>
+</main>
+
+<button id="btnAdd" class="fab" aria-label="Manga ekle">+</button>
+
+<!-- Ekleme -->
+<dialog id="dlgAdd" class="sheet">
+  <form method="dialog" id="formAdd">
+    <h2>Manga ekle</h2>
+    <label>Seri linki
+      <input name="url" type="url" inputmode="url" required placeholder="https://site.com/manga/seri-adi">
+    </label>
+    <label>Kaldığın bölüm <small>(boş bırakırsan güncel sayılır)</small>
+      <input name="lastRead" inputmode="decimal" placeholder="ör. 905">
+    </label>
+    <p class="hint">Bölüm linki yapıştırsan da olur, seriyi kendim bulurum. Bölümler birkaç saniye içinde gelir.</p>
+    <p class="err" id="addErr" hidden></p>
+    <div class="row">
+      <button type="button" class="ghost" data-close>Vazgeç</button>
+      <button type="submit" class="primary" id="addSubmit">Ekle</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Seri detayı -->
+<dialog id="dlgSeries" class="sheet tall">
+  <div class="detail-head">
+    <div class="cover" id="dCoverBox"><span></span><img id="dCover" alt="" referrerpolicy="no-referrer"></div>
+    <div>
+      <h2 id="dTitle" tabindex="-1" autofocus></h2>
+      <a id="dHost" target="_blank" rel="noopener"></a>
+      <p id="dStatus" class="muted"></p>
+    </div>
+  </div>
+  <div class="row wrap">
+    <a id="dNext" class="primary btn" target="_blank" rel="noopener">Sıradakini oku</a>
+    <button id="dAllRead" class="ghost">Hepsini okudum</button>
+  </div>
+  <p class="hint">Bir bölüme dokununca uygulamanın içinde açılır ve o bölüme kadar okundu sayılır.</p>
+  <ul id="dChapters" class="chapters"></ul>
+  <button id="dMore" class="ghost wide" hidden>Daha eski bölümler</button>
+  <div class="row">
+    <button id="dDelete" class="danger">Takipten çıkar</button>
+    <button class="ghost" data-close>Kapat</button>
+  </div>
+</dialog>
+
+<!-- Ayarlar -->
+<dialog id="dlgSettings" class="sheet">
+  <h2>Ayarlar</h2>
+
+  <div class="setting">
+    <div>
+      <b>Arka planda kontrol</b>
+      <p class="muted" id="batteryState">Telefon her 15 dakikada bir yeni bölüm arar.</p>
+    </div>
+    <button type="button" id="btnBattery" class="ghost" hidden>İzin ver</button>
+  </div>
+
+  <div class="setting col">
+    <div>
+      <b>Yedek</b>
+      <p class="muted">Listen sadece bu telefonda durur. Uygulamayı silmeden ya da telefon değiştirmeden önce yedek al.</p>
+    </div>
+    <div class="row">
+      <button type="button" id="btnExport" class="ghost">Yedeği kaydet</button>
+      <button type="button" id="btnImport" class="ghost">Yedekten yükle</button>
+    </div>
+  </div>
+
+  <details class="howto">
+    <summary>Eski Manga Takip listemi al</summary>
+    <p class="muted">GitHub'lı Manga Takip uygulamasını kullanıyorsan listeni ve kaldığın bölümleri buraya bir kerede aktarabilirsin. Depo herkese açık olmalı.</p>
+    <label>Depo (kullanıcı/depo)
+      <input id="ghRepo" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="kullanici-adi/Manga-takip">
+    </label>
+    <button type="button" id="btnGhImport" class="ghost wide">Listeyi al</button>
+  </details>
+
+  <p class="muted small" id="about"></p>
+  <div class="row">
+    <button type="button" class="primary" data-close>Kapat</button>
+  </div>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="./app.js" type="module"></script>
+</body>
+</html>
