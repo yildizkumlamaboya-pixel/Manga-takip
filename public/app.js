@@ -149,6 +149,9 @@ function view(item) {
 function render() {
   const rows = list.map(view).sort((a, b) => b.unread - a.unread || a.title.localeCompare(b.title, 'tr'));
   const shown = filter === 'unread' ? rows.filter((r) => r.unread > 0) : rows;
+  renderNews();
+  $('#list').hidden = filter === 'news';
+  $('#news').hidden = filter !== 'news';
   $('#list').replaceChildren(
     ...shown.map((r) => {
       const li = document.createElement('li');
@@ -182,7 +185,7 @@ function render() {
       return li;
     }),
   );
-  $('#empty').hidden = list.length > 0;
+  $('#empty').hidden = list.length > 0 || filter === 'news';
   const total = rows.reduce((a, r) => a + r.unread, 0);
   document.title = total ? `(${total}) Manga Takip` : 'Manga Takip';
   if ('setAppBadge' in navigator) (total ? navigator.setAppBadge(total) : navigator.clearAppBadge()).catch(() => {});
@@ -237,14 +240,13 @@ function startPolling() {
   }, 15000);
 }
 
-document.querySelectorAll('.chip').forEach((c) =>
-  c.addEventListener('click', () => {
-    document.querySelectorAll('.chip').forEach((x) => x.classList.remove('active'));
-    c.classList.add('active');
-    filter = c.dataset.filter;
-    render();
-  }),
-);
+function setFilter(f) {
+  filter = f;
+  document.querySelectorAll('.chip').forEach((x) => x.classList.toggle('active', x.dataset.filter === f));
+  render();
+  if (f === 'news') window.scrollTo(0, 0);
+}
+document.querySelectorAll('.chip').forEach((c) => c.addEventListener('click', () => setFilter(c.dataset.filter)));
 
 /* ---------- Ekleme ---------- */
 $('#btnAdd').onclick = () => {
@@ -527,6 +529,7 @@ $('#btnPush').onclick = async () => {
 window.__nativeBack = () => {
   const open = [...document.querySelectorAll('dialog[open]')];
   if (open.length) { open[open.length - 1].close(); return true; }
+  if (filter !== 'all') { setFilter('all'); return true; }
   return false;
 };
 window.__nativeCheckDone = (summary) => {
@@ -562,3 +565,90 @@ function setCover(box, src, title) {
   img.onload = () => { img.hidden = false; };
   if (src) { img.hidden = false; img.src = src; } else { img.hidden = true; img.removeAttribute('src'); }
 }
+
+/* ---------- Yeni bölüm bildirimleri sekmesi ---------- */
+// Her serinin state kaydında news: [[bölüm, bulunduğu zaman], ...] tutulur.
+// "Görüldü" bilgisi bu cihazda saklanır; okuduğun bölümler zaten soluk görünür.
+const NEWS_SEEN_KEY = 'mt-news-seen';
+const NEWS_DAYS = 30;
+function newsSeenAt() { return store.get(NEWS_SEEN_KEY) || ''; }
+
+function newsEntries() {
+  const since = Date.now() - NEWS_DAYS * 86400000;
+  const out = [];
+  for (const item of list) {
+    const st = state[item.url];
+    if (!st?.news) continue;
+    const v = view(item);
+    const urls = new Map((st.chapters || []).map(([n, u]) => [n, u]));
+    for (const [num, at] of st.news) {
+      if (new Date(at).getTime() < since) continue;
+      out.push({ item, v, num, at, href: urls.get(num) || item.url, read: v.base != null && num <= v.base });
+    }
+  }
+  return out.sort((a, b) => b.at.localeCompare(a.at) || b.num - a.num);
+}
+
+function dayLabel(iso) {
+  const d = new Date(iso);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const day = new Date(d); day.setHours(0, 0, 0, 0);
+  const diff = Math.round((today - day) / 86400000);
+  if (diff === 0) return 'Bugün';
+  if (diff === 1) return 'Dün';
+  return d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', weekday: 'long' });
+}
+
+function renderNews() {
+  const entries = newsEntries();
+  const seen = newsSeenAt();
+  const fresh = entries.filter((e) => !e.read && e.at > seen).length;
+  const cnt = $('#newsCount');
+  cnt.textContent = fresh;
+  cnt.hidden = !fresh;
+  $('#newsAllRead').hidden = !fresh;
+  $('#newsEmpty').hidden = entries.length > 0;
+  if (filter !== 'news') return;
+
+  const items = [];
+  let lastDay = '';
+  for (const e of entries) {
+    const day = dayLabel(e.at);
+    if (day !== lastDay) {
+      const h = document.createElement('li');
+      h.className = 'news-day';
+      h.textContent = day;
+      items.push(h);
+      lastDay = day;
+    }
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.className = 'news-item' + (e.read ? ' seen' : '');
+    a.href = e.href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.innerHTML = `
+      <div class="cover"><span></span><img alt="" loading="lazy" referrerpolicy="no-referrer"></div>
+      <div><b></b><div class="meta"></div></div>
+      <div class="when"></div>`;
+    setCover(a.querySelector('.cover'), e.v.st?.cover, e.v.title);
+    a.querySelector('b').textContent = e.v.title;
+    const meta = a.querySelector('.meta');
+    if (!e.read && e.at > seen) { const dot = document.createElement('span'); dot.className = 'dot'; meta.append(dot); }
+    meta.append(`Bölüm ${fmt(e.num)}` + (e.read ? ' · okundu' : '') + ' · ' + host(e.item.url));
+    a.querySelector('.when').textContent = new Date(e.at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+    a.onclick = (ev) => {
+      current = e.item.url;
+      if (NATIVE && NATIVE.openReader) return openChapter(ev, e.num);
+      if (!e.read) setRead(e.num).catch((err) => toast(err.message));
+    };
+    li.append(a);
+    items.push(li);
+  }
+  $('#newsList').replaceChildren(...items);
+}
+
+$('#newsAllRead').onclick = () => {
+  store.set(NEWS_SEEN_KEY, new Date().toISOString());
+  render();
+};

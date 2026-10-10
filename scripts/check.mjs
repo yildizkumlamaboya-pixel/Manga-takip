@@ -10,6 +10,7 @@ import { mergeChapters, fillGaps } from '../lib/chapters.js';
 const titleFromSlug = (url) => new URL(url).pathname.replace(/\/+$/, '').split('/').pop().split('-').filter(Boolean).map((w) => w.charAt(0).toLocaleUpperCase('tr') + w.slice(1)).join(' ');
 
 const dir = process.argv[2] || 'store';
+const NEWS_KEEP = 30; // seri başına saklanan yeni bölüm kaydı
 const read = async (f, def) => {
   try { return JSON.parse(await readFile(join(dir, f), 'utf8')); } catch { return def; }
 };
@@ -47,10 +48,16 @@ await pool(list, 4, async (item) => {
       errorSince: null,
       via: d.via,
     };
+    let log = prev?.news || [];
     if (prev && prev.latest != null) {
       const fresh = d.chapters.filter((c) => c.num > prev.latest);
-      if (fresh.length) news.push({ url: item.url, title: state[item.url].title, fresh });
+      if (fresh.length) {
+        news.push({ url: item.url, title: state[item.url].title, fresh });
+        const now = new Date().toISOString();
+        log = [...fresh.map((c) => [c.num, now]), ...log].slice(0, NEWS_KEEP);
+      }
     }
+    if (log.length) state[item.url].news = log;
   } catch (e) {
     errors.push({ url: item.url, error: e.message });
     state[item.url] = prev

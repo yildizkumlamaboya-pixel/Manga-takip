@@ -151,6 +151,24 @@ public final class Checker {
         e.put("errorSince", JSONObject.NULL);
         e.put("via", "phone");
         e.put("phoneAt", iso(new Date()));
+
+        // Yeni bölümler sekmesi için kayıt: [[num, zaman], ...] en yeni başta
+        JSONArray log = new JSONArray();
+        if (prev != null && !prev.isNull("latest") && prev.has("latest")) {
+            double before = prev.getDouble("latest");
+            String now = iso(new Date());
+            for (Parser.Chapter c : chapters) {
+                if (c.num > before && log.length() < 30) {
+                    JSONArray n = new JSONArray();
+                    n.put(c.num);
+                    n.put(now);
+                    log.put(n);
+                }
+            }
+        }
+        JSONArray old = prev == null ? null : prev.optJSONArray("news");
+        if (old != null) for (int j = 0; j < old.length() && log.length() < 30; j++) log.put(old.get(j));
+        if (log.length() > 0) e.put("news", log);
         return e;
     }
 
