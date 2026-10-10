@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Base64;
 
@@ -360,7 +359,7 @@ public final class Checker {
             String text = n <= 1
                 ? "Bölüm " + Parser.fmt(latest) + " çıktı"
                 : n + " yeni bölüm (" + Parser.fmt(oldest) + "–" + Parser.fmt(latest) + ")";
-            show(url.hashCode(), title, text, oldestUrl != null ? oldestUrl : url);
+            show(url.hashCode(), title, text, url, chs == null ? "[]" : chs.toString(), oldest);
             seen.put(url, latest);
             count++;
         }
@@ -377,12 +376,13 @@ public final class Checker {
         }
     }
 
-    private void show(int id, String title, String text, String openUrl) {
+    private void show(int id, String title, String text, String seriesUrl, String chaptersJson, double num) {
         if (Build.VERSION.SDK_INT >= 33
             && ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return;
         ensureChannel(ctx);
-        Intent open = new Intent(Intent.ACTION_VIEW, Uri.parse(openUrl));
-        open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Bildirime dokununca bölüm uygulama içi okuyucuda açılır
+        Intent open = ReaderActivity.intent(ctx, seriesUrl, title, chaptersJson, num);
+        open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pi = PendingIntent.getActivity(ctx, id, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(ctx, CHANNEL) : new Notification.Builder(ctx);
         b.setSmallIcon(R.drawable.ic_stat)

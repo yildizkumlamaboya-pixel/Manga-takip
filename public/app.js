@@ -329,7 +329,7 @@ function renderDetail(reset = true) {
       a.rel = 'noopener';
       a.textContent = `Bölüm ${fmt(num)}`;
       li.dataset.num = num;
-      a.onclick = () => { setRead(num).catch((e) => toast(e.message)); };
+      a.onclick = (e) => openChapter(e, num);
       li.append(a);
       return li;
     }),
@@ -342,13 +342,29 @@ function renderDetail(reset = true) {
     nb.href = next[1];
     nb.textContent = `Sıradaki: Bölüm ${fmt(next[0])}`;
     nb.removeAttribute('aria-disabled');
-    nb.onclick = () => { setRead(next[0]).catch((e) => toast(e.message)); };
+    nb.onclick = (e) => openChapter(e, next[0]);
   } else {
     nb.removeAttribute('href');
     nb.textContent = v.pending ? 'Bekleniyor…' : 'Güncelsin ✓';
     nb.setAttribute('aria-disabled', 'true');
     nb.onclick = null;
   }
+}
+
+// Bölümü aç: uygulamada okuyucuda, tarayıcıda sitenin kendi sayfasında
+function openChapter(e, num) {
+  if (NATIVE && NATIVE.openReader) {
+    e.preventDefault();
+    const v = view(list.find((i) => i.url === current));
+    NATIVE.openReader(current, v.title, JSON.stringify(v.st?.chapters || []), num);
+    // Kaldığın yeri okuyucu kaydeder; ekranda hemen göster
+    const it = list.find((i) => i.url === current);
+    if (it && (it.lastRead == null || num > it.lastRead)) it.lastRead = num;
+    render();
+    renderDetail(false);
+    return;
+  }
+  setRead(num).catch((err) => toast(err.message));
 }
 
 function openSeries(url) {

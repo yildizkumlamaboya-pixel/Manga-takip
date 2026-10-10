@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ReaderActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
         <service
             android:name=".CheckJob"
             android:exported="true"

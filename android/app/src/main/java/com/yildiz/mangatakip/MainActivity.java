@@ -65,6 +65,16 @@ public class MainActivity extends Activity {
         CheckJob.schedule(this);
     }
 
+    private boolean firstResume = true;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Okuyucudan dönünce listeyi tazele (kaldığın yer güncellenmiş olur)
+        if (!firstResume) web.evaluateJavascript("window.__nativeCheckDone && window.__nativeCheckDone('')", null);
+        firstResume = false;
+    }
+
     @Override
     public void onBackPressed() {
         if (web.canGoBack()) web.goBack();
@@ -94,6 +104,11 @@ public class MainActivity extends Activity {
                 main.post(() -> web.evaluateJavascript(
                     "window.__nativeCheckDone && window.__nativeCheckDone(" + JSONObject.quote(summary) + ")", null));
             }).start();
+        }
+
+        @JavascriptInterface
+        public void openReader(String seriesUrl, String title, String chaptersJson, double num) {
+            main.post(() -> startActivity(ReaderActivity.intent(MainActivity.this, seriesUrl, title, chaptersJson, num)));
         }
 
         @JavascriptInterface
