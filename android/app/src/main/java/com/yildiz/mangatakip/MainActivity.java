@@ -16,6 +16,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -75,10 +76,21 @@ public class MainActivity extends Activity {
         firstResume = false;
     }
 
+    private long lastBack = 0;
+
+    /** Geri: önce açık pencereyi kapat, ana ekranda iki kez basınca çık. */
     @Override
     public void onBackPressed() {
-        if (web.canGoBack()) web.goBack();
-        else super.onBackPressed();
+        web.evaluateJavascript("window.__nativeBack ? window.__nativeBack() : false", handled -> {
+            if ("true".equals(handled)) return;
+            long now = System.currentTimeMillis();
+            if (now - lastBack < 2000) {
+                finish();
+            } else {
+                lastBack = now;
+                Toast.makeText(this, "Çıkmak için tekrar geri bas", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private SharedPreferences prefs() {

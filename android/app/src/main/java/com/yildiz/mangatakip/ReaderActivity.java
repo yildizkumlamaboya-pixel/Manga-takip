@@ -95,13 +95,24 @@ public class ReaderActivity extends Activity {
         label.setPadding(dp(6), 0, dp(6), 0);
         bar.addView(label, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
 
-        prevBtn = barButton("‹");
-        prevBtn.setOnClickListener(v -> step(-1));
-        bar.addView(prevBtn);
-        nextBtn = barButton("›");
-        nextBtn.setOnClickListener(v -> step(1));
-        bar.addView(nextBtn);
         root.addView(bar);
+
+        // Önceki / sonraki bölüm: büyük düğmeler
+        LinearLayout nav = new LinearLayout(this);
+        nav.setOrientation(LinearLayout.HORIZONTAL);
+        nav.setBackgroundColor(Color.parseColor("#1f1c28"));
+        nav.setPadding(dp(8), 0, dp(8), dp(8));
+        prevBtn = navButton("‹  Önceki", false);
+        prevBtn.setOnClickListener(v -> step(-1));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(48), 1f);
+        lp.setMargins(0, 0, dp(4), 0);
+        nav.addView(prevBtn, lp);
+        nextBtn = navButton("Sonraki  ›", true);
+        nextBtn.setOnClickListener(v -> step(1));
+        LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(0, dp(48), 1f);
+        rp.setMargins(dp(4), 0, 0, 0);
+        nav.addView(nextBtn, rp);
+        root.addView(nav);
 
         web = new WebView(this);
         web.setBackgroundColor(bg);
@@ -138,6 +149,21 @@ public class ReaderActivity extends Activity {
         b.setBackgroundColor(Color.TRANSPARENT);
         b.setMinWidth(dp(44));
         b.setMinimumWidth(dp(44));
+        return b;
+    }
+
+    private Button navButton(String text, boolean primary) {
+        Button b = new Button(this);
+        b.setText(text);
+        b.setAllCaps(false);
+        b.setTextSize(17);
+        b.setTypeface(Typeface.DEFAULT_BOLD);
+        android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable();
+        bg.setCornerRadius(dp(12));
+        bg.setColor(Color.parseColor(primary ? "#ff6b4a" : "#2a2635"));
+        b.setBackground(bg);
+        b.setTextColor(Color.parseColor(primary ? "#1a0d08" : "#f1eef6"));
+        b.setStateListAnimator(null);
         return b;
     }
 
@@ -244,8 +270,7 @@ public class ReaderActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (web.canGoBack()) web.goBack();
-        else close();
+        close(); // geri tuşu listeye döndürür
     }
 
     @Override

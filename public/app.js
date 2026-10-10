@@ -524,6 +524,12 @@ $('#btnPush').onclick = async () => {
 };
 
 /* ---------- Başlangıç ---------- */
+// Android geri tuşu: açık pencere varsa onu kapat
+window.__nativeBack = () => {
+  const open = [...document.querySelectorAll('dialog[open]')];
+  if (open.length) { open[open.length - 1].close(); return true; }
+  return false;
+};
 window.__nativeCheckDone = (summary) => {
   load({ quiet: true });
   if (summary) toast(summary);
