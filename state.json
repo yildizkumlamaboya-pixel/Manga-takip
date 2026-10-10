@@ -1,4 +1,22 @@
 {
+ "https://uzaymanga.com/manga/efsanevi-buyu-imparatoru": {
+  "title": "https://uzaymanga.com/manga/efsanevi-buyu-imparatoru",
+  "cover": null,
+  "latest": null,
+  "first": null,
+  "chapters": [],
+  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
+  "errorSince": "2026-10-10T18:57:01.563Z"
+ },
+ "https://mangawt.com/manga/iskelet-asker": {
+  "title": "https://mangawt.com/manga/iskelet-asker",
+  "cover": null,
+  "latest": null,
+  "first": null,
+  "chapters": [],
+  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
+  "errorSince": "2026-10-10T19:04:56.212Z"
+ },
  "https://toontaku.com/seri/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu Oku",
   "cover": "https://cdn.toontaku.com/manga/68d108a0434e6/thumbnail/2025-05-31-03-07-46-1748704066230.jpg",
@@ -330,22 +348,13 @@
   "errorSince": null,
   "via": "direct"
  },
- "https://uzaymanga.com/manga/efsanevi-buyu-imparatoru": {
-  "title": "https://uzaymanga.com/manga/efsanevi-buyu-imparatoru",
+ "https://golgebahcesi.com/manga/barbarin-fantezi-dunyasi": {
+  "title": "https://golgebahcesi.com/manga/barbarin-fantezi-dunyasi",
   "cover": null,
   "latest": null,
   "first": null,
   "chapters": [],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-10T18:57:01.563Z"
- },
- "https://mangawt.com/manga/iskelet-asker": {
-  "title": "https://mangawt.com/manga/iskelet-asker",
-  "cover": null,
-  "latest": null,
-  "first": null,
-  "chapters": [],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-10T19:04:56.212Z"
+  "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
+  "errorSince": "2026-10-10T19:10:44.959Z"
  }
 }
