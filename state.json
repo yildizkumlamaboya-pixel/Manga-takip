@@ -5,7 +5,7 @@
   "latest": null,
   "first": null,
   "chapters": [],
-  "error": "Site bot korumasına takıldı (403)",
+  "error": "Sayfa okundu ama bölüm bulunamadı (okuma servisi üzerinden).",
   "errorSince": "2026-10-10T18:57:01.563Z"
  }
 }
