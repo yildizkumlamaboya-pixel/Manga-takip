@@ -356,5 +356,14 @@
   "chapters": [],
   "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
   "errorSince": "2026-10-10T19:10:44.959Z"
+ },
+ "https://golgebahcesi.com/manga/tang-klaninin-gunceleri": {
+  "title": "https://golgebahcesi.com/manga/tang-klaninin-gunceleri",
+  "cover": null,
+  "latest": null,
+  "first": null,
+  "chapters": [],
+  "error": "Site bot korumasına takıldı (200); Okuma servisi de bot korumasına takıldı",
+  "errorSince": "2026-10-10T19:12:04.073Z"
  }
 }
