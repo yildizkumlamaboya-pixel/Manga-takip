@@ -152,11 +152,10 @@ function render() {
   const rows = list.map(view).sort((a, b) =>
     (recent[b.url] || '').localeCompare(recent[a.url] || '') || b.unread - a.unread || a.title.localeCompare(b.title, 'tr'));
   const q = searchText();
-  const shelfOf = (r) => r.shelf || '';
+  const shelfOf = (r) => (r.shelf === 'done' ? 'done' : '');
   // Arama yazılıysa tüm raflarda arar; değilse seçili rafı gösterir
   const shown = q ? rows.filter((r) => r.title.toLocaleLowerCase('tr').includes(q) || r.url.includes(q))
     : filter === 'done' ? rows.filter((r) => shelfOf(r) === 'done')
-    : filter === 'dropped' ? rows.filter((r) => shelfOf(r) === 'dropped')
     : rows.filter((r) => !shelfOf(r) && (filter !== 'unread' || r.unread > 0));
   $('#nDone').textContent = rows.filter((r) => shelfOf(r) === 'done').length || '';
   $('#search').hidden = list.length < 6 && !q;
@@ -199,9 +198,8 @@ function render() {
   $('#empty').hidden = list.length > 0 || filter === 'news';
   const none = $('#none');
   none.hidden = !(list.length > 0 && filter !== 'news' && shown.length === 0);
-  none.textContent = q ? 'Aramana uyan seri yok.' : filter === 'done' ? 'Bitirdiğin seriler burada durur. Seri sayfasından "Bitti" seç.'
-    : filter === 'dropped' ? 'Bıraktığın seriler burada durur, onlardan bildirim gelmez.' : filter === 'unread' ? 'Yeni bölümü olan seri yok, güncelsin ✓' : '';
-  const total = rows.filter((r) => r.shelf !== 'dropped').reduce((a, r) => a + r.unread, 0);
+  none.textContent = q ? 'Aramana uyan seri yok.' : filter === 'done' ? 'Bitirdiğin seriler burada durur. Seri sayfasından "Bitti" seç.' : filter === 'unread' ? 'Yeni bölümü olan seri yok, güncelsin ✓' : '';
+  const total = rows.reduce((a, r) => a + r.unread, 0);
   document.title = total ? `(${total}) Manga Takip` : 'Manga Takip';
   if ('setAppBadge' in navigator) (total ? navigator.setAppBadge(total) : navigator.clearAppBadge()).catch(() => {});
 }
@@ -218,6 +216,11 @@ async function load({ quiet = false } = {}) {
     if (current && $('#dlgSeries').open) renderDetail(false);
     showLastRun();
     if (list.some((i) => !state[i.url])) startPolling();
+    // Kaldırılan "Bıraktım" rafındaki seriler Okuyorum'a döner
+    if (list.some((i) => i.shelf === 'dropped')) {
+      mutate('list.json', [], (x) => { x.forEach((i) => { if (i.shelf === 'dropped') delete i.shelf; }); return x; }, 'Raf düzeltme')
+        .then((x) => { list = x; render(); }).catch(() => {});
+    }
   } catch (e) {
     if (e.status === 401 || e.status === 403) openSettings(e.message);
     else if (!quiet) toast(e.message);
@@ -328,7 +331,7 @@ function renderDetail(reset = true) {
   $('#dHost').textContent = host(v.url) + ' ↗';
   $('#dHost').href = v.url;
   setCover($('#dCoverBox'), v.st?.cover, v.title);
-  document.querySelectorAll('#dShelf button').forEach((b) => b.classList.toggle('active', b.dataset.shelf === (item.shelf || '')));
+  document.querySelectorAll('#dShelf button').forEach((b) => b.classList.toggle('active', b.dataset.shelf === (item.shelf === 'done' ? 'done' : '')));
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
     : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.error}` : '');
@@ -630,7 +633,7 @@ function newsEntries() {
   const out = [];
   for (const item of list) {
     const st = state[item.url];
-    if (!st?.news || item.shelf === 'dropped') continue;
+    if (!st?.news) continue;
     const v = view(item);
     const urls = new Map((st.chapters || []).map(([n, u]) => [n, u]));
     for (const [num, at] of st.news) {
@@ -722,7 +725,7 @@ function touchRecent(url) {
 function searchText() { return ($('#search').value || '').trim().toLocaleLowerCase('tr'); }
 $('#search').addEventListener('input', () => render());
 
-const SHELF_NAMES = { '': 'Okuyorum', done: 'Bitti', dropped: 'Bıraktım' };
+const SHELF_NAMES = { '': 'Okuyorum', done: 'Bitti' };
 document.querySelectorAll('#dShelf button').forEach((b) => (b.onclick = async () => {
   const url = current;
   const shelf = b.dataset.shelf || null;
@@ -734,7 +737,7 @@ document.querySelectorAll('#dShelf button').forEach((b) => (b.onclick = async ()
     }, `Raf: ${SHELF_NAMES[shelf || '']}`);
     render();
     renderDetail(false);
-    toast(shelf === 'dropped' ? 'Bıraktım rafına taşındı, bildirim gelmeyecek' : `${SHELF_NAMES[shelf || '']} rafına taşındı`);
+    toast(`${SHELF_NAMES[shelf || '']} rafına taşındı`);
   } catch (e) { toast(e.message); }
 }));
 
