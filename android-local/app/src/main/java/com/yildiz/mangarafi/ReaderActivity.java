@@ -18,6 +18,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -44,6 +45,23 @@ public class ReaderActivity extends Activity {
     private final List<double[]> nums = new ArrayList<>(); // artan sırada [num]
     private final List<String> urls = new ArrayList<>();
     private double current = -1;
+    private int restoreY = -1;          // yenilemeden sonra inilecek yer (piksel)
+    private double restoreRatio = -1;   // sayfa boyu değişirse oranla
+
+    /** Yüklenemeyen resimleri yerinde tekrar dener; yeniden denenen resim sayısını döndürür. */
+    private static final String FIX_JS =
+        "(function(){var n=0;document.querySelectorAll('img').forEach(function(i){"
+        + "if(i.complete&&i.naturalWidth===0&&(i.currentSrc||i.src)){var s=i.currentSrc||i.src;"
+        + "i.removeAttribute('src');setTimeout(function(){i.src=s;},60);n++;}});return n;})()";
+
+    /** Her sayfada: resim yüklenemezse 1,5 sn sonra kendiliğinden 2 kez daha dener. */
+    private static final String AUTO_JS =
+        "(function(){if(window.__mtRetry)return;window.__mtRetry=1;"
+        + "function retry(i){var k=+(i.dataset.mtTry||0);if(k>=2)return;i.dataset.mtTry=k+1;"
+        + "var s=i.currentSrc||i.src;if(!s)return;setTimeout(function(){i.removeAttribute('src');"
+        + "setTimeout(function(){i.src=s;},60);},1500);}"
+        + "document.addEventListener('error',function(e){if(e.target&&e.target.tagName==='IMG')retry(e.target);},true);"
+        + "document.querySelectorAll('img').forEach(function(i){if(i.complete&&i.naturalWidth===0)retry(i);});})()";
 
     /** Okuyucuyu açan Intent. */
     static Intent intent(Context ctx, String seriesUrl, String title, String chaptersJson, double num) {
@@ -93,6 +111,10 @@ public class ReaderActivity extends Activity {
         label.setPadding(dp(6), 0, dp(6), 0);
         bar.addView(label, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
 
+        Button refresh = barButton("↻ Yenile");
+        refresh.setOnClickListener(v -> refresh());
+        bar.addView(refresh);
+
         root.addView(bar);
 
         // Önceki / sonraki bölüm: büyük düğmeler
@@ -130,6 +152,8 @@ public class ReaderActivity extends Activity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                view.evaluateJavascript(AUTO_JS, null);
+                if (restoreY >= 0) restoreScroll();
                 onChapterShown(url);
             }
         });
@@ -169,6 +193,45 @@ public class ReaderActivity extends Activity {
         return Math.round(v * getResources().getDisplayMetrics().density);
     }
 
+    /**
+     * Yenile: önce bozuk resimleri sayfayı kapatmadan tekrar dener (yerin değişmez).
+     * Bozuk resim bulunamazsa sayfayı yeniden yükler ve kaldığın yere geri iner.
+     */
+    private void refresh() {
+        web.evaluateJavascript(FIX_JS, n -> {
+            int count = 0;
+            try { count = Integer.parseInt(n == null ? "0" : n.trim()); } catch (Exception ignored) { }
+            if (count > 0) {
+                Toast.makeText(this, count + " resim yeniden yükleniyor", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            web.evaluateJavascript("scrollY+','+document.documentElement.scrollHeight", pos -> {
+                try {
+                    String[] p = pos.replace("\"", "").split(",");
+                    restoreY = (int) Double.parseDouble(p[0]);
+                    double h = Double.parseDouble(p[1]);
+                    restoreRatio = h > 0 ? restoreY / h : -1;
+                } catch (Exception e) {
+                    restoreY = -1;
+                }
+                Toast.makeText(this, "Sayfa yenileniyor…", Toast.LENGTH_SHORT).show();
+                web.reload();
+            });
+        });
+    }
+
+    /** Resimler yüklendikçe sayfa uzar; 10 sn boyunca kaldığın yere tekrar tekrar iner. Dokununca bırakır. */
+    private void restoreScroll() {
+        int y = restoreY;
+        double r = restoreRatio;
+        restoreY = -1;
+        web.evaluateJavascript("(function(){var y=" + y + ",r=" + r + ",t=0,stop=false;"
+            + "addEventListener('touchstart',function(){stop=true;},{once:true,passive:true});"
+            + "var h=setInterval(function(){if(stop||t++>40){clearInterval(h);return;}"
+            + "var H=document.documentElement.scrollHeight,target=(H>=y+innerHeight)?y:(r>0?r*H:y);"
+            + "if(Math.abs(scrollY-target)>40)scrollTo(0,target);},250);})()", null);
+    }
+
     private void loadChapters(String json) {
         try {
             JSONArray arr = new JSONArray(json == null ? "[]" : json);
@@ -197,6 +260,7 @@ public class ReaderActivity extends Activity {
             i = nums.size() - 1;
         }
         current = nums.get(i)[0];
+        restoreY = -1;
         updateBar();
         web.loadUrl(urls.get(i));
     }
