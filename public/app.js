@@ -159,7 +159,6 @@ function render() {
     : filter === 'dropped' ? rows.filter((r) => shelfOf(r) === 'dropped')
     : rows.filter((r) => !shelfOf(r) && (filter !== 'unread' || r.unread > 0));
   $('#nDone').textContent = rows.filter((r) => shelfOf(r) === 'done').length || '';
-  $('#nDropped').textContent = rows.filter((r) => shelfOf(r) === 'dropped').length || '';
   $('#search').hidden = list.length < 6 && !q;
   renderNews();
   $('#list').hidden = filter === 'news';
