@@ -170,7 +170,7 @@ function render() {
       li.querySelector('h3').textContent = r.title;
       li.querySelector('.meta').textContent = r.pending
         ? 'Bölümler okunuyor…'
-        : r.st.latest == null ? `Okuduğun ${fmt(r.base)} · henüz okunamadı` : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}` + (r.st.via === 'phone' ? ' · 📱' : '');
+        : r.st.latest == null ? `Okuduğun ${fmt(r.base)} · henüz okunamadı` : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}`;
       if (r.st?.error && !phoneFresh(r.st)) {
         const e = li.querySelector('.err-line');
         e.textContent = r.st.error;
@@ -314,7 +314,7 @@ function renderDetail(reset = true) {
   setCover($('#dCoverBox'), v.st?.cover, v.title);
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
-    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.error}` : '') + (v.st.via === 'phone' ? ' · telefondan okundu' : '');
+    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.error}` : '');
 
   // Sıradaki bölüm listenin derinlerindeyse oraya kadar göster
   const nextIdx = v.base == null ? -1 : chapters.findLastIndex(([n]) => n > v.base);
@@ -534,7 +534,12 @@ window.__nativeBack = () => {
 };
 window.__nativeCheckDone = (summary) => {
   load({ quiet: true });
-  if (summary) toast(summary);
+  if (!summary) return;
+  // Telefonun özeti ("Telefondan okunan: 6, yeni bölüm: 2") sadeleştirilir
+  const fresh = /yeni bölüm: (\d+)/.exec(summary);
+  if (fresh) toast(`${fresh[1]} yeni bölüm`);
+  else if (/hata|anahtarı yok/i.test(summary)) toast(summary);
+  else toast('Kontrol tamamlandı');
 };
 
 document.querySelectorAll('[data-close]').forEach((b) => (b.onclick = () => b.closest('dialog').close()));

@@ -108,8 +108,9 @@ const lines = [
   `- Kontrol edilen: ${list.length} seri`,
   `- Yeni bölüm: ${news.map((n) => `${n.title} (${n.fresh.length})`).join(', ') || 'yok'}`,
   `- Gönderilen bildirim: ${sent}`,
-  ...Object.entries(state).filter(([, v]) => v.via && v.via !== 'direct').map(([u, v]) => `- ℹ️ ${u}: ${v.via} yoluyla okundu`),
-  ...errors.map((e) => `- ⚠️ ${e.url}: ${e.error}`),
+  // Telefonun son 3 saatte okuduğu seriler hata sayılmaz
+  ...errors.filter((e) => !(state[e.url]?.via === 'phone' && Date.now() - new Date(state[e.url].phoneAt || 0) < 3 * 3600e3))
+    .map((e) => `- ⚠️ ${e.url}: ${e.error}`),
 ];
 console.log(lines.join('\n'));
 if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');
