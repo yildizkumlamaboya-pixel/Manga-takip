@@ -90,7 +90,7 @@ public final class Checker {
         for (int i = 0; i < list.length(); i++) {
             String url = list.getJSONObject(i).getString("url");
             JSONObject prev = state.optJSONObject(url);
-            if (!needsPhone(prev)) continue;
+            // Telefon her seriyi kendisi kontrol eder (GitHub'ın zamanlanmış kontrolü saatlerce gecikebiliyor)
             try {
                 JSONObject entry = readSeries(url, prev);
                 state.put(url, entry);
