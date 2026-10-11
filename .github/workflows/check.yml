@@ -41,17 +41,27 @@ jobs:
 
       - name: Değişiklikleri kaydet
         working-directory: store
+        env:
+          VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
+          VAPID_SUBJECT: ${{ vars.VAPID_SUBJECT }}
         run: |
           git config user.name "manga-takip-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "Değişiklik yok"
-            exit 0
-          fi
-          git commit -m "Kontrol $(date -u +'%Y-%m-%d %H:%M')"
           for i in 1 2 3; do
+            git add -A
+            if git diff --cached --quiet; then
+              echo "Değişiklik yok"
+              exit 0
+            fi
+            git commit -q -m "Kontrol $(date -u +'%Y-%m-%d %H:%M')"
             git pull --rebase origin data && git push origin HEAD:data && exit 0
+            # Telefon aynı anda yazdı (çakışma): en güncel veriyi alıp kontrolü yeniden yap.
+            # Bildirimler ilk turda gitti, tekrar gönderilmesin diye gizli anahtar verilmiyor.
+            echo "Çakışma oldu, güncel veriyle tekrar deneniyor ($i)"
+            git rebase --abort 2>/dev/null || true
+            git fetch -q origin data
+            git reset -q --hard origin/data
             sleep 5
+            (cd .. && node scripts/check.mjs store > /dev/null)
           done
           exit 1
