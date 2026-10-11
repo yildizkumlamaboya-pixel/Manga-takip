@@ -26,8 +26,6 @@
 <main>
   <div id="banner" class="banner" hidden></div>
 
-  <section id="resume" class="resume" hidden></section>
-
   <div class="filters" role="tablist">
     <button class="chip active" data-filter="all">Tümü</button>
     <button class="chip" data-filter="unread">Yeni bölümü olanlar</button>
@@ -74,8 +72,15 @@
       <p id="dStatus" class="muted"></p>
     </div>
   </div>
+  <div class="resume" id="dResume">
+    <div class="resume-label">Kaldığın yerden devam et</div>
+    <div class="meta" id="dResumeInfo"></div>
+    <div class="resume-actions">
+      <a id="dAgain" class="ghost btn" target="_blank" rel="noopener" hidden></a>
+      <a id="dNext" class="primary btn" target="_blank" rel="noopener">Sıradakini oku</a>
+    </div>
+  </div>
   <div class="row wrap">
-    <a id="dNext" class="primary btn" target="_blank" rel="noopener">Sıradakini oku</a>
     <button id="dAllRead" class="ghost">Hepsini okudum</button>
   </div>
   <p class="hint">Bir bölüme dokununca uygulamanın içinde açılır ve o bölüme kadar okundu sayılır.</p>

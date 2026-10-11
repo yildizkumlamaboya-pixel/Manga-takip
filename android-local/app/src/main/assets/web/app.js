@@ -79,10 +79,12 @@ function view(item) {
 
 /* ---------- Liste ---------- */
 function render() {
-  const rows = list.map(view).sort((a, b) => b.unread - a.unread || a.title.localeCompare(b.title, 'tr'));
+  const recent = recentMap();
+  // Son okunanlar üstte (en yeni en üstte), hiç okunmamışlar altta yeni bölüm sayısına göre
+  const rows = list.map(view).sort((a, b) =>
+    (recent[b.url] || '').localeCompare(recent[a.url] || '') || b.unread - a.unread || a.title.localeCompare(b.title, 'tr'));
   const shown = filter === 'unread' ? rows.filter((r) => r.unread > 0) : rows;
   renderNews();
-  renderResume();
   $('#list').hidden = filter === 'news';
   $('#news').hidden = filter !== 'news';
   $('#list').replaceChildren(
@@ -250,10 +252,21 @@ function renderDetail(reset = true) {
   $('#dMore').hidden = shownCount >= chapters.length;
 
   const next = v.base == null ? null : [...chapters].reverse().find(([n]) => n > v.base);
+  const cur = v.base == null ? null : chapters.find(([n]) => n === v.base);
+  $('#dResumeInfo').textContent = v.pending ? 'Bölümler okunuyor…'
+    : v.base == null ? 'Henüz okumaya başlamadın'
+    : `Son okuduğun: Bölüm ${fmt(v.base)}` + (v.unread ? ` · ${v.unread} yeni bölüm` : ' · güncelsin');
+  const ab = $('#dAgain');
+  ab.hidden = !cur;
+  if (cur) {
+    ab.href = cur[1];
+    ab.textContent = `Tekrar aç: ${fmt(cur[0])}`;
+    ab.onclick = (e) => openChapter(e, cur[0]);
+  }
   const nb = $('#dNext');
   if (next) {
     nb.href = next[1];
-    nb.textContent = `Sıradaki: Bölüm ${fmt(next[0])}`;
+    nb.textContent = `Devam et: ${fmt(next[0])} ›`;
     nb.removeAttribute('aria-disabled');
     nb.onclick = (e) => openChapter(e, next[0]);
   } else {
@@ -266,7 +279,7 @@ function renderDetail(reset = true) {
 
 // Bölümü aç: uygulamada okuyucuda, tarayıcıda sitenin kendi sayfasında
 function openChapter(e, num) {
-  rememberLast(current, num);
+  touchRecent(current);
   if (NATIVE && NATIVE.openReader) {
     e.preventDefault();
     const v = view(list.find((i) => i.url === current));
@@ -490,57 +503,15 @@ load();
 // İlk açılışta hiç kontrol yapılmadıysa başlat
 if (NATIVE && list.length && !NATIVE.lastCheck().split('|')[0] && !checking()) { NATIVE.checkNow(); setTimeout(startPolling, 300); }
 
-/* ---------- Kaldığın yerden devam et ---------- */
-// Son açılan seri bu cihazda hatırlanır; bölüm numarası her zaman listedeki "kaldığın yer"den gelir.
-const LAST_KEY = 'rafi-last';
-function rememberLast(url, num) {
-  store.set(LAST_KEY, JSON.stringify({ url, num, at: new Date().toISOString() }));
+/* ---------- Son okunanlar ---------- */
+// Hangi seriyi ne zaman okuduğun bu cihazda tutulur; ana sayfa buna göre sıralanır.
+const RECENT_KEY = 'rafi-recent';
+function recentMap() {
+  try { return JSON.parse(store.get(RECENT_KEY) || '{}') || {}; } catch { return {}; }
 }
-
-function resumeTarget() {
-  let last = null;
-  try { last = JSON.parse(store.get(LAST_KEY) || 'null'); } catch {}
-  let item = last && list.find((i) => i.url === last.url);
-  // Hiç kayıt yoksa: okunmamış bölümü olan ve kaldığı yer belli bir seri
-  if (!item) item = list.map(view).filter((v) => v.lastRead != null && v.unread > 0).sort((a, b) => b.unread - a.unread)[0];
-  if (!item) return null;
-  const v = view(item);
-  const chapters = v.st?.chapters || [];
-  if (!chapters.length || v.base == null) return null;
-  const cur = chapters.find(([n]) => n === v.base) || null;           // en son açtığın bölüm
-  const next = [...chapters].reverse().find(([n]) => n > v.base) || null; // sıradaki
-  if (!cur && !next) return null;
-  return { v, cur, next };
-}
-
-function renderResume() {
-  const box = $('#resume');
-  const t = filter === 'news' ? null : resumeTarget();
-  box.hidden = !t;
-  if (!t) return;
-  const { v, cur, next } = t;
-  box.innerHTML = `
-    <div class="resume-label">Kaldığın yerden devam et</div>
-    <div class="resume-body">
-      <div class="cover"><span></span><img alt="" referrerpolicy="no-referrer"></div>
-      <div class="resume-info"><b></b><div class="meta"></div></div>
-    </div>
-    <div class="resume-actions"></div>`;
-  setCover(box.querySelector('.cover'), v.st?.cover, v.title);
-  box.querySelector('b').textContent = v.title;
-  box.querySelector('.meta').textContent = `Son okuduğun: Bölüm ${fmt(v.base)}` + (v.unread ? ` · ${v.unread} yeni` : ' · güncelsin');
-  const actions = box.querySelector('.resume-actions');
-  const btn = (ch, label, primary) => {
-    const a = document.createElement('a');
-    a.className = (primary ? 'primary' : 'ghost') + ' btn';
-    a.href = ch[1];
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.textContent = label;
-    a.onclick = (e) => { current = v.url; openChapter(e, ch[0]); };
-    return a;
-  };
-  if (cur) actions.append(btn(cur, `Tekrar aç: Bölüm ${fmt(cur[0])}`, !next));
-  if (next) actions.append(btn(next, `Devam et: Bölüm ${fmt(next[0])} ›`, true));
-  box.querySelector('.resume-body').onclick = () => openSeries(v.url);
+function touchRecent(url) {
+  if (!url) return;
+  const m = recentMap();
+  m[url] = new Date().toISOString();
+  store.set(RECENT_KEY, JSON.stringify(m));
 }

@@ -162,12 +162,13 @@ button[disabled], .btn[aria-disabled="true"] { opacity: .5; pointer-events: none
 .news-item .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent, #ff6b4a); margin-right: 6px; vertical-align: middle; }
 
 /* Kaldığın yerden devam et */
-.resume { background: linear-gradient(135deg, var(--panel), var(--panel-2)); border-radius: var(--radius); padding: 12px; margin: 0 0 12px; }
+.resume { background: var(--bg); border-radius: var(--radius); padding: 12px; margin: 10px 0 4px; }
 .resume-label { font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--accent, #ff6b4a); margin-bottom: 8px; }
 .resume-body { display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: center; cursor: pointer; }
 .resume-body .cover { width: 48px; height: 66px; border-radius: 8px; }
 .resume-body .cover span { font-size: 17px; }
 .resume-info b { display: block; font-size: 16px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.resume-actions { display: flex; gap: 8px; margin-top: 12px; }
+.resume-actions { display: flex; gap: 8px; margin-top: 10px; }
 .resume-actions .btn { flex: 1; text-align: center; padding: 12px 10px; font-weight: 700; }
 .btn.ghost { background: var(--bg); color: var(--text); border-radius: 12px; text-decoration: none; display: inline-block; }
+.resume .btn.ghost { background: var(--panel-2); }
