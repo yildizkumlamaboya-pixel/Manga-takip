@@ -26,13 +26,18 @@
 <main>
   <div id="banner" class="banner" hidden></div>
 
+  <input id="search" class="search" type="search" placeholder="Seri ara…" autocomplete="off" hidden>
+
   <div class="filters" role="tablist">
-    <button class="chip active" data-filter="all">Tümü</button>
+    <button class="chip active" data-filter="all">Okuyorum</button>
     <button class="chip" data-filter="unread">Yeni bölümü olanlar</button>
     <button class="chip" data-filter="news">🔔 Bildirimler <span id="newsCount" class="count" hidden></span></button>
+    <button class="chip" data-filter="done">Bitti <span class="n" id="nDone"></span></button>
+    <button class="chip" data-filter="dropped">Bıraktım <span class="n" id="nDropped"></span></button>
   </div>
 
   <ul id="list" class="list"></ul>
+  <p id="none" class="empty" hidden></p>
   <div id="news" hidden>
     <div class="news-head"><span class="muted small"><b>Yeni bölüm bildirimleri</b> · son 30 gün</span><button id="newsAllRead" class="link-btn" hidden>Hepsini görüldü say</button></div>
     <ul id="newsList" class="news-list"></ul>
@@ -80,6 +85,11 @@
       <a id="dNext" class="primary btn" target="_blank" rel="noopener">Sıradakini oku</a>
     </div>
   </div>
+  <div class="shelf" id="dShelf">
+    <button data-shelf="">Okuyorum</button>
+    <button data-shelf="done">Bitti</button>
+    <button data-shelf="dropped">Bıraktım</button>
+  </div>
   <div class="row wrap">
     <button id="dAllRead" class="ghost">Hepsini okudum</button>
   </div>
@@ -104,6 +114,16 @@
     <button type="button" id="btnBattery" class="ghost" hidden>İzin ver</button>
   </div>
 
+  <div class="setting col" id="quietBox" hidden>
+    <div>
+      <b>Sessiz saatler</b>
+      <p class="muted">Bu saatlerde bildirimler sessizce gelir, ses ve titreşim olmaz.</p>
+    </div>
+    <label class="inline"><input type="checkbox" id="quietOn"> Açık</label>
+    <div class="row quiet-row">
+      <select id="quietFrom"></select><span class="muted">ile</span><select id="quietTo"></select><span class="muted">arası</span>
+    </div>
+  </div>
   <div class="setting col">
     <div>
       <b>Yedek</b>

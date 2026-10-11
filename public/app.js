@@ -151,7 +151,16 @@ function render() {
   // Son okunanlar üstte (en yeni en üstte), hiç okunmamışlar altta yeni bölüm sayısına göre
   const rows = list.map(view).sort((a, b) =>
     (recent[b.url] || '').localeCompare(recent[a.url] || '') || b.unread - a.unread || a.title.localeCompare(b.title, 'tr'));
-  const shown = filter === 'unread' ? rows.filter((r) => r.unread > 0) : rows;
+  const q = searchText();
+  const shelfOf = (r) => r.shelf || '';
+  // Arama yazılıysa tüm raflarda arar; değilse seçili rafı gösterir
+  const shown = q ? rows.filter((r) => r.title.toLocaleLowerCase('tr').includes(q) || r.url.includes(q))
+    : filter === 'done' ? rows.filter((r) => shelfOf(r) === 'done')
+    : filter === 'dropped' ? rows.filter((r) => shelfOf(r) === 'dropped')
+    : rows.filter((r) => !shelfOf(r) && (filter !== 'unread' || r.unread > 0));
+  $('#nDone').textContent = rows.filter((r) => shelfOf(r) === 'done').length || '';
+  $('#nDropped').textContent = rows.filter((r) => shelfOf(r) === 'dropped').length || '';
+  $('#search').hidden = list.length < 6 && !q;
   renderNews();
   $('#list').hidden = filter === 'news';
   $('#news').hidden = filter !== 'news';
@@ -189,7 +198,11 @@ function render() {
     }),
   );
   $('#empty').hidden = list.length > 0 || filter === 'news';
-  const total = rows.reduce((a, r) => a + r.unread, 0);
+  const none = $('#none');
+  none.hidden = !(list.length > 0 && filter !== 'news' && shown.length === 0);
+  none.textContent = q ? 'Aramana uyan seri yok.' : filter === 'done' ? 'Bitirdiğin seriler burada durur. Seri sayfasından "Bitti" seç.'
+    : filter === 'dropped' ? 'Bıraktığın seriler burada durur, onlardan bildirim gelmez.' : filter === 'unread' ? 'Yeni bölümü olan seri yok, güncelsin ✓' : '';
+  const total = rows.filter((r) => r.shelf !== 'dropped').reduce((a, r) => a + r.unread, 0);
   document.title = total ? `(${total}) Manga Takip` : 'Manga Takip';
   if ('setAppBadge' in navigator) (total ? navigator.setAppBadge(total) : navigator.clearAppBadge()).catch(() => {});
 }
@@ -316,6 +329,7 @@ function renderDetail(reset = true) {
   $('#dHost').textContent = host(v.url) + ' ↗';
   $('#dHost').href = v.url;
   setCover($('#dCoverBox'), v.st?.cover, v.title);
+  document.querySelectorAll('#dShelf button').forEach((b) => b.classList.toggle('active', b.dataset.shelf === (item.shelf || '')));
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
     : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.error}` : '');
@@ -617,7 +631,7 @@ function newsEntries() {
   const out = [];
   for (const item of list) {
     const st = state[item.url];
-    if (!st?.news) continue;
+    if (!st?.news || item.shelf === 'dropped') continue;
     const v = view(item);
     const urls = new Map((st.chapters || []).map(([n, u]) => [n, u]));
     for (const [num, at] of st.news) {
@@ -704,3 +718,42 @@ function touchRecent(url) {
   m[url] = new Date().toISOString();
   store.set(RECENT_KEY, JSON.stringify(m));
 }
+
+/* ---------- Arama ve raflar ---------- */
+function searchText() { return ($('#search').value || '').trim().toLocaleLowerCase('tr'); }
+$('#search').addEventListener('input', () => render());
+
+const SHELF_NAMES = { '': 'Okuyorum', done: 'Bitti', dropped: 'Bıraktım' };
+document.querySelectorAll('#dShelf button').forEach((b) => (b.onclick = async () => {
+  const url = current;
+  const shelf = b.dataset.shelf || null;
+  try {
+    list = await mutate('list.json', [], (l) => {
+      const it = l.find((i) => i.url === url);
+      if (it) { if (shelf) it.shelf = shelf; else delete it.shelf; }
+      return l;
+    }, `Raf: ${SHELF_NAMES[shelf || '']}`);
+    render();
+    renderDetail(false);
+    toast(shelf === 'dropped' ? 'Bıraktım rafına taşındı, bildirim gelmeyecek' : `${SHELF_NAMES[shelf || '']} rafına taşındı`);
+  } catch (e) { toast(e.message); }
+}));
+
+/* ---------- Sessiz saatler (uygulama ayarı) ---------- */
+(function setupQuiet() {
+  const box = $('#quietBox');
+  if (!box || !NATIVE || !NATIVE.getSetting) return;
+  box.hidden = false;
+  const from = $('#quietFrom'), to = $('#quietTo'), on = $('#quietOn');
+  for (const sel of [from, to]) {
+    for (let h = 0; h < 24; h++) sel.append(new Option(String(h).padStart(2, '0') + ':00', h));
+  }
+  on.checked = NATIVE.getSetting('quiet_on') === 'true';
+  from.value = NATIVE.getSetting('quiet_from') || '0';
+  to.value = NATIVE.getSetting('quiet_to') || '8';
+  const sync = () => { from.disabled = to.disabled = !on.checked; };
+  sync();
+  on.onchange = () => { NATIVE.setSetting('quiet_on', String(on.checked)); sync(); toast(on.checked ? 'Sessiz saatler açık' : 'Sessiz saatler kapalı'); };
+  from.onchange = () => NATIVE.setSetting('quiet_from', from.value);
+  to.onchange = () => NATIVE.setSetting('quiet_to', to.value);
+})();

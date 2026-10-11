@@ -176,3 +176,17 @@ button[disabled], .btn[aria-disabled="true"] { opacity: .5; pointer-events: none
 .resume-actions .btn { flex: 1; text-align: center; padding: 12px 10px; font-weight: 700; }
 .btn.ghost { background: var(--bg); color: var(--text); border-radius: 12px; text-decoration: none; display: inline-block; }
 .resume .btn.ghost { background: var(--panel-2); }
+
+/* Arama ve raflar */
+.search { width: 100%; margin: 0 0 10px; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--panel-2); background: var(--panel); color: var(--text); font: inherit; }
+.chip .n { opacity: .6; margin-left: 2px; }
+.chip .n:empty { display: none; }
+.shelf { display: flex; gap: 0; margin: 12px 0 2px; background: var(--bg); border-radius: 12px; padding: 3px; }
+.shelf button { flex: 1; background: none; border: 0; color: var(--muted); padding: 9px 4px; border-radius: 10px; font: inherit; font-size: 14px; cursor: pointer; }
+.shelf button.active { background: var(--panel-2); color: var(--text); font-weight: 700; }
+.inline { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.inline input { width: 20px; height: 20px; accent-color: var(--accent); }
+.quiet-row { justify-content: flex-start; align-items: center; margin-top: 0; }
+.quiet-row select { background: var(--panel-2); color: var(--text); border: 0; border-radius: 10px; padding: 8px 10px; font: inherit; }
+.quiet-row select:disabled { opacity: .45; }
+#quietBox { margin-bottom: 10px; }

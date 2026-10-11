@@ -349,6 +349,10 @@ public final class Checker {
             JSONObject st = state.optJSONObject(url);
             if (st == null || st.isNull("latest")) continue;
             double latest = st.getDouble("latest");
+            if ("dropped".equals(list.getJSONObject(i).optString("shelf"))) {
+                seen.put(url, latest); // bıraktığın seri: bildirim yok
+                continue;
+            }
             if (!seen.has(url)) {
                 seen.put(url, latest); // ilk kez görülüyor: bildirim yok
                 continue;
@@ -382,12 +386,27 @@ public final class Checker {
         return count;
     }
 
+    static final String CHANNEL_QUIET = "yeni-bolum-sessiz";
+
+    /** Sessiz saatlerdeysek bildirim sessiz kanaldan gider (ses/titreşim yok, yine görünür). */
+    static String channelNow(Context ctx) {
+        SharedPreferences p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        if (!p.getBoolean("quiet_on", false)) return CHANNEL;
+        int from = p.getInt("quiet_from", 0), to = p.getInt("quiet_to", 8);
+        int h = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
+        boolean quiet = from <= to ? (h >= from && h < to) : (h >= from || h < to);
+        return quiet ? CHANNEL_QUIET : CHANNEL;
+    }
+
     static void ensureChannel(Context ctx) {
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationManager nm = ctx.getSystemService(NotificationManager.class);
             NotificationChannel ch = new NotificationChannel(CHANNEL, "Yeni bölümler", NotificationManager.IMPORTANCE_DEFAULT);
             ch.setDescription("Takip ettiğin serilerde yeni bölüm çıkınca");
             nm.createNotificationChannel(ch);
+            NotificationChannel q = new NotificationChannel(CHANNEL_QUIET, "Yeni bölümler (sessiz saatler)", NotificationManager.IMPORTANCE_LOW);
+            q.setDescription("Sessiz saatlerde sessizce gelen bildirimler");
+            nm.createNotificationChannel(q);
         }
     }
 
@@ -399,7 +418,7 @@ public final class Checker {
         Intent open = ReaderActivity.intent(ctx, seriesUrl, title, chaptersJson, num);
         open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pi = PendingIntent.getActivity(ctx, id, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(ctx, CHANNEL) : new Notification.Builder(ctx);
+        Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(ctx, channelNow(ctx)) : new Notification.Builder(ctx);
         b.setSmallIcon(R.drawable.ic_stat)
             .setContentTitle(title)
             .setContentText(text)

@@ -52,7 +52,7 @@ await pool(list, 4, async (item) => {
     if (prev && prev.latest != null) {
       const fresh = d.chapters.filter((c) => c.num > prev.latest);
       if (fresh.length) {
-        news.push({ url: item.url, title: state[item.url].title, fresh });
+        if (item.shelf !== 'dropped') news.push({ url: item.url, title: state[item.url].title, fresh });
         const now = new Date().toISOString();
         log = [...fresh.map((c) => [c.num, now]), ...log].slice(0, NEWS_KEEP);
       }

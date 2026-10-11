@@ -123,6 +123,24 @@ public class MainActivity extends Activity {
             main.post(() -> startActivity(ReaderActivity.intent(MainActivity.this, seriesUrl, title, chaptersJson, num)));
         }
 
+        /** Uygulama ayarları (sessiz saatler): quiet_on, quiet_from, quiet_to. */
+        @JavascriptInterface
+        public String getSetting(String key) {
+            if ("quiet_on".equals(key)) return String.valueOf(prefs().getBoolean(key, false));
+            if ("quiet_from".equals(key)) return String.valueOf(prefs().getInt(key, 0));
+            if ("quiet_to".equals(key)) return String.valueOf(prefs().getInt(key, 8));
+            return "";
+        }
+
+        @JavascriptInterface
+        public void setSetting(String key, String value) {
+            try {
+                if ("quiet_on".equals(key)) prefs().edit().putBoolean(key, "true".equals(value)).apply();
+                else if ("quiet_from".equals(key) || "quiet_to".equals(key))
+                    prefs().edit().putInt(key, Math.max(0, Math.min(23, Integer.parseInt(value)))).apply();
+            } catch (Exception ignored) { }
+        }
+
         /** Okuyucunun bu seride kaydettiği konum: {"num":..,"p":..} ya da boş. */
         @JavascriptInterface
         public String getPosition(String seriesUrl) {

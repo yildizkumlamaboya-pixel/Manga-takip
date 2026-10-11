@@ -1,5 +1,5 @@
 // Service worker: uygulama kabuğunu önbellekler, bildirimleri gösterir.
-const CACHE = 'mt-v14';
+const CACHE = 'mt-v15';
 const SHELL = ['./', './index.html', './style.css', './app.js', './config.js', './url.js', './manifest.webmanifest', './icons/icon-192.png'];
 
 self.addEventListener('install', (e) => {
