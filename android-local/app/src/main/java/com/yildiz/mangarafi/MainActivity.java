@@ -273,6 +273,12 @@ public class MainActivity extends Activity {
             main.post(() -> startActivity(ReaderActivity.intent(MainActivity.this, seriesUrl, title, chaptersJson, num)));
         }
 
+        /** Okuyucunun bu seride kaydettiği konum: {"num":..,"p":..} ya da boş. */
+        @JavascriptInterface
+        public String getPosition(String seriesUrl) {
+            return prefs().getString(ReaderActivity.posKey(seriesUrl), "");
+        }
+
         @JavascriptInterface
         public String lastCheck() {
             return prefs().getString("lastRun", "") + "|" + prefs().getString("lastSummary", "");

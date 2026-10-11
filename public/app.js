@@ -203,6 +203,7 @@ async function load({ quiet = false } = {}) {
     state = s.data;
     store.set(CACHE_KEY, JSON.stringify({ list, state }));
     render();
+    if (current && $('#dlgSeries').open) renderDetail(false);
     showLastRun();
     if (list.some((i) => !state[i.url])) startPolling();
   } catch (e) {
@@ -342,17 +343,35 @@ function renderDetail(reset = true) {
 
   const next = v.base == null ? null : [...chapters].reverse().find(([n]) => n > v.base);
   const cur = v.base == null ? null : chapters.find(([n]) => n === v.base);
+  // Okuyucunun kaydettiği satır: bölüm yarım kaldıysa ana düğme oraya döner
+  let pos = null;
+  try { pos = JSON.parse((NATIVE && NATIVE.getPosition && NATIVE.getPosition(v.url)) || 'null'); } catch {}
+  const half = cur && pos && pos.num === cur[0] && pos.p < 0.95 && pos.y >= 300 ? Math.round(pos.p * 100) : null;
   $('#dResumeInfo').textContent = v.pending ? 'Bölümler okunuyor…'
     : v.base == null ? 'Henüz okumaya başlamadın'
-    : `Son okuduğun: Bölüm ${fmt(v.base)}` + (v.unread ? ` · ${v.unread} yeni bölüm` : ' · güncelsin');
+    : `Son okuduğun: Bölüm ${fmt(v.base)}` + (half != null ? ` (%${half})` : '') + (v.unread ? ` · ${v.unread} yeni bölüm` : ' · güncelsin');
   const ab = $('#dAgain');
+  const nb = $('#dNext');
+  if (half != null) {
+    // Yarım bölüm: ana düğme kaldığın satıra, yandaki sıradakine
+    nb.href = cur[1];
+    nb.textContent = `Kaldığın yerden: ${fmt(cur[0])} ›`;
+    nb.removeAttribute('aria-disabled');
+    nb.onclick = (e) => openChapter(e, cur[0]);
+    ab.hidden = !next;
+    if (next) {
+      ab.href = next[1];
+      ab.textContent = `Sonraki: ${fmt(next[0])}`;
+      ab.onclick = (e) => openChapter(e, next[0]);
+    }
+    return;
+  }
   ab.hidden = !cur;
   if (cur) {
     ab.href = cur[1];
     ab.textContent = `Tekrar aç: ${fmt(cur[0])}`;
     ab.onclick = (e) => openChapter(e, cur[0]);
   }
-  const nb = $('#dNext');
   if (next) {
     nb.href = next[1];
     nb.textContent = `Devam et: ${fmt(next[0])} ›`;

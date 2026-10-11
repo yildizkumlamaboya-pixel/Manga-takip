@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -49,6 +51,14 @@ public class ReaderActivity extends Activity {
     private double current = -1;
     private int restoreY = -1;          // yenilemeden sonra inilecek yer (piksel)
     private double restoreRatio = -1;   // sayfa boyu değişirse oranla
+    private long noSaveUntil = 0;       // sayfa yüklenip kaldığın yere inene kadar konum kaydedilmez
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Runnable saver = new Runnable() {
+        @Override public void run() {
+            savePos(current);
+            handler.postDelayed(this, 4000);
+        }
+    };
 
     /** Yüklenemeyen resimleri yerinde tekrar dener; yeniden denenen resim sayısını döndürür. */
     private static final String FIX_JS =
@@ -156,6 +166,7 @@ public class ReaderActivity extends Activity {
             public void onPageFinished(WebView view, String url) {
                 view.evaluateJavascript(AUTO_JS, null);
                 if (restoreY >= 0) restoreScroll();
+                else noSaveUntil = System.currentTimeMillis() + 1500;
                 onChapterShown(url);
             }
         });
@@ -217,6 +228,7 @@ public class ReaderActivity extends Activity {
                     restoreY = -1;
                 }
                 Toast.makeText(this, "Sayfa yenileniyor…", Toast.LENGTH_SHORT).show();
+                noSaveUntil = Long.MAX_VALUE;
                 web.reload();
             });
         });
@@ -227,6 +239,7 @@ public class ReaderActivity extends Activity {
         int y = restoreY;
         double r = restoreRatio;
         restoreY = -1;
+        noSaveUntil = System.currentTimeMillis() + 11000;
         web.evaluateJavascript("(function(){var y=" + y + ",r=" + r + ",t=0,stop=false;"
             + "addEventListener('touchstart',function(){stop=true;},{once:true,passive:true});"
             + "var h=setInterval(function(){if(stop||t++>40){clearInterval(h);return;}"
@@ -262,12 +275,13 @@ public class ReaderActivity extends Activity {
             i = nums.size() - 1;
         }
         current = nums.get(i)[0];
-        restoreY = -1;
+        loadSavedPos(current);
         updateBar();
         web.loadUrl(urls.get(i));
     }
 
     private void step(int dir) {
+        savePos(current);
         int i = indexOf(current);
         int j = i + dir;
         if (i < 0 || j < 0 || j >= nums.size()) return;
@@ -325,6 +339,61 @@ public class ReaderActivity extends Activity {
                 }
             }
         }).start();
+    }
+
+    /* ---------- Kaldığın satır ---------- */
+    // Her seri için en son okunan bölümün konumu saklanır: {num, y, h, p} (p = okunan oran)
+
+    static String posKey(String seriesUrl) { return "pos:" + seriesUrl; }
+
+    private void loadSavedPos(double num) {
+        restoreY = -1;
+        noSaveUntil = Long.MAX_VALUE; // yükleme bitene kadar
+        try {
+            String t = getSharedPreferences(Checker.PREFS, MODE_PRIVATE).getString(posKey(seriesUrl), null);
+            if (t == null) return;
+            JSONObject o = new JSONObject(t);
+            if (o.getDouble("num") != num || o.getDouble("p") >= 0.95 || o.getInt("y") < 300) return;
+            restoreY = o.getInt("y");
+            double h = o.getDouble("h");
+            restoreRatio = h > 0 ? restoreY / h : -1;
+            Toast.makeText(this, "Kaldığın yere iniliyor…", Toast.LENGTH_SHORT).show();
+        } catch (Exception ignored) { }
+    }
+
+    private void savePos(double num) {
+        if (num < 0 || web == null || System.currentTimeMillis() < noSaveUntil) return;
+        final String key = posKey(seriesUrl);
+        web.evaluateJavascript("scrollY+','+document.documentElement.scrollHeight+','+innerHeight", v -> {
+            try {
+                if (System.currentTimeMillis() < noSaveUntil) return;
+                String[] p = v.replace("\"", "").split(",");
+                int y = (int) Double.parseDouble(p[0]);
+                double h = Double.parseDouble(p[1]);
+                double vh = Double.parseDouble(p[2]);
+                if (h <= vh * 1.5) return; // sayfa daha yüklenmemiş
+                JSONObject o = new JSONObject();
+                o.put("num", num);
+                o.put("y", y);
+                o.put("h", h);
+                o.put("p", Math.min(1, (y + vh) / h));
+                o.put("at", System.currentTimeMillis());
+                getSharedPreferences(Checker.PREFS, MODE_PRIVATE).edit().putString(key, o.toString()).apply();
+            } catch (Exception ignored) { }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.postDelayed(saver, 4000);
+    }
+
+    @Override
+    protected void onPause() {
+        handler.removeCallbacks(saver);
+        savePos(current);
+        super.onPause();
     }
 
     private void close() {
