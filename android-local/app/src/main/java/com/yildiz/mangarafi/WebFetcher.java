@@ -40,12 +40,16 @@ final class WebFetcher {
                 w.setWebViewClient(new WebViewClient());
                 w.loadUrl(url);
                 long start = SystemClock.uptimeMillis();
+                int[] last = {-1};
                 Runnable poll = new Runnable() {
                     @Override public void run() {
                         if (done.getCount() == 0) return;
                         w.evaluateJavascript("document.documentElement?document.documentElement.outerHTML:''", v -> {
                             String html = unquote(v);
-                            boolean ready = w.getProgress() == 100 && html.length() > 3000 && !Parser.isChallenge(html);
+                            // Bölüm listesi sonradan yüklenebilir: sayı iki okumada aynı kalınca hazır say
+                            int n = html.isEmpty() ? 0 : Parser.parseSeriesPage(html, url).chapters.size();
+                            boolean ready = w.getProgress() == 100 && n > 0 && n == last[0];
+                            last[0] = n;
                             if (ready || SystemClock.uptimeMillis() - start > timeoutMs) {
                                 out[0] = html;
                                 done.countDown();
@@ -73,7 +77,8 @@ final class WebFetcher {
         });
         String html = out[0];
         if (html == null || html.isEmpty()) throw new IOException("tarayıcıyla da açılamadı");
-        if (Parser.isChallenge(html)) throw new IOException("tarayıcı doğrulaması geçilemedi");
+        if (Parser.parseSeriesPage(html, url).chapters.isEmpty() && Parser.isChallenge(html))
+            throw new IOException("tarayıcı doğrulaması geçilemedi");
         return html;
     }
 

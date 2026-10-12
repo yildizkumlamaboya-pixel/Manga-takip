@@ -211,7 +211,11 @@ public class ReaderActivity extends Activity {
             public void onPageFinished(WebView view, String url) {
                 addTopSpace();
                 view.evaluateJavascript(AUTO_JS, null);
-                if (pageMode && !harvested) harvest(0);
+                if (pageMode && !harvested) {
+                    handler.removeCallbacksAndMessages(harvestToken);
+                    harvestLast = -1;
+                    harvest(0);
+                }
                 if (restoreY >= 0) restoreScroll();
                 else noSaveUntil = System.currentTimeMillis() + 1500;
                 onChapterShown(url);
@@ -276,16 +280,37 @@ public class ReaderActivity extends Activity {
         web.loadUrl(seriesUrl);
     }
 
-    /** Sayfa doğrulamayı geçip açılınca HTML'i okuyup bölümleri kaydeder. */
+    private int harvestLast = -1;
+    private final Object harvestToken = new Object();
+
+    /**
+     * Seri sayfası açıkken HTML'i aralıklarla okur; bölüm sayısı artmayı bırakınca
+     * (liste sonradan yükleniyor olabilir) bölümleri kaydeder.
+     */
     private void harvest(int attempt) {
         if (harvested || isFinishing()) return;
+        String cur = web.getUrl();
+        String curPath = "";
+        try { curPath = new URL(cur).getPath().replaceAll("/+$", ""); } catch (Exception ignored) { }
+        if (!curPath.equals(seriesPath)) return; // kullanıcı başka sayfaya geçti
         web.evaluateJavascript("document.documentElement?document.documentElement.outerHTML:''", v -> {
             String html;
             try { html = new JSONArray("[" + v + "]").getString(0); } catch (Exception e) { html = ""; }
-            if (html.length() < 2000 || Parser.isChallenge(html)) {
-                if (attempt < 20) handler.postDelayed(() -> harvest(attempt + 1), 1500);
+            int count = html.isEmpty() ? 0 : Parser.parseSeriesPage(html, seriesUrl).chapters.size();
+            boolean stable = count > 0 && count == harvestLast && web.getProgress() == 100;
+            harvestLast = count;
+            if (!stable) {
+                if (attempt < 30) handler.postAtTime(() -> harvest(attempt + 1), harvestToken, android.os.SystemClock.uptimeMillis() + 1500);
+                else if (count > 0) { harvestLast = -2; harvestNow(html); }
+                else Toast.makeText(this, "Bu sayfada bölüm listesi bulunamadı", Toast.LENGTH_LONG).show();
                 return;
             }
+            harvestNow(html);
+        });
+    }
+
+    private void harvestNow(String html) {
+        {
             harvested = true;
             final String page = html;
             final Context ctx = getApplicationContext();
@@ -312,7 +337,7 @@ public class ReaderActivity extends Activity {
                     }
                 });
             }).start();
-        });
+        }
     }
 
     private Button barButton(String text) {
