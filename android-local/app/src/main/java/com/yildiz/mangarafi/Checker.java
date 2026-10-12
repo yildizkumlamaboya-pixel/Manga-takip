@@ -233,7 +233,14 @@ public final class Checker {
     }
 
     private Parser.Series fetchSeries(String url) throws Exception {
-        String html = httpGet(url);
+        String html;
+        try {
+            html = httpGet(url);
+        } catch (IOException e) {
+            // Bazı siteler adresin sonunda "/" yoksa 404 veriyor (ör. merlintoon)
+            if (!"HTTP 404".equals(e.getMessage()) || url.endsWith("/")) throw e;
+            html = httpGet(url + "/");
+        }
         Parser.Series s = Parser.parseSeriesPage(html, url);
         URL u = new URL(url);
         List<String> paths = Parser.sitemapPaths(u.getHost());
