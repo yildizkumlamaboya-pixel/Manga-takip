@@ -10416,14 +10416,24 @@
   "phoneError": "tarayıcı doğrulaması geçilemedi"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
-  "title": "https:\/\/merlintoon.com\/seri\/ragnarin-donusu",
+  "title": "Ragnarin Donusu",
   "cover": null,
-  "latest": null,
-  "first": null,
-  "chapters": [],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-12T16:25:21.932Z",
-  "phoneError": "tarayıcı doğrulaması geçilemedi"
+  "latest": 2,
+  "first": 2,
+  "chapters": [
+   [
+    2,
+    "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-2\/"
+   ],
+   [
+    1,
+    "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-1\/"
+   ]
+  ],
+  "error": null,
+  "errorSince": null,
+  "via": "phone",
+  "phoneAt": "2026-10-12T20:55:54Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
