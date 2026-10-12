@@ -175,6 +175,15 @@ public final class Checker {
         return notified;
     }
 
+    /** Okuyucuda açılan seri sayfasından bölümleri alıp kaydeder. Bulunan bölüm sayısını döndürür. */
+    public int saveFromPage(String url, String html) throws Exception {
+        Parser.Series s = Parser.parseSeriesPage(html, url);
+        if (s.chapters.isEmpty()) return 0;
+        JSONObject entry = buildEntry(url, Store.state(ctx).optJSONObject(url), s);
+        saveEntry(url, entry);
+        return entry.getJSONArray("chapters").length();
+    }
+
     private JSONObject errorEntry(String url, JSONObject prev, Exception e) {
         try {
             String msg = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
@@ -195,7 +204,11 @@ public final class Checker {
     }
 
     private JSONObject readSeries(String url, JSONObject prev) throws Exception {
-        Parser.Series s = fetchSeries(url);
+        return buildEntry(url, prev, fetchSeries(url));
+    }
+
+    /** Okunan seri sayfasından state kaydını oluşturur (önceki bölümler korunur, boşluklar doldurulur). */
+    JSONObject buildEntry(String url, JSONObject prev, Parser.Series s) throws Exception {
         List<Parser.Chapter> previous = new ArrayList<>();
         if (prev != null) {
             JSONArray pc = prev.optJSONArray("chapters");

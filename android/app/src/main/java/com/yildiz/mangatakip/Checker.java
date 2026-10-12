@@ -98,6 +98,26 @@ public final class Checker {
                 ok++;
             } catch (Exception e) {
                 fail++;
+                // GitHub da okuyamıyorsa telefonun hatasını da yaz (ekranda gerçek sebep görünsün)
+                if (prev == null || (!prev.isNull("error") && prev.optString("error", "").length() > 0)) {
+                    try {
+                        JSONObject x = prev != null ? new JSONObject(prev.toString()) : new JSONObject();
+                        if (prev == null) {
+                            x.put("title", Parser.titleFromSlug(url));
+                            x.put("cover", JSONObject.NULL);
+                            x.put("latest", JSONObject.NULL);
+                            x.put("first", JSONObject.NULL);
+                            x.put("chapters", new JSONArray());
+                            x.put("error", "okunamadı");
+                        }
+                        String msg = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
+                        if (!msg.equals(x.optString("phoneError"))) {
+                            x.put("phoneError", msg);
+                            state.put(url, x);
+                            updated.put(url, x);
+                        }
+                    } catch (Exception ignored) { }
+                }
             }
         }
 
@@ -119,7 +139,11 @@ public final class Checker {
     }
 
     private JSONObject readSeries(String url, JSONObject prev) throws Exception {
-        Parser.Series s = fetchSeries(url);
+        return buildEntry(url, prev, fetchSeries(url));
+    }
+
+    /** Okunan seri sayfasından state kaydını oluşturur (önceki bölümler korunur, boşluklar doldurulur). */
+    JSONObject buildEntry(String url, JSONObject prev, Parser.Series s) throws Exception {
         List<Parser.Chapter> previous = new ArrayList<>();
         if (prev != null) {
             JSONArray pc = prev.optJSONArray("chapters");
@@ -352,6 +376,24 @@ public final class Checker {
             JSONObject merged = new JSONObject(fresh.text == null ? "{}" : fresh.text);
             for (Map.Entry<String, JSONObject> en : updated.entrySet()) merged.put(en.getKey(), en.getValue());
             ghPut(token, "state.json", merged.toString(1) + "\n", fresh.sha, "Telefondan kontrol");
+        }
+    }
+
+    /** Okuyucuda açılan seri sayfasından bölümleri alıp kaydeder. Bulunan bölüm sayısını döndürür. */
+    public int saveFromPage(String url, String html) throws Exception {
+        Parser.Series s = Parser.parseSeriesPage(html, url);
+        if (s.chapters.isEmpty()) return 0;
+        synchronized (LOCK) {
+            String token = prefs.getString("token", "");
+            if (token.isEmpty()) return 0;
+            GhFile stateFile = ghGet(token, "state.json");
+            JSONObject state = new JSONObject(stateFile.text == null ? "{}" : stateFile.text);
+            JSONObject entry = buildEntry(url, state.optJSONObject(url), s);
+            state.put(url, entry);
+            Map<String, JSONObject> updated = new HashMap<>();
+            updated.put(url, entry);
+            saveState(token, state, stateFile.sha, updated);
+            return entry.getJSONArray("chapters").length();
         }
     }
 

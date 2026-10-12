@@ -52,6 +52,7 @@ public class ReaderActivity extends Activity {
     static final String EXTRA_TITLE = "title";
     static final String EXTRA_CHAPTERS = "chapters"; // [[num,url], ...]
     static final String EXTRA_NUM = "num";
+    static final String EXTRA_PAGE = "page"; // seri sayfasını aç, bölümleri oradan al
 
     private WebView web;
     private TextView label;
@@ -69,6 +70,7 @@ public class ReaderActivity extends Activity {
     private final List<double[]> nums = new ArrayList<>(); // artan sırada [num]
     private final List<String> urls = new ArrayList<>();
     private double current = -1;
+    private boolean pageMode = false, harvested = false;
     private int restoreY = -1;          // yenilemeden sonra inilecek yer (piksel)
     private double restoreRatio = -1;   // sayfa boyu değişirse oranla
     private long noSaveUntil = 0;       // sayfa yüklenip kaldığın yere inene kadar konum kaydedilmez
@@ -94,6 +96,13 @@ public class ReaderActivity extends Activity {
         + "setTimeout(function(){i.src=s;},60);},1500);}"
         + "document.addEventListener('error',function(e){if(e.target&&e.target.tagName==='IMG')retry(e.target);},true);"
         + "document.querySelectorAll('img').forEach(function(i){if(i.complete&&i.naturalWidth===0)retry(i);});})()";
+
+    /** Seri sayfasını okuyucuda açar; sayfa yüklenince bölüm listesi oradan alınır. */
+    static Intent pageIntent(Context ctx, String seriesUrl, String title) {
+        Intent i = intent(ctx, seriesUrl, title, "[]", -1);
+        i.putExtra(EXTRA_PAGE, true);
+        return i;
+    }
 
     /** Okuyucuyu açan Intent. */
     static Intent intent(Context ctx, String seriesUrl, String title, String chaptersJson, double num) {
@@ -202,6 +211,7 @@ public class ReaderActivity extends Activity {
             public void onPageFinished(WebView view, String url) {
                 addTopSpace();
                 view.evaluateJavascript(AUTO_JS, null);
+                if (pageMode && !harvested) harvest(0);
                 if (restoreY >= 0) restoreScroll();
                 else noSaveUntil = System.currentTimeMillis() + 1500;
                 onChapterShown(url);
@@ -248,7 +258,61 @@ public class ReaderActivity extends Activity {
         setContentView(root);
         applyLook();
 
-        open(in.getDoubleExtra(EXTRA_NUM, -1));
+        pageMode = in.getBooleanExtra(EXTRA_PAGE, false);
+        if (pageMode) openSeriesPage();
+        else open(in.getDoubleExtra(EXTRA_NUM, -1));
+    }
+
+    /* ---------- Seri sayfasından bölümleri alma ---------- */
+
+    private void openSeriesPage() {
+        label.setText((seriesTitle == null ? "" : seriesTitle + " · ") + "seri sayfası");
+        prevBtn.setEnabled(false);
+        prevBtn.setAlpha(0.35f);
+        nextBtn.setEnabled(false);
+        nextBtn.setAlpha(0.35f);
+        noSaveUntil = Long.MAX_VALUE;
+        Toast.makeText(this, "Sayfa açılınca bölümleri alacağım…", Toast.LENGTH_SHORT).show();
+        web.loadUrl(seriesUrl);
+    }
+
+    /** Sayfa doğrulamayı geçip açılınca HTML'i okuyup bölümleri kaydeder. */
+    private void harvest(int attempt) {
+        if (harvested || isFinishing()) return;
+        web.evaluateJavascript("document.documentElement?document.documentElement.outerHTML:''", v -> {
+            String html;
+            try { html = new JSONArray("[" + v + "]").getString(0); } catch (Exception e) { html = ""; }
+            if (html.length() < 2000 || Parser.isChallenge(html)) {
+                if (attempt < 20) handler.postDelayed(() -> harvest(attempt + 1), 1500);
+                return;
+            }
+            harvested = true;
+            final String page = html;
+            final Context ctx = getApplicationContext();
+            new Thread(() -> {
+                int n;
+                String err = null;
+                try { n = new Checker(ctx).saveFromPage(seriesUrl, page); }
+                catch (Exception e) { n = -1; err = e.getMessage(); }
+                final int count = n;
+                final String error = err;
+                Parser.Series ps = Parser.parseSeriesPage(page, seriesUrl);
+                runOnUiThread(() -> {
+                    if (count > 0) {
+                        nums.clear();
+                        urls.clear();
+                        List<Parser.Chapter> cs = new ArrayList<>(ps.chapters);
+                        cs.sort((a, b) -> Double.compare(a.num, b.num));
+                        for (Parser.Chapter c : cs) { nums.add(new double[]{c.num}); urls.add(c.url); }
+                        Toast.makeText(this, count + " bölüm bulundu, listene eklendi. Bir bölüme dokunarak okumaya başlayabilirsin.", Toast.LENGTH_LONG).show();
+                    } else if (count == 0) {
+                        Toast.makeText(this, "Bu sayfada bölüm bulunamadı", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this, "Kaydedilemedi: " + error, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }).start();
+        });
     }
 
     private Button barButton(String text) {
@@ -681,6 +745,7 @@ public class ReaderActivity extends Activity {
     private void onChapterShown(String url) {
         try {
             String path = new URL(url).getPath().replaceAll("/+$", "");
+            if (path.equals(seriesPath) || current < 0 && !path.startsWith(seriesPath + "/")) return; // seri sayfası
             if (path.startsWith(seriesPath + "/")) {
                 Double n = Parser.numFromPath(path.substring(seriesPath.length() + 1));
                 if (n != null) current = n;

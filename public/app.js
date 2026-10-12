@@ -183,7 +183,7 @@ function render() {
         : r.st.latest == null ? `Okuduğun ${fmt(r.base)} · henüz okunamadı` : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}`;
       if (r.st?.error && !phoneFresh(r.st)) {
         const e = li.querySelector('.err-line');
-        e.textContent = r.st.error;
+        e.textContent = r.st.phoneError || r.st.error;
         e.hidden = false;
       }
       const b = li.querySelector('.badge');
@@ -334,7 +334,7 @@ function renderDetail(reset = true) {
   document.querySelectorAll('#dShelf button').forEach((b) => b.classList.toggle('active', b.dataset.shelf === (item.shelf === 'done' ? 'done' : '')));
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
-    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.error}` : '');
+    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error && !phoneFresh(v.st) ? ` · ⚠️ ${v.st.phoneError || v.st.error}` : '');
 
   // Sıradaki bölüm listenin derinlerindeyse oraya kadar göster
   const nextIdx = v.base == null ? -1 : chapters.findLastIndex(([n]) => n > v.base);
@@ -360,6 +360,9 @@ function renderDetail(reset = true) {
   const next = v.base == null ? null : [...chapters].reverse().find(([n]) => n > v.base);
   const cur = v.base == null ? null : chapters.find(([n]) => n === v.base);
   const firstCh = chapters.length ? chapters[chapters.length - 1] : null;
+  const blocked = !!v.st?.error && !chapters.length;
+  $('#dSiteHelp').hidden = !(blocked && NATIVE && NATIVE.openSite);
+  $('#dResume').hidden = blocked;
   $('#dRestart').hidden = !firstCh || v.pending;
   // Okuyucunun kaydettiği satır: bölüm yarım kaldıysa ana düğme oraya döner
   let pos = null;
@@ -443,7 +446,7 @@ $('#dAllRead').onclick = () => {
 
 $('#dDelete').onclick = async () => {
   const item = list.find((i) => i.url === current);
-  if (!confirm(`"${view(item).title}" takipten çıkarılsın mı?`)) return;
+  if (!(await ask(`"${view(item).title}" takipten çıkarılsın mı?`))) return;
   try {
     const url = current;
     list = await mutate('list.json', [], (l) => l.filter((i) => i.url !== url), `Çıkarıldı: ${url}`);
@@ -771,7 +774,7 @@ $('#dRestart').onclick = async () => {
   if (!chapters.length) return;
   const [firstNum, firstUrl] = chapters[chapters.length - 1];
   if (v.base != null && v.base > firstNum
-    && !confirm(`Kaldığın yer (Bölüm ${fmt(v.base)}) sıfırlanacak ve ilk bölümden (Bölüm ${fmt(firstNum)}) başlayacaksın. Devam edilsin mi?`)) return;
+    && !(await ask(`Kaldığın yer (Bölüm ${fmt(v.base)}) sıfırlanacak ve ilk bölümden (Bölüm ${fmt(firstNum)}) başlayacaksın. Devam edilsin mi?`))) return;
   try {
     list = await mutate('list.json', [], (l) => {
       const it = l.find((i) => i.url === url);
@@ -784,4 +787,31 @@ $('#dRestart').onclick = async () => {
     if (NATIVE && NATIVE.openReader) NATIVE.openReader(url, v.title, JSON.stringify(chapters), firstNum);
     else window.open(firstUrl, '_blank', 'noopener');
   } catch (e) { toast(e.message); }
+};
+
+/* ---------- Onay penceresi ---------- */
+// Uygulamanın içindeki tarayıcı confirm() pencerelerini göstermediği için kendi penceremiz.
+function ask(message, okText = 'Evet') {
+  return new Promise((resolve) => {
+    const d = document.createElement('dialog');
+    d.className = 'sheet';
+    d.innerHTML = '<p class="ask-msg"></p><div class="row"><button type="button" class="ghost">Vazgeç</button><button type="button" class="primary"></button></div>';
+    d.querySelector('.ask-msg').textContent = message;
+    const [no, yes] = d.querySelectorAll('button');
+    yes.textContent = okText;
+    let answered = false;
+    const done = (v) => { if (answered) return; answered = true; d.close(); d.remove(); resolve(v); };
+    no.onclick = () => done(false);
+    yes.onclick = () => done(true);
+    d.addEventListener('close', () => done(false));
+    document.body.append(d);
+    d.showModal();
+  });
+}
+
+/* ---------- Bot korumalı site: sayfayı uygulamada açıp bölümleri al ---------- */
+$('#dOpenSite').onclick = () => {
+  const v = view(list.find((i) => i.url === current));
+  touchRecent(current);
+  NATIVE.openSite(current, v.title);
 };

@@ -147,6 +147,12 @@ public class MainActivity extends Activity {
             return prefs().getString(ReaderActivity.posKey(seriesUrl), "");
         }
 
+        /** Seri sayfasını uygulamada açar; bölümler sayfadan alınır (bot korumalı siteler için). */
+        @JavascriptInterface
+        public void openSite(String seriesUrl, String title) {
+            main.post(() -> startActivity(ReaderActivity.pageIntent(MainActivity.this, seriesUrl, title)));
+        }
+
         @JavascriptInterface
         public String lastCheck() {
             return prefs().getString("lastRun", "") + "|" + prefs().getString("lastSummary", "");

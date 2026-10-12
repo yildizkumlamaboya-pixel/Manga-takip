@@ -188,3 +188,7 @@ button[disabled], .btn[aria-disabled="true"] { opacity: .5; pointer-events: none
 #quietBox { margin-bottom: 10px; }
 
 .restart { display: block; margin: 10px auto 0; font-size: 14px; }
+.ask-msg { font-size: 16px; line-height: 1.45; margin: 4px 2px 8px; }
+
+.site-help { background: var(--bg); border-radius: var(--radius); padding: 12px; margin: 10px 0 4px; }
+.site-help p { margin: 0 0 4px; font-size: 14px; color: var(--muted); line-height: 1.45; }
