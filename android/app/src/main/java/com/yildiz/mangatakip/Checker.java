@@ -174,12 +174,21 @@ public final class Checker {
 
     private Parser.Series fetchSeries(String url) throws Exception {
         String html;
+        String pageUrl = url;
         try {
-            html = httpGet(url);
+            try {
+                html = httpGet(pageUrl);
+            } catch (IOException e) {
+                // Bazı siteler adresin sonunda "/" yoksa 404 veriyor (ör. merlintoon)
+                if (!"HTTP 404".equals(e.getMessage()) || url.endsWith("/")) throw e;
+                pageUrl = url + "/";
+                html = httpGet(pageUrl);
+            }
         } catch (IOException e) {
-            // Bazı siteler adresin sonunda "/" yoksa 404 veriyor (ör. merlintoon)
-            if (!"HTTP 404".equals(e.getMessage()) || url.endsWith("/")) throw e;
-            html = httpGet(url + "/");
+            // Bot koruması (403/503/doğrulama): sayfayı görünmez tarayıcıda aç
+            String m = String.valueOf(e.getMessage());
+            if (!(m.contains("403") || m.contains("503") || m.contains("429") || m.contains("doğrulama"))) throw e;
+            html = WebFetcher.fetch(ctx, pageUrl, 25000);
         }
         Parser.Series s = Parser.parseSeriesPage(html, url);
         URL u = new URL(url);

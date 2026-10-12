@@ -269,6 +269,8 @@ function renderDetail(reset = true) {
 
   const next = v.base == null ? null : [...chapters].reverse().find(([n]) => n > v.base);
   const cur = v.base == null ? null : chapters.find(([n]) => n === v.base);
+  const firstCh = chapters.length ? chapters[chapters.length - 1] : null;
+  $('#dRestart').hidden = !firstCh || v.pending;
   // Okuyucunun kaydettiği satır: bölüm yarım kaldıysa ana düğme oraya döner
   let pos = null;
   try { pos = JSON.parse((NATIVE && NATIVE.getPosition && NATIVE.getPosition(v.url)) || 'null'); } catch {}
@@ -588,3 +590,27 @@ document.querySelectorAll('#dShelf button').forEach((b) => (b.onclick = async ()
   from.onchange = () => NATIVE.setSetting('quiet_from', from.value);
   to.onchange = () => NATIVE.setSetting('quiet_to', to.value);
 })();
+
+/* ---------- Seriye baştan başla ---------- */
+// Kaldığın yeri ilk bölüme çeker ve ilk bölümü açar.
+$('#dRestart').onclick = async () => {
+  const url = current;
+  const v = view(list.find((i) => i.url === url));
+  const chapters = v.st?.chapters || [];
+  if (!chapters.length) return;
+  const [firstNum, firstUrl] = chapters[chapters.length - 1];
+  if (v.base != null && v.base > firstNum
+    && !confirm(`Kaldığın yer (Bölüm ${fmt(v.base)}) sıfırlanacak ve ilk bölümden (Bölüm ${fmt(firstNum)}) başlayacaksın. Devam edilsin mi?`)) return;
+  try {
+    list = await mutate('list.json', [], (l) => {
+      const it = l.find((i) => i.url === url);
+      if (it) it.lastRead = firstNum;
+      return l;
+    }, 'Baştan başla');
+    touchRecent(url);
+    render();
+    renderDetail(false);
+    if (NATIVE && NATIVE.openReader) NATIVE.openReader(url, v.title, JSON.stringify(chapters), firstNum);
+    else window.open(firstUrl, '_blank', 'noopener');
+  } catch (e) { toast(e.message); }
+};

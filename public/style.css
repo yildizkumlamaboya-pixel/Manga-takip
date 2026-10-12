@@ -186,3 +186,5 @@ button[disabled], .btn[aria-disabled="true"] { opacity: .5; pointer-events: none
 .quiet-row select { background: var(--panel-2); color: var(--text); border: 0; border-radius: 10px; padding: 8px 10px; font: inherit; }
 .quiet-row select:disabled { opacity: .45; }
 #quietBox { margin-bottom: 10px; }
+
+.restart { display: block; margin: 10px auto 0; font-size: 14px; }
