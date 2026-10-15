@@ -8111,7 +8111,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-15T13:15:01Z",
+  "phoneAt": "2026-10-15T13:17:12Z",
   "news": [
    [
     123,
@@ -9995,7 +9995,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-15T13:15:09Z",
+  "phoneAt": "2026-10-15T13:17:19Z",
   "news": [
    [
     115,
@@ -10917,7 +10917,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-15T13:11:04Z"
+  "phoneAt": "2026-10-15T13:17:25Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -12449,6 +12449,6 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-15T13:15:02Z"
+  "phoneAt": "2026-10-15T13:17:13Z"
  }
 }
