@@ -55,6 +55,10 @@ public class ReaderActivity extends Activity {
     static final String EXTRA_PAGE = "page"; // seri sayfasını aç, bölümleri oradan al
 
     private WebView web;
+    private WebView pre;                // sıradaki bölümün arkada önden yüklendiği sayfa
+    private String preUrl = null;
+    private boolean preReady = false;
+    private FrameLayout root;
     private TextView label;
     private Button prevBtn, nextBtn;
     private LinearLayout header;        // üst şerit + önceki/sonraki
@@ -131,7 +135,7 @@ public class ReaderActivity extends Activity {
         rp = getSharedPreferences(Checker.PREFS, MODE_PRIVATE);
 
         // Katmanlar: sayfa, filtreler, üst şerit (sayfanın üstünde durur), yüzen düğmeler, menü
-        FrameLayout root = new FrameLayout(this);
+        root = new FrameLayout(this);
         root.setBackgroundColor(bg);
 
         header = new LinearLayout(this);
@@ -186,54 +190,10 @@ public class ReaderActivity extends Activity {
         nav.addView(nextBtn, rlp);
         header.addView(nav);
 
-        web = new WebView(this);
-        web.setBackgroundColor(bg);
-        WebSettings s = web.getSettings();
-        s.setJavaScriptEnabled(true);
-        s.setDomStorageEnabled(true);
-        s.setLoadWithOverviewMode(true);
-        s.setUseWideViewPort(true);
-        CookieManager.getInstance().setAcceptThirdPartyCookies(web, true);
-        web.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
-                Uri u = req.getUrl();
-                // Sitenin kendi sayfaları okuyucuda kalır; reklam yönlendirmeleri engellenir
-                return u.getHost() == null || !u.getHost().endsWith(host.replaceFirst("^www\\.", ""));
-            }
-
-            @Override
-            public void onPageCommitVisible(WebView view, String url) {
-                addTopSpace();
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                addTopSpace();
-                view.evaluateJavascript(AUTO_JS, null);
-                if (pageMode && !harvested) {
-                    handler.removeCallbacksAndMessages(harvestToken);
-                    harvestLast = -1;
-                    harvest(0);
-                }
-                if (restoreY >= 0) restoreScroll();
-                else noSaveUntil = System.currentTimeMillis() + 1500;
-                onChapterShown(url);
-            }
-        });
-        web.setOnScrollChangeListener((v, x, y, ox, oy) -> onPageScroll(y, y - oy));
-        GestureDetector taps = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override public boolean onSingleTapConfirmed(MotionEvent e) {
-                // Tam ekranda dokununca düğmeler gelir/gider
-                if (rp.getBoolean("r_full", true)) setHeaderHidden(!headerHidden);
-                return false;
-            }
-        });
-        web.setOnTouchListener((v, e) -> {
-            if (e.getAction() == MotionEvent.ACTION_DOWN && scrolling) pauseScroll();
-            taps.onTouchEvent(e);
-            return false;
-        });
+        // Arkada (görünmez) sıradaki bölüm, önde okunan bölüm
+        pre = makeWeb(bg);
+        root.addView(pre, new FrameLayout.LayoutParams(-1, -1));
+        web = makeWeb(bg);
         root.addView(web, new FrameLayout.LayoutParams(-1, -1));
 
         warmView = overlay(Color.rgb(255, 147, 41));
@@ -364,6 +324,127 @@ public class ReaderActivity extends Activity {
         b.setTextColor(Color.parseColor(primary ? "#1a0d08" : "#f1eef6"));
         b.setStateListAnimator(null);
         return b;
+    }
+
+    private WebView makeWeb(int bg) {
+        WebView w = new WebView(this);
+        w.setBackgroundColor(bg);
+        WebSettings s = w.getSettings();
+        s.setJavaScriptEnabled(true);
+        s.setDomStorageEnabled(true);
+        s.setLoadWithOverviewMode(true);
+        s.setUseWideViewPort(true);
+        CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);
+        w.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
+                Uri u = req.getUrl();
+                // Sitenin kendi sayfaları okuyucuda kalır; reklam yönlendirmeleri engellenir
+                return u.getHost() == null || !u.getHost().endsWith(host.replaceFirst("^www\\.", ""));
+            }
+
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                addTopSpace(view);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if ("about:blank".equals(url)) return;
+                addTopSpace(view);
+                view.evaluateJavascript(AUTO_JS, null);
+                if (view != web) { onPreloaded(view); return; } // arkadaki önden yükleme
+                if (pageMode && !harvested) {
+                    handler.removeCallbacksAndMessages(harvestToken);
+                    harvestLast = -1;
+                    harvest(0);
+                }
+                if (restoreY >= 0) restoreScroll();
+                else noSaveUntil = System.currentTimeMillis() + 1500;
+                onChapterShown(url);
+            }
+        });
+        w.setOnScrollChangeListener((v, x, y, ox, oy) -> { if (v == web) onPageScroll(y, y - oy); });
+        GestureDetector taps = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override public boolean onSingleTapConfirmed(MotionEvent e) {
+                // Tam ekranda dokununca düğmeler gelir/gider
+                if (rp.getBoolean("r_full", true)) setHeaderHidden(!headerHidden);
+                return false;
+            }
+        });
+        w.setOnTouchListener((v, e) -> {
+            if (v != web) return true;
+            if (e.getAction() == MotionEvent.ACTION_DOWN && scrolling) pauseScroll();
+            taps.onTouchEvent(e);
+            return false;
+        });
+        return w;
+    }
+
+    /* ---------- Sıradaki bölümü önden yükleme ---------- */
+
+    /** Arkadaki sayfayı baştan sona kaydırıp resimlerin yüklenmesini sağlar, sonra başa döner. */
+    private static final String PRE_JS =
+        "(function(){if(window.__mtPre)return;var y=0;window.__mtPre=setInterval(function(){"
+        + "document.querySelectorAll('img[loading=lazy]').forEach(function(i){i.loading='eager';});"
+        + "y+=innerHeight;scrollTo(0,y);if(y>document.documentElement.scrollHeight+innerHeight){"
+        + "clearInterval(window.__mtPre);window.__mtPre=-1;scrollTo(0,0);}},400);})()";
+
+    private final Runnable preloadNext = this::startPreload;
+
+    private void schedulePreload() {
+        handler.removeCallbacks(preloadNext);
+        if (pageMode || !rp.getBoolean("r_pre", true)) {
+            if (preUrl != null) { preUrl = null; preReady = false; pre.stopLoading(); pre.loadUrl("about:blank"); }
+            return;
+        }
+        handler.postDelayed(preloadNext, 3000); // önce okunan bölüm rahatça yüklensin
+    }
+
+    private void startPreload() {
+        int i = indexOf(current);
+        if (i < 0 || i >= nums.size() - 1) return;
+        String next = urls.get(i + 1);
+        if (next.equals(preUrl)) return;
+        preUrl = next;
+        preReady = false;
+        pre.stopLoading();
+        pre.loadUrl(next);
+    }
+
+    private void onPreloaded(WebView v) {
+        if (preUrl == null) return;
+        preReady = true;
+        v.evaluateJavascript(PRE_JS, null);
+    }
+
+    /** Önden yüklenen sayfayı öne alır (Sonraki'ye basınca anında açılır). */
+    private void showPreloaded(double num) {
+        WebView old = web;
+        web = pre;
+        pre = old;
+        root.removeView(old);
+        root.addView(old, 0, new FrameLayout.LayoutParams(-1, -1));
+        boolean ready = preReady;
+        preUrl = null;
+        preReady = false;
+        pre.stopLoading();
+        pre.loadUrl("about:blank");
+
+        current = num;
+        stopAutoScroll();
+        endFab.setVisibility(View.GONE);
+        setHeaderHidden(false);
+        web.evaluateJavascript("if(window.__mtPre>0)clearInterval(window.__mtPre);window.__mtPre=-1;scrollTo(0,0)", null);
+        web.scrollTo(0, 0);
+        loadSavedPos(num);
+        if (ready) {
+            if (restoreY >= 0) restoreScroll();
+            else noSaveUntil = System.currentTimeMillis() + 1500;
+        }
+        updateBar();
+        markRead(current);
+        schedulePreload();
     }
 
     private View overlay(int color) {
@@ -524,6 +605,7 @@ public class ReaderActivity extends Activity {
         addCheck(box, "Tam ekran (kaydırınca düğmeleri gizle)", "r_full", true, this::applyLook);
         addCheck(box, "Okurken ekran kararmasın", "r_awake", true, this::applyLook);
         addCheck(box, "Ses tuşlarıyla sayfa kaydır", "r_vol", false, null);
+        addCheck(box, "Sıradaki bölümü önden yükle", "r_pre", true, this::schedulePreload);
 
         Button brk = navButton(breakLabel(), false);
         brk.setTextSize(15);
@@ -558,11 +640,11 @@ public class ReaderActivity extends Activity {
     /* ---------- Tam ekran ---------- */
 
     /** Üst şerit sayfanın üstünde durduğu için sayfanın başına o kadar boşluk eklenir. */
-    private void addTopSpace() {
+    private void addTopSpace(WebView w) {
         int hp = header.getHeight();
-        int ww = web.getWidth();
-        if (hp <= 0 || ww <= 0) { header.post(this::addTopSpace); return; }
-        web.evaluateJavascript("(function(hp,ww){if(!document.body||document.getElementById('__mtTop'))return;"
+        int ww = w.getWidth();
+        if (hp <= 0 || ww <= 0) { header.post(() -> addTopSpace(w)); return; }
+        w.evaluateJavascript("(function(hp,ww){if(!document.body||document.getElementById('__mtTop'))return;"
             + "var d=document.createElement('div');d.id='__mtTop';d.style.height=Math.round(hp*innerWidth/ww)+'px';"
             + "document.body.insertBefore(d,document.body.firstChild);})(" + hp + "," + ww + ")", null);
     }
@@ -754,6 +836,7 @@ public class ReaderActivity extends Activity {
         int i = indexOf(current);
         int j = i + dir;
         if (i < 0 || j < 0 || j >= nums.size()) return;
+        if (dir == 1 && urls.get(j).equals(preUrl)) { showPreloaded(nums.get(j)[0]); return; }
         open(nums.get(j)[0]);
     }
 
@@ -778,6 +861,7 @@ public class ReaderActivity extends Activity {
         } catch (Exception ignored) { }
         updateBar();
         markRead(current);
+        schedulePreload();
     }
 
     private void markRead(double num) {
@@ -882,6 +966,8 @@ public class ReaderActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        if (pre != null) pre.destroy();
         if (web != null) web.destroy();
         super.onDestroy();
     }
