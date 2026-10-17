@@ -3769,7 +3769,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:01:45Z",
+  "phoneAt": "2026-10-17T19:04:29Z",
   "news": [
    [
     922,
@@ -5359,7 +5359,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:01:46Z"
+  "phoneAt": "2026-10-17T19:04:29Z"
  },
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
@@ -6079,7 +6079,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:01:47Z",
+  "phoneAt": "2026-10-17T19:04:32Z",
   "news": [
    [
     177,
@@ -6388,7 +6388,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-17T19:04:31Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -6723,7 +6724,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-17T19:04:31Z",
   "news": [
    [
     81,
@@ -7033,7 +7035,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:01:47Z"
+  "phoneAt": "2026-10-17T19:04:34Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri": {
   "title": "Tang Klanının Günceleri",
@@ -7300,7 +7302,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-17T19:04:32Z",
   "news": [
    [
     64,
@@ -7830,7 +7833,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:01:49Z",
+  "phoneAt": "2026-10-17T19:04:36Z",
   "news": [
    [
     123,
@@ -8140,7 +8143,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:01:48Z"
+  "phoneAt": "2026-10-17T19:04:35Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9535,7 +9538,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-17T19:04:33Z",
   "news": [
    [
     346,
@@ -10018,10 +10022,10 @@
     "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-17T18:54:15.009Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T18:47:20Z",
+  "phoneAt": "2026-10-17T19:04:40Z",
   "news": [
    [
     116,
@@ -10944,10 +10948,10 @@
     "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-17T18:54:15.081Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T18:47:30Z",
+  "phoneAt": "2026-10-17T19:04:43Z",
   "news": [
    [
     198,
@@ -11852,7 +11856,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-17T19:04:34Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
@@ -12483,6 +12488,7 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "jina"
+  "via": "phone",
+  "phoneAt": "2026-10-17T19:04:36Z"
  }
 }
