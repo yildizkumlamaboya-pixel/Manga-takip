@@ -3769,7 +3769,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:04:39Z",
+  "phoneAt": "2026-10-17T11:28:16Z",
   "news": [
    [
     922,
@@ -5359,7 +5359,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:04:40Z"
+  "phoneAt": "2026-10-17T11:28:17Z"
  },
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
@@ -6079,7 +6079,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:19Z",
+  "phoneAt": "2026-10-17T11:28:20Z",
   "news": [
    [
     177,
@@ -6389,7 +6389,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:04:42Z"
+  "phoneAt": "2026-10-17T11:28:20Z"
  },
  "https:\/\/eskimangalar.com\/manga\/gecmise-donen-polisin-ikinci-sansi": {
   "title": "Geçmişe Dönen Polisin İkinci Şansı",
@@ -6693,7 +6693,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:22Z"
+  "phoneAt": "2026-10-17T11:28:21Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -7029,7 +7029,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:04:41Z",
+  "phoneAt": "2026-10-17T11:28:19Z",
   "news": [
    [
     81,
@@ -7303,7 +7303,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:19Z",
+  "phoneAt": "2026-10-17T11:28:20Z",
   "news": [
    [
     64,
@@ -7833,7 +7833,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:26Z",
+  "phoneAt": "2026-10-17T11:28:23Z",
   "news": [
    [
     123,
@@ -8143,7 +8143,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:25Z"
+  "phoneAt": "2026-10-17T11:28:22Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9539,7 +9539,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:21Z",
+  "phoneAt": "2026-10-17T11:28:21Z",
   "news": [
    [
     346,
@@ -10353,7 +10353,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:28:12Z",
+  "phoneAt": "2026-10-17T11:28:40Z",
   "news": [
    [
     198,
@@ -10832,10 +10832,10 @@
     "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-17T09:30:46.400Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T08:32:34Z",
+  "phoneAt": "2026-10-17T11:28:36Z",
   "news": [
    [
     116,
@@ -10957,8 +10957,7 @@
     87,
     "2026-10-12T21:17:55Z"
    ]
-  ],
-  "phoneError": "bölüm bulunamadı"
+  ]
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -11858,7 +11857,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:23Z"
+  "phoneAt": "2026-10-17T11:28:22Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
@@ -12490,6 +12489,6 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T11:27:27Z"
+  "phoneAt": "2026-10-17T11:28:24Z"
  }
 }
