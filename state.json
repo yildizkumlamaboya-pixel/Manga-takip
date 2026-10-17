@@ -2,9 +2,13 @@
  "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru": {
   "title": "Efsanevi Büyü İmparatoru",
   "cover": "https:\/\/uzaymanga.com\/upload\/thumbnail\/1772102042108___6-1\/thumbnail.avif?w=512",
-  "latest": 922,
+  "latest": 923,
   "first": 920,
   "chapters": [
+   [
+    923,
+    "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru\/923-bolum-oku"
+   ],
    [
     922,
     "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru\/922-bolum-oku"
@@ -3769,8 +3773,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:40Z",
+  "phoneAt": "2026-10-17T19:32:15Z",
   "news": [
+   [
+    923,
+    "2026-10-17T19:32:15Z"
+   ],
    [
     922,
     "2026-10-16T17:36:39Z"
@@ -5359,7 +5367,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:44Z"
+  "phoneAt": "2026-10-17T19:32:16Z"
  },
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
@@ -6079,7 +6087,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:48Z",
+  "phoneAt": "2026-10-17T19:32:18Z",
   "news": [
    [
     177,
@@ -6389,7 +6397,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:46Z"
+  "phoneAt": "2026-10-17T19:32:17Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -6725,7 +6733,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:45Z",
+  "phoneAt": "2026-10-17T19:32:17Z",
   "news": [
    [
     81,
@@ -7035,7 +7043,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:50Z"
+  "phoneAt": "2026-10-17T19:32:19Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri": {
   "title": "Tang Klanının Günceleri",
@@ -7303,7 +7311,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:46Z",
+  "phoneAt": "2026-10-17T19:32:18Z",
   "news": [
    [
     64,
@@ -7833,7 +7841,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:52Z",
+  "phoneAt": "2026-10-17T19:32:21Z",
   "news": [
    [
     123,
@@ -8143,7 +8151,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:51Z"
+  "phoneAt": "2026-10-17T19:32:21Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9539,7 +9547,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:49Z",
+  "phoneAt": "2026-10-17T19:32:19Z",
   "news": [
    [
     346,
@@ -10025,7 +10033,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:19:38Z",
+  "phoneAt": "2026-10-17T19:32:26Z",
   "news": [
    [
     116,
@@ -10951,7 +10959,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:19:42Z",
+  "phoneAt": "2026-10-17T19:32:29Z",
   "news": [
    [
     198,
@@ -11857,7 +11865,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:50Z"
+  "phoneAt": "2026-10-17T19:32:20Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
@@ -12489,6 +12497,6 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-17T19:21:53Z"
+  "phoneAt": "2026-10-17T19:32:22Z"
  }
 }
