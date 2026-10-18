@@ -2,9 +2,13 @@
  "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru": {
   "title": "Efsanevi Büyü İmparatoru",
   "cover": "https:\/\/uzaymanga.com\/upload\/thumbnail\/1772102042108___6-1\/thumbnail.avif?w=512",
-  "latest": 923,
+  "latest": 924,
   "first": 920,
   "chapters": [
+   [
+    924,
+    "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru\/924-bolum-oku"
+   ],
    [
     923,
     "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru\/923-bolum-oku"
@@ -3773,8 +3777,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:09Z",
+  "phoneAt": "2026-10-18T17:25:04Z",
   "news": [
+   [
+    924,
+    "2026-10-18T17:25:04Z"
+   ],
    [
     923,
     "2026-10-17T19:32:15Z"
@@ -5367,7 +5375,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:10Z"
+  "phoneAt": "2026-10-18T17:25:06Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi": {
   "title": "Barbarın Fantezi Dünyası",
@@ -5667,7 +5675,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:12Z"
+  "phoneAt": "2026-10-18T17:25:08Z"
  },
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
@@ -6391,7 +6399,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:14Z",
+  "phoneAt": "2026-10-18T17:25:09Z",
   "news": [
    [
     178,
@@ -6741,7 +6749,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:11Z",
+  "phoneAt": "2026-10-18T17:25:07Z",
   "news": [
    [
     81,
@@ -7015,7 +7023,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:13Z",
+  "phoneAt": "2026-10-18T17:25:08Z",
   "news": [
    [
     64,
@@ -7325,7 +7333,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:15Z"
+  "phoneAt": "2026-10-18T17:25:11Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -7849,7 +7857,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:18Z",
+  "phoneAt": "2026-10-18T17:25:13Z",
   "news": [
    [
     123,
@@ -8159,7 +8167,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:17Z"
+  "phoneAt": "2026-10-18T17:25:12Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9555,7 +9563,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:14Z",
+  "phoneAt": "2026-10-18T17:25:10Z",
   "news": [
    [
     346,
@@ -11063,7 +11071,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:16Z"
+  "phoneAt": "2026-10-18T17:25:11Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -12505,6 +12513,6 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T17:15:19Z"
+  "phoneAt": "2026-10-18T17:25:14Z"
  }
 }
