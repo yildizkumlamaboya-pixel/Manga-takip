@@ -3773,7 +3773,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T15:40:17Z",
+  "phoneAt": "2026-10-18T15:46:21Z",
   "news": [
    [
     923,
@@ -5367,7 +5367,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T15:40:19Z"
+  "phoneAt": "2026-10-18T15:46:22Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi": {
   "title": "Barbarın Fantezi Dünyası",
@@ -5666,7 +5666,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-18T15:46:23Z"
  },
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
@@ -6390,7 +6391,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T15:40:19Z",
+  "phoneAt": "2026-10-18T15:46:24Z",
   "news": [
    [
     178,
@@ -6739,7 +6740,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-18T15:46:23Z",
   "news": [
    [
     81,
@@ -7012,7 +7014,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-18T15:46:24Z",
   "news": [
    [
     64,
@@ -7322,7 +7325,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T15:40:20Z"
+  "phoneAt": "2026-10-18T15:46:25Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -7846,7 +7849,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T15:40:22Z",
+  "phoneAt": "2026-10-18T15:46:27Z",
   "news": [
    [
     123,
@@ -8156,7 +8159,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T15:40:21Z"
+  "phoneAt": "2026-10-18T15:46:27Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9551,7 +9554,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-18T15:46:24Z",
   "news": [
    [
     346,
@@ -10034,10 +10038,10 @@
     "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-18T14:42:00.807Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T13:32:34Z",
+  "phoneAt": "2026-10-18T15:46:32Z",
   "news": [
    [
     116,
@@ -11058,7 +11062,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-18T15:46:26Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -11859,10 +11864,10 @@
     "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-18T14:42:00.967Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-18T13:32:38Z",
+  "phoneAt": "2026-10-18T15:46:35Z",
   "news": [
    [
     198,
@@ -12499,6 +12504,7 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "jina"
+  "via": "phone",
+  "phoneAt": "2026-10-18T15:46:28Z"
  }
 }
