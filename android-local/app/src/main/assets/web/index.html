@@ -124,51 +124,73 @@
 <dialog id="dlgSettings" class="sheet">
   <h2>Ayarlar</h2>
 
-  <div class="setting">
-    <div>
-      <b>Arka planda kontrol</b>
-      <p class="muted" id="batteryState">Telefon her 15 dakikada bir yeni bölüm arar.</p>
-    </div>
-    <button type="button" id="btnBattery" class="ghost" hidden>İzin ver</button>
-  </div>
-
-  <div class="setting col" id="netBox" hidden>
-    <label class="inline"><input type="checkbox" id="dnsOn"> Güvenli DNS (engellenen siteleri açar)</label>
-    <p class="muted">Siteler operatörün DNS'i yerine şifreli DNS (Cloudflare 1.1.1.1) ile açılır. Bir site açılmazsa kapatıp dene.</p>
-    <label class="inline"><input type="checkbox" id="offWifi"> Çevrimdışı bölümleri sadece Wi-Fi'da indir</label>
-    <div class="offline-row"><span class="muted" id="offTotal"></span><button type="button" class="ghost" id="offClear">Kopyaları sil</button></div>
-  </div>
-  <div class="setting col" id="quietBox" hidden>
-    <div>
-      <b>Sessiz saatler</b>
-      <p class="muted">Bu saatlerde bildirimler sessizce gelir, ses ve titreşim olmaz.</p>
-    </div>
-    <label class="inline"><input type="checkbox" id="quietOn"> Açık</label>
-    <div class="row quiet-row">
-      <select id="quietFrom"></select><span class="muted">ile</span><select id="quietTo"></select><span class="muted">arası</span>
-    </div>
-  </div>
-  <div class="setting col">
-    <div>
-      <b>Yedek</b>
-      <p class="muted">Listen sadece bu telefonda durur. Uygulamayı silmeden ya da telefon değiştirmeden önce yedek al.</p>
-    </div>
-    <div class="row">
-      <button type="button" id="btnExport" class="ghost">Yedeği kaydet</button>
-      <button type="button" id="btnImport" class="ghost">Yedekten yükle</button>
+  <div class="set-group">
+    <div class="set-title">Bildirimler</div>
+    <div class="set-card">
+      <div class="set-row">
+        <div class="txt"><b>Arka planda kontrol</b><small id="batteryState">Telefon her 15 dakikada bir yeni bölüm arar.</small></div>
+        <button type="button" id="btnBattery" class="ghost small-btn" hidden>İzin ver</button>
+      </div>
+      <label class="set-row" id="quietBox" hidden>
+        <div class="txt"><b>Sessiz saatler</b><small>Bu saatlerde bildirimler sessiz gelir</small></div>
+        <input type="checkbox" class="switch" id="quietOn">
+      </label>
+      <div class="set-row time-row" id="quietTimes" hidden>
+        <select id="quietFrom"></select><span class="muted">ile</span><select id="quietTo"></select><span class="muted">arası</span>
+      </div>
     </div>
   </div>
 
-  <details class="howto">
-    <summary>Eski Manga Takip listemi al</summary>
-    <p class="muted">GitHub'lı Manga Takip uygulamasını kullanıyorsan listeni ve kaldığın bölümleri buraya bir kerede aktarabilirsin. Depo herkese açık olmalı.</p>
-    <label>Depo (kullanıcı/depo)
-      <input id="ghRepo" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="kullanici-adi/Manga-takip">
-    </label>
-    <button type="button" id="btnGhImport" class="ghost wide">Listeyi al</button>
-  </details>
+  <div id="netBox" hidden>
+    <div class="set-group">
+      <div class="set-title">İnternet</div>
+      <div class="set-card">
+        <label class="set-row">
+          <div class="txt"><b>Güvenli DNS</b><small>Engellenen siteleri açar. Bir site açılmazsa kapatıp dene.</small></div>
+          <input type="checkbox" class="switch" id="dnsOn">
+        </label>
+      </div>
+    </div>
+    <div class="set-group">
+      <div class="set-title">Çevrimdışı okuma</div>
+      <div class="set-card">
+        <label class="set-row">
+          <div class="txt"><b>Sadece Wi-Fi ile indir</b><small>Mobil veri harcanmaz</small></div>
+          <input type="checkbox" class="switch" id="offWifi">
+        </label>
+        <div class="set-row">
+          <div class="txt"><b>Kayıtlı bölümler</b><small id="offTotal"></small></div>
+          <button type="button" class="ghost small-btn" id="offClear">Temizle</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <p class="muted small" id="about"></p>
+  <div class="set-group">
+    <div class="set-title">Yedek</div>
+    <div class="set-card">
+      <div class="set-row">
+        <div class="txt"><b>Yedeği kaydet</b><small>Listeni ve kaldığın yerleri dosyaya kaydeder</small></div>
+        <button type="button" id="btnExport" class="ghost small-btn">Kaydet</button>
+      </div>
+      <div class="set-row">
+        <div class="txt"><b>Yedekten yükle</b><small>Kaydettiğin yedek dosyasını açar</small></div>
+        <button type="button" id="btnImport" class="ghost small-btn">Yükle</button>
+      </div>
+      <details class="howto fold">
+        <summary class="set-row">
+          <div class="txt"><b>Eski Manga Takip listemi al</b><small>GitHub'lı uygulamadan tek seferde aktar</small></div>
+          <span class="chev">›</span>
+        </summary>
+        <div class="fold-body">
+          <input id="ghRepo" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="kullanici-adi/Manga-takip">
+          <button type="button" id="btnGhImport" class="primary wide">Listeyi al</button>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <p class="muted small about" id="about"></p>
   <div class="row">
     <button type="button" class="primary" data-close>Kapat</button>
   </div>

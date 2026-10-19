@@ -588,7 +588,7 @@ document.querySelectorAll('#dShelf button').forEach((b) => (b.onclick = async ()
   on.checked = NATIVE.getSetting('quiet_on') === 'true';
   from.value = NATIVE.getSetting('quiet_from') || '0';
   to.value = NATIVE.getSetting('quiet_to') || '8';
-  const sync = () => { from.disabled = to.disabled = !on.checked; };
+  const sync = () => { $('#quietTimes').hidden = !on.checked; };
   sync();
   on.onchange = () => { NATIVE.setSetting('quiet_on', String(on.checked)); sync(); toast(on.checked ? 'Sessiz saatler açık' : 'Sessiz saatler kapalı'); };
   from.onchange = () => NATIVE.setSetting('quiet_from', from.value);
@@ -686,7 +686,7 @@ $('#dOffN').onchange = () => {
   if (!box || !NATIVE || !NATIVE.getOffline) return;
   box.hidden = false;
   const dns = $('#dnsOn'), wifi = $('#offWifi');
-  const refresh = () => { $('#offTotal').textContent = 'Çevrimdışı kopyalar: ' + mb(NATIVE.offlineTotal() || 0); };
+  const refresh = () => { $('#offTotal').textContent = mb(NATIVE.offlineTotal() || 0) + ' yer kaplıyor'; };
   dns.checked = NATIVE.getSetting('dns_on') === 'true';
   wifi.checked = NATIVE.getSetting('offline_wifi') === 'true';
   dns.onchange = () => { NATIVE.setSetting('dns_on', String(dns.checked)); toast(dns.checked ? 'Güvenli DNS açık' : 'Güvenli DNS kapalı'); };

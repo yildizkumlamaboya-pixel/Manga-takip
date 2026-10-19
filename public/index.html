@@ -127,55 +127,84 @@
 <dialog id="dlgSettings" class="sheet">
   <form method="dialog" id="formSettings">
     <h2>Ayarlar</h2>
-    <label>GitHub erişim anahtarı
-      <input name="token" type="password" autocomplete="off" required placeholder="github_pat_…">
-    </label>
-    <button type="button" id="btnTest" class="ghost wide">Bağlantıyı test et</button>
-    <pre id="tokenTest" class="test-out"></pre>
-    <details class="howto">
-      <summary>Anahtarı nasıl alırım?</summary>
-      <ol>
-        <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Bu sayfayı aç</a> (GitHub'a giriş yapmış olman gerekir).</li>
-        <li>Ad: <b>manga-takip</b>, süre: <b>No expiration</b> veya 1 yıl.</li>
-        <li><b>Repository access</b> → <b>Only select repositories</b> → <b>manga-takip</b>.</li>
-        <li><b>Permissions</b> → <b>Contents: Read and write</b> ve <b>Actions: Read and write</b>.</li>
-        <li><b>Generate token</b>, çıkan anahtarı kopyalayıp buraya yapıştır.</li>
-      </ol>
-      <p class="muted">Anahtar sadece bu telefonda saklanır, hiçbir yere gönderilmez (sadece GitHub'a).</p>
-    </details>
-    <div class="setting" id="batteryBox" hidden>
-      <div>
-        <b>Arka planda kontrol</b>
-        <p class="muted" id="batteryState"></p>
-      </div>
-      <button type="button" id="btnBattery" class="ghost">İzin ver</button>
-    </div>
-    <div class="setting col" id="netBox" hidden>
-    <label class="inline"><input type="checkbox" id="dnsOn"> Güvenli DNS (engellenen siteleri açar)</label>
-    <p class="muted">Siteler operatörün DNS'i yerine şifreli DNS (Cloudflare 1.1.1.1) ile açılır. Bir site açılmazsa kapatıp dene.</p>
-    <label class="inline"><input type="checkbox" id="offWifi"> Çevrimdışı bölümleri sadece Wi-Fi'da indir</label>
-    <div class="offline-row"><span class="muted" id="offTotal"></span><button type="button" class="ghost" id="offClear">Kopyaları sil</button></div>
-  </div>
-  <div class="setting col" id="quietBox" hidden>
-      <div>
-        <b>Sessiz saatler</b>
-        <p class="muted">Bu saatlerde bildirimler sessizce gelir, ses ve titreşim olmaz.</p>
-      </div>
-      <label class="inline"><input type="checkbox" id="quietOn"> Açık</label>
-      <div class="row quiet-row">
-        <select id="quietFrom"></select><span class="muted">ile</span><select id="quietTo"></select><span class="muted">arası</span>
+
+    <div class="set-group">
+      <div class="set-title">Bildirimler</div>
+      <div class="set-card">
+        <div class="set-row" id="batteryBox" hidden>
+          <div class="txt"><b>Arka planda kontrol</b><small id="batteryState"></small></div>
+          <button type="button" id="btnBattery" class="ghost small-btn">İzin ver</button>
+        </div>
+        <label class="set-row" id="quietBox" hidden>
+          <div class="txt"><b>Sessiz saatler</b><small>Bu saatlerde bildirimler sessiz gelir</small></div>
+          <input type="checkbox" class="switch" id="quietOn">
+        </label>
+        <div class="set-row time-row" id="quietTimes" hidden>
+          <select id="quietFrom"></select><span class="muted">ile</span><select id="quietTo"></select><span class="muted">arası</span>
+        </div>
+        <div class="set-row" id="pushRow">
+          <div class="txt"><b>Bildirimler</b><small id="pushState">Kapalı</small></div>
+          <button type="button" id="btnPush" class="ghost small-btn">Aç</button>
+        </div>
       </div>
     </div>
-    <div class="setting">
-      <div>
-        <b>Bildirimler</b>
-        <p class="muted" id="pushState">Kapalı</p>
+
+    <div id="netBox" hidden>
+      <div class="set-group">
+        <div class="set-title">İnternet</div>
+        <div class="set-card">
+          <label class="set-row">
+            <div class="txt"><b>Güvenli DNS</b><small>Engellenen siteleri açar. Bir site açılmazsa kapatıp dene.</small></div>
+            <input type="checkbox" class="switch" id="dnsOn">
+          </label>
+        </div>
       </div>
-      <button type="button" id="btnPush" class="ghost">Aç</button>
+      <div class="set-group">
+        <div class="set-title">Çevrimdışı okuma</div>
+        <div class="set-card">
+          <label class="set-row">
+            <div class="txt"><b>Sadece Wi-Fi ile indir</b><small>Mobil veri harcanmaz</small></div>
+            <input type="checkbox" class="switch" id="offWifi">
+          </label>
+          <div class="set-row">
+            <div class="txt"><b>Kayıtlı bölümler</b><small id="offTotal"></small></div>
+            <button type="button" class="ghost small-btn" id="offClear">Temizle</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="set-group">
+      <div class="set-title">GitHub bağlantısı</div>
+      <details class="set-card howto fold">
+        <summary class="set-row">
+          <div class="txt"><b>Erişim anahtarı</b><small id="tokenStatus"></small></div>
+          <span class="chev">›</span>
+        </summary>
+        <div class="fold-body">
+          <input name="token" type="password" autocomplete="off" required placeholder="github_pat_…">
+          <div class="row">
+            <button type="button" id="btnTest" class="ghost">Test et</button>
+            <button type="submit" class="primary">Kaydet</button>
+          </div>
+          <pre id="tokenTest" class="test-out"></pre>
+          <details class="help">
+            <summary>Anahtarı nasıl alırım?</summary>
+            <ol>
+              <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Bu sayfayı aç</a> (GitHub'a giriş yapmış olman gerekir).</li>
+              <li>Ad: <b>manga-takip</b>, süre: <b>No expiration</b> veya 1 yıl.</li>
+              <li><b>Repository access</b> → <b>Only select repositories</b> → <b>manga-takip</b>.</li>
+              <li><b>Permissions</b> → <b>Contents: Read and write</b> ve <b>Actions: Read and write</b>.</li>
+              <li><b>Generate token</b>, çıkan anahtarı kopyalayıp buraya yapıştır.</li>
+            </ol>
+            <p class="muted">Anahtar sadece bu telefonda saklanır, sadece GitHub'a gönderilir.</p>
+          </details>
+        </div>
+      </details>
+    </div>
+
     <div class="row">
-      <button type="button" class="ghost" data-close>Kapat</button>
-      <button type="submit" class="primary">Kaydet</button>
+      <button type="button" class="primary" data-close>Kapat</button>
     </div>
   </form>
 </dialog>
