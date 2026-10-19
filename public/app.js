@@ -442,6 +442,7 @@ $('#dMore').onclick = () => {
 
 $('#dAllRead').onclick = () => {
   const st = state[current];
+  if (NATIVE && NATIVE.clearNotification) NATIVE.clearNotification(current);
   if (st?.latest != null) setRead(st.latest).catch((e) => toast(e.message));
 };
 
@@ -635,6 +636,7 @@ function setCover(box, src, title) {
 const NEWS_SEEN_KEY = 'mt-news-seen';
 const NEWS_DAYS = 30;
 function newsSeenAt() { return store.get(NEWS_SEEN_KEY) || ''; }
+const NEWS_CLEARED_KEY = 'mt-news-cleared';
 
 function newsEntries() {
   const since = Date.now() - NEWS_DAYS * 86400000;
@@ -646,6 +648,7 @@ function newsEntries() {
     const urls = new Map((st.chapters || []).map(([n, u]) => [n, u]));
     for (const [num, at] of st.news) {
       if (new Date(at).getTime() < since) continue;
+      if (at <= (store.get('mt-news-cleared') || '')) continue; // "Tümünü okundu say" ile temizlendi
       out.push({ item, v, num, at, href: urls.get(num) || item.url, read: v.base != null && num <= v.base });
     }
   }
@@ -711,7 +714,26 @@ function renderNews() {
   $('#newsList').replaceChildren(...items);
 }
 
-$('#newsAllRead').onclick = () => {
+$('#newsAllRead').onclick = async () => {
+  // Bildirimdeki tüm bölümleri okundu say, listeyi ve telefondaki bildirimleri temizle
+  const entries = newsEntries();
+  const upTo = {};
+  for (const e of entries) if (!e.read) upTo[e.item.url] = Math.max(upTo[e.item.url] ?? -Infinity, e.num);
+  try {
+    if (Object.keys(upTo).length) {
+      list = await mutate('list.json', [], (l) => {
+        for (const it of l) {
+          const n = upTo[it.url];
+          if (n != null && (it.lastRead == null || n > it.lastRead)) it.lastRead = n;
+        }
+        return l;
+      }, 'Bildirimler okundu');
+    }
+  } catch (err) { toast(err.message); }
+  store.set(NEWS_CLEARED_KEY, new Date().toISOString());
+  if (NATIVE && NATIVE.clearNotifications) NATIVE.clearNotifications();
+  toast('Tüm bildirimler okundu sayıldı');
+
   store.set(NEWS_SEEN_KEY, new Date().toISOString());
   render();
 };

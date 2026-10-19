@@ -316,6 +316,18 @@ public class MainActivity extends Activity {
             } catch (Exception ignored) { }
         }
 
+        /** Telefondaki tüm yeni bölüm bildirimlerini kaldırır. */
+        @JavascriptInterface
+        public void clearNotifications() {
+            ((android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
+        }
+
+        /** Bir serinin bildirimini kaldırır (bildirim kimliği seri adresinden üretilir). */
+        @JavascriptInterface
+        public void clearNotification(String seriesUrl) {
+            ((android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(seriesUrl.hashCode());
+        }
+
         /** Okuyucunun bu seride kaydettiği konum: {"num":..,"p":..} ya da boş. */
         @JavascriptInterface
         public String getPosition(String seriesUrl) {
