@@ -331,6 +331,7 @@ function renderDetail(reset = true) {
   $('#dHost').textContent = host(v.url) + ' ↗';
   $('#dHost').href = v.url;
   setCover($('#dCoverBox'), v.st?.cover, v.title);
+  renderOffline(v);
   document.querySelectorAll('#dShelf button').forEach((b) => b.classList.toggle('active', b.dataset.shelf === (item.shelf === 'done' ? 'done' : '')));
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
@@ -815,3 +816,58 @@ $('#dOpenSite').onclick = () => {
   touchRecent(current);
   NATIVE.openSite(current, v.title);
 };
+
+/* ---------- Çevrimdışı okuma (manga başına) ---------- */
+let offTimer = null;
+const mb = (b) => (b / 1048576 < 10 ? (b / 1048576).toFixed(1) : Math.round(b / 1048576)) + ' MB';
+
+function offSummary(url) {
+  try { return JSON.parse(NATIVE.getOffline(url) || '{}'); } catch { return {}; }
+}
+
+function renderOffline(v) {
+  const box = $('#dOffline');
+  if (!NATIVE || !NATIVE.getOffline) { box.hidden = true; return; }
+  box.hidden = false;
+  const o = offSummary(v.url);
+  const sel = $('#dOffN');
+  if (![...sel.options].some((x) => +x.value === (o.n || 0))) sel.append(new Option(`Sonraki ${o.n} bölüm`, o.n));
+  sel.value = String(o.n || 0);
+  const nums = o.nums || [];
+  $('#dOffInfo').textContent = !o.n && !nums.length ? 'Açarsan kaldığın yerden sonraki bölümler telefona kaydedilir, internetsiz okursun. 7 gün saklanır.'
+    : `${nums.length} bölüm telefonda hazır` + (nums.length ? ` (${fmt(nums[0])}–${fmt(nums[nums.length - 1])}) · ${mb(o.size || 0)}` : '')
+      + (o.busy ? ' · indiriliyor…' : '') + ' · 7 gün saklanır';
+  // Bölüm listesinde kayıtlı olanları işaretle
+  const set = new Set(nums.map(Number));
+  setTimeout(() => document.querySelectorAll('#dChapters li').forEach((li) => li.classList.toggle('off', set.has(Number(li.dataset.num)))), 0);
+  clearTimeout(offTimer);
+  if (o.busy && $('#dlgSeries').open) offTimer = setTimeout(() => { if (current === v.url) renderOffline(view(list.find((i) => i.url === v.url))); }, 3000);
+}
+
+$('#dOffN').onchange = () => {
+  const v = view(list.find((i) => i.url === current));
+  const n = Number($('#dOffN').value);
+  NATIVE.setOffline(v.url, n, JSON.stringify(v.st?.chapters || []), v.base ?? -1);
+  toast(n ? `Sonraki ${n} bölüm indirilecek` + (NATIVE.getSetting && NATIVE.getSetting('offline_wifi') === 'true' ? ' (Wi-Fi\'da)' : '') : 'Çevrimdışı okuma kapatıldı');
+  setTimeout(() => renderOffline(v), 600);
+};
+
+(function setupNet() {
+  const box = $('#netBox');
+  if (!box || !NATIVE || !NATIVE.getOffline) return;
+  box.hidden = false;
+  const dns = $('#dnsOn'), wifi = $('#offWifi');
+  const refresh = () => { $('#offTotal').textContent = 'Çevrimdışı kopyalar: ' + mb(NATIVE.offlineTotal() || 0); };
+  dns.checked = NATIVE.getSetting('dns_on') === 'true';
+  wifi.checked = NATIVE.getSetting('offline_wifi') === 'true';
+  dns.onchange = () => { NATIVE.setSetting('dns_on', String(dns.checked)); toast(dns.checked ? 'Güvenli DNS açık' : 'Güvenli DNS kapalı'); };
+  wifi.onchange = () => NATIVE.setSetting('offline_wifi', String(wifi.checked));
+  $('#offClear').onclick = async () => {
+    if (!(await ask('Telefondaki tüm çevrimdışı bölüm kopyaları silinsin mi?', 'Sil'))) return;
+    NATIVE.clearOffline();
+    setTimeout(refresh, 800);
+    toast('Kopyalar silindi');
+  };
+  $('#btnSettings').addEventListener('click', refresh);
+  refresh();
+})();

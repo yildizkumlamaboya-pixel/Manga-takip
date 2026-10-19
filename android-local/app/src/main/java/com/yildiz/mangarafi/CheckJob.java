@@ -26,7 +26,10 @@ public class CheckJob extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         new Thread(() -> {
+            Net.applyWebView(this);
             new Checker(this).run();
+            // Çevrimdışı açık seriler için sıradaki bölümleri indir (en fazla 8 dk)
+            Offline.ensureAll(this, Store.list(this), Store.state(this), 8 * 60_000L);
             jobFinished(params, false);
         }).start();
         return true;

@@ -54,8 +54,13 @@ public final class Checker {
     private final SharedPreferences prefs;
     private final Map<String, String> sitemapCache = new HashMap<>();
 
+    static Context appCtx;
+    JSONArray lastList;      // son kontrolde okunan liste/durum (çevrimdışı indirme için)
+    JSONObject lastState;
+
     public Checker(Context ctx) {
         this.ctx = ctx.getApplicationContext();
+        appCtx = this.ctx;
         this.prefs = this.ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
@@ -122,6 +127,8 @@ public final class Checker {
         }
 
         if (!updated.isEmpty()) saveState(token, state, stateFile.sha, updated);
+        lastList = list;
+        lastState = state;
         int notified = notifyNew(list, state);
 
         StringBuilder sb = new StringBuilder();
@@ -277,7 +284,7 @@ public final class Checker {
     }
 
     static String httpGet(String url) throws IOException {
-        HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
+        HttpURLConnection c = Net.open(appCtx, url); // güvenli DNS açıksa yerel vekil üzerinden
         try {
             c.setInstanceFollowRedirects(true);
             c.setConnectTimeout(20000);

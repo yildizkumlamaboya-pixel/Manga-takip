@@ -87,6 +87,8 @@ public class MainActivity extends Activity {
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
         }
         CheckJob.schedule(this);
+        Net.applyWebView(this);                                  // gömülü güvenli DNS
+        new Thread(() -> Offline.cleanup(getApplicationContext())).start(); // 7 günü dolan kopyalar
     }
 
     /** Arayüz dosyalarını uygulamanın içinden verir. */
@@ -163,6 +165,7 @@ public class MainActivity extends Activity {
                 running.decrementAndGet();
             }
             js("window.__nativeCheckDone && window.__nativeCheckDone(" + JSONObject.quote(summary) + ")");
+            Offline.ensureAll(MainActivity.this, Store.list(MainActivity.this), Store.state(MainActivity.this), 0);
         }).start();
     }
 
@@ -273,9 +276,29 @@ public class MainActivity extends Activity {
             main.post(() -> startActivity(ReaderActivity.intent(MainActivity.this, seriesUrl, title, chaptersJson, num)));
         }
 
+        /** Çevrimdışı okuma özeti: {"n":..,"nums":[..],"size":..,"busy":..} */
+        @JavascriptInterface
+        public String getOffline(String seriesUrl) { return Offline.summary(MainActivity.this, seriesUrl); }
+
+        /** Bu manga için sıradaki n bölümü çevrimdışı tut (0 = kapalı). */
+        @JavascriptInterface
+        public void setOffline(String seriesUrl, int n, String chaptersJson, double base) {
+            Offline.setWanted(MainActivity.this, seriesUrl, n);
+            if (n <= 0) return;
+            try { Offline.ensure(MainActivity.this, seriesUrl, new JSONArray(chaptersJson), base); } catch (Exception ignored) { }
+        }
+
+        @JavascriptInterface
+        public double offlineTotal() { return Offline.size(Offline.root(MainActivity.this)); }
+
+        @JavascriptInterface
+        public void clearOffline() { new Thread(() -> Offline.clearAll(MainActivity.this)).start(); }
+
         /** Uygulama ayarları (sessiz saatler): quiet_on, quiet_from, quiet_to. */
         @JavascriptInterface
         public String getSetting(String key) {
+            if ("dns_on".equals(key)) return String.valueOf(Net.dnsOn(MainActivity.this));
+            if ("offline_wifi".equals(key)) return String.valueOf(Offline.wifiOnly(MainActivity.this));
             if ("quiet_on".equals(key)) return String.valueOf(prefs().getBoolean(key, false));
             if ("quiet_from".equals(key)) return String.valueOf(prefs().getInt(key, 0));
             if ("quiet_to".equals(key)) return String.valueOf(prefs().getInt(key, 8));
@@ -285,7 +308,9 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void setSetting(String key, String value) {
             try {
-                if ("quiet_on".equals(key)) prefs().edit().putBoolean(key, "true".equals(value)).apply();
+                if ("dns_on".equals(key)) Net.setDnsOn(MainActivity.this, "true".equals(value));
+                else if ("offline_wifi".equals(key)) Offline.setWifiOnly(MainActivity.this, "true".equals(value));
+                else if ("quiet_on".equals(key)) prefs().edit().putBoolean(key, "true".equals(value)).apply();
                 else if ("quiet_from".equals(key) || "quiet_to".equals(key))
                     prefs().edit().putInt(key, Math.max(0, Math.min(23, Integer.parseInt(value)))).apply();
             } catch (Exception ignored) { }

@@ -76,6 +76,7 @@ public class ReaderActivity extends Activity {
     private final List<String> urls = new ArrayList<>();
     private double current = -1;
     private boolean pageMode = false, harvested = false;
+    private boolean offlineShown = false; // şu an çevrimdışı kopya gösteriliyor
     private int restoreY = -1;          // yenilemeden sonra inilecek yer (piksel)
     private double restoreRatio = -1;   // sayfa boyu değişirse oranla
     private long noSaveUntil = 0;       // sayfa yüklenip kaldığın yere inene kadar konum kaydedilmez
@@ -134,6 +135,7 @@ public class ReaderActivity extends Activity {
         loadChapters(in.getStringExtra(EXTRA_CHAPTERS));
 
         rp = getSharedPreferences(Checker.PREFS, MODE_PRIVATE);
+        Net.applyWebView(this); // gömülü güvenli DNS
 
         // Katmanlar: sayfa, filtreler, üst şerit (sayfanın üstünde durur), yüzen düğmeler, menü
         root = new FrameLayout(this);
@@ -342,12 +344,17 @@ public class ReaderActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
+                if (Offline.HOST.equals(u.getHost())) return false;
                 // Sitenin kendi sayfaları okuyucuda kalır; reklam yönlendirmeleri engellenir
                 return u.getHost() == null || !u.getHost().endsWith(host.replaceFirst("^www\\.", ""));
             }
 
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
+                if (Offline.HOST.equals(req.getUrl().getHost())) {
+                    WebResourceResponse r = Offline.serve(getApplicationContext(), req.getUrl());
+                    return r != null ? r : empty();
+                }
                 if (adsBlocked() && isAdHost(req.getUrl().getHost())) return empty();
                 return null;
             }
@@ -365,6 +372,7 @@ public class ReaderActivity extends Activity {
                 view.evaluateJavascript(AUTO_JS, null);
                 if (adsBlocked()) view.evaluateJavascript(AD_CSS_JS, null);
                 if (view != web) { onPreloaded(view); return; } // arkadaki önden yükleme
+                offlineShown = url.startsWith("https://" + Offline.HOST);
                 if (pageMode && !harvested) {
                     handler.removeCallbacksAndMessages(harvestToken);
                     harvestLast = -1;
@@ -459,7 +467,7 @@ public class ReaderActivity extends Activity {
         int i = indexOf(current);
         if (i < 0 || i >= nums.size() - 1) return;
         String next = urls.get(i + 1);
-        if (next.equals(preUrl)) return;
+        if (next.equals(preUrl) || Offline.has(this, seriesUrl, nums.get(i + 1)[0])) return;
         preUrl = next;
         preReady = false;
         pre.stopLoading();
@@ -486,6 +494,7 @@ public class ReaderActivity extends Activity {
         pre.loadUrl("about:blank");
 
         current = num;
+        offlineShown = false;
         stopAutoScroll();
         endFab.setVisibility(View.GONE);
         setHeaderHidden(false);
@@ -499,6 +508,20 @@ public class ReaderActivity extends Activity {
         updateBar();
         markRead(current);
         schedulePreload();
+        ensureOffline();
+    }
+
+    /** Bu manga için çevrimdışı açıksa kaldığın yerden sonraki bölümleri arka planda indir. */
+    private void ensureOffline() {
+        if (current < 0 || Offline.wanted(this, seriesUrl) <= 0) return;
+        JSONArray arr = new JSONArray();
+        for (int k = 0; k < nums.size(); k++) {
+            JSONArray c = new JSONArray();
+            try { c.put(nums.get(k)[0]); } catch (Exception ignored) { }
+            c.put(urls.get(k));
+            arr.put(c);
+        }
+        Offline.ensure(this, seriesUrl, arr, current);
     }
 
     private View overlay(int color) {
@@ -814,6 +837,17 @@ public class ReaderActivity extends Activity {
      * Bozuk resim bulunamazsa sayfayı yeniden yükler ve kaldığın yere geri iner.
      */
     private void refresh() {
+        if (offlineShown) {
+            // Çevrimdışı kopyadan sitedeki canlı sayfaya geç
+            int i = indexOf(current);
+            if (i >= 0) {
+                offlineShown = false;
+                updateBar();
+                Toast.makeText(this, "Sitedeki sayfa açılıyor…", Toast.LENGTH_SHORT).show();
+                web.loadUrl(urls.get(i));
+            }
+            return;
+        }
         web.evaluateJavascript(FIX_JS, n -> {
             int count = 0;
             try { count = Integer.parseInt(n == null ? "0" : n.trim()); } catch (Exception ignored) { }
@@ -883,7 +917,15 @@ public class ReaderActivity extends Activity {
         endFab.setVisibility(View.GONE);
         setHeaderHidden(false);
         updateBar();
-        web.loadUrl(urls.get(i));
+        if (Offline.has(this, seriesUrl, current)) {
+            // Çevrimdışı kopya var: beklemeden telefondan aç (internet gerekmez)
+            offlineShown = true;
+            updateBar();
+            web.loadDataWithBaseURL(Offline.baseUrl(seriesUrl, current), Offline.pageHtml(this, seriesUrl, current),
+                "text/html", "utf-8", null);
+        } else {
+            web.loadUrl(urls.get(i));
+        }
     }
 
     private void step(int dir) {
@@ -891,13 +933,15 @@ public class ReaderActivity extends Activity {
         int i = indexOf(current);
         int j = i + dir;
         if (i < 0 || j < 0 || j >= nums.size()) return;
+        if (Offline.has(this, seriesUrl, nums.get(j)[0])) { open(nums.get(j)[0]); return; } // telefonda kayıtlı
         if (dir == 1 && urls.get(j).equals(preUrl)) { showPreloaded(nums.get(j)[0]); return; }
         open(nums.get(j)[0]);
     }
 
     private void updateBar() {
         int i = indexOf(current);
-        label.setText((seriesTitle == null ? "" : seriesTitle + " · ") + "Bölüm " + Parser.fmt(current));
+        label.setText((seriesTitle == null ? "" : seriesTitle + " · ") + "Bölüm " + Parser.fmt(current)
+            + (offlineShown ? " · çevrimdışı" : ""));
         prevBtn.setEnabled(i > 0);
         prevBtn.setAlpha(i > 0 ? 1f : 0.35f);
         nextBtn.setEnabled(i >= 0 && i < nums.size() - 1);

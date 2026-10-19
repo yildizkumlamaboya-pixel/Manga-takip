@@ -93,6 +93,19 @@
     <button data-shelf="">Okuyorum</button>
     <button data-shelf="done">Bitti</button>
   </div>
+  <div class="offline" id="dOffline" hidden>
+    <div class="offline-row">
+      <b>Çevrimdışı okuma</b>
+      <select id="dOffN">
+        <option value="0">Kapalı</option>
+        <option value="5">Sonraki 5 bölüm</option>
+        <option value="10">Sonraki 10 bölüm</option>
+        <option value="20">Sonraki 20 bölüm</option>
+        <option value="50">Sonraki 50 bölüm</option>
+      </select>
+    </div>
+    <p class="muted small" id="dOffInfo"></p>
+  </div>
   <div class="row wrap">
     <button id="dAllRead" class="ghost">Hepsini okudum</button>
   </div>
@@ -117,6 +130,12 @@
     <button type="button" id="btnBattery" class="ghost" hidden>İzin ver</button>
   </div>
 
+  <div class="setting col" id="netBox" hidden>
+    <label class="inline"><input type="checkbox" id="dnsOn"> Güvenli DNS (engellenen siteleri açar)</label>
+    <p class="muted">Siteler operatörün DNS'i yerine şifreli DNS (Cloudflare 1.1.1.1) ile açılır. Bir site açılmazsa kapatıp dene.</p>
+    <label class="inline"><input type="checkbox" id="offWifi"> Çevrimdışı bölümleri sadece Wi-Fi'da indir</label>
+    <div class="offline-row"><span class="muted" id="offTotal"></span><button type="button" class="ghost" id="offClear">Kopyaları sil</button></div>
+  </div>
   <div class="setting col" id="quietBox" hidden>
     <div>
       <b>Sessiz saatler</b>

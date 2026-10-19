@@ -192,3 +192,13 @@ button[disabled], .btn[aria-disabled="true"] { opacity: .5; pointer-events: none
 
 .site-help { background: var(--bg); border-radius: var(--radius); padding: 12px; margin: 10px 0 4px; }
 .site-help p { margin: 0 0 4px; font-size: 14px; color: var(--muted); line-height: 1.45; }
+
+/* Çevrimdışı okuma */
+.offline { background: var(--bg); border-radius: var(--radius); padding: 12px; margin: 10px 0 4px; }
+.offline-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.offline select { background: var(--panel-2); color: var(--text); border: 0; border-radius: 10px; padding: 8px 10px; font: inherit; }
+.offline p { margin: 8px 0 0; }
+.chapters li.off a { background: linear-gradient(90deg, rgba(255,107,74,.10), transparent 60%); }
+.chapters li.off a::before { content: "⬇"; order: 2; margin-left: auto; margin-right: 8px; color: var(--accent); font-size: 13px; }
+.chapters li.off.new a::after { order: 3; }
+#netBox { margin-bottom: 10px; }
