@@ -3777,7 +3777,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T22:19:43Z",
+  "phoneAt": "2026-10-19T23:36:35Z",
   "news": [
    [
     924,
@@ -4094,7 +4094,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-19T23:36:35Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -4433,7 +4434,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-19T23:36:35Z",
   "news": [
    [
     82,
@@ -4710,7 +4712,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-19T23:36:35Z",
   "news": [
    [
     64,
@@ -5444,7 +5447,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T22:19:45Z",
+  "phoneAt": "2026-10-19T23:36:35Z",
   "news": [
    [
     179,
@@ -5766,7 +5769,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T22:19:46Z"
+  "phoneAt": "2026-10-19T23:36:37Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -7165,7 +7168,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-19T23:36:36Z",
   "news": [
    [
     347,
@@ -7703,7 +7707,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T22:19:47Z",
+  "phoneAt": "2026-10-19T23:36:37Z",
   "news": [
    [
     123,
@@ -8013,7 +8017,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T22:19:46Z"
+  "phoneAt": "2026-10-19T23:36:37Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -8912,7 +8916,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-19T23:36:36Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -9385,10 +9390,10 @@
     "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-19T20:16:02.833Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T18:30:13Z",
+  "phoneAt": "2026-10-19T23:36:42Z",
   "news": [
    [
     116,
@@ -10311,10 +10316,10 @@
     "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-19T20:16:02.986Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T18:30:17Z",
+  "phoneAt": "2026-10-19T23:36:43Z",
   "news": [
    [
     198,
@@ -10951,7 +10956,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "jina"
+  "via": "phone",
+  "phoneAt": "2026-10-19T23:36:38Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/gel-beni-al": {
   "title": "Gel Beni Al",
@@ -11854,7 +11860,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-19T23:36:38Z"
  },
  "https:\/\/mangawt.com\/manga\/iskelet-asker": {
   "title": "İskelet Asker",
@@ -13434,6 +13441,6 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T22:19:45Z"
+  "phoneAt": "2026-10-19T23:36:35Z"
  }
 }
