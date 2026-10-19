@@ -663,9 +663,9 @@ function renderOffline(v) {
   if (![...sel.options].some((x) => +x.value === (o.n || 0))) sel.append(new Option(`Sonraki ${o.n} bölüm`, o.n));
   sel.value = String(o.n || 0);
   const nums = o.nums || [];
-  $('#dOffInfo').textContent = !o.n && !nums.length ? 'Açarsan kaldığın yerden sonraki bölümler telefona kaydedilir, internetsiz okursun. 7 gün saklanır.'
+  $('#dOffInfo').textContent = !o.n && !nums.length ? 'Açarsan kaldığın yerden sonraki bölümler telefona kaydedilir, internetsiz okursun. Okuduğun bölüm 7 gün sonra silinir.'
     : `${nums.length} bölüm telefonda hazır` + (nums.length ? ` (${fmt(nums[0])}–${fmt(nums[nums.length - 1])}) · ${mb(o.size || 0)}` : '')
-      + (o.busy ? ' · indiriliyor…' : '') + ' · 7 gün saklanır';
+      + (o.busy ? ' · indiriliyor…' : '') + ' · okuduktan 7 gün sonra silinir';
   // Bölüm listesinde kayıtlı olanları işaretle
   const set = new Set(nums.map(Number));
   setTimeout(() => document.querySelectorAll('#dChapters li').forEach((li) => li.classList.toggle('off', set.has(Number(li.dataset.num)))), 0);
@@ -677,7 +677,7 @@ $('#dOffN').onchange = () => {
   const v = view(list.find((i) => i.url === current));
   const n = Number($('#dOffN').value);
   NATIVE.setOffline(v.url, n, JSON.stringify(v.st?.chapters || []), v.base ?? -1);
-  toast(n ? `Sonraki ${n} bölüm indirilecek` + (NATIVE.getSetting && NATIVE.getSetting('offline_wifi') === 'true' ? ' (Wi-Fi\'da)' : '') : 'Çevrimdışı okuma kapatıldı');
+  toast(n >= 9999 ? 'Okumadığın tüm bölümler indirilecek' : n ? `Sonraki ${n} bölüm indirilecek` + (NATIVE.getSetting && NATIVE.getSetting('offline_wifi') === 'true' ? ' (Wi-Fi\'da)' : '') : 'Çevrimdışı okuma kapatıldı, bu mangadaki kopyalar silindi');
   setTimeout(() => renderOffline(v), 600);
 };
 

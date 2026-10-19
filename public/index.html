@@ -105,6 +105,8 @@
         <option value="10">Sonraki 10 bölüm</option>
         <option value="20">Sonraki 20 bölüm</option>
         <option value="50">Sonraki 50 bölüm</option>
+        <option value="100">Sonraki 100 bölüm</option>
+        <option value="9999">Okumadığım tüm bölümler</option>
       </select>
     </div>
     <p class="muted small" id="dOffInfo"></p>
@@ -141,6 +143,13 @@
       </ol>
       <p class="muted">Anahtar sadece bu telefonda saklanır, hiçbir yere gönderilmez (sadece GitHub'a).</p>
     </details>
+    <div class="setting" id="batteryBox" hidden>
+      <div>
+        <b>Arka planda kontrol</b>
+        <p class="muted" id="batteryState"></p>
+      </div>
+      <button type="button" id="btnBattery" class="ghost">İzin ver</button>
+    </div>
     <div class="setting col" id="netBox" hidden>
     <label class="inline"><input type="checkbox" id="dnsOn"> Güvenli DNS (engellenen siteleri açar)</label>
     <p class="muted">Siteler operatörün DNS'i yerine şifreli DNS (Cloudflare 1.1.1.1) ile açılır. Bir site açılmazsa kapatıp dene.</p>

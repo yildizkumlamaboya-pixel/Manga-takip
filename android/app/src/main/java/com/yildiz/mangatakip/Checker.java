@@ -92,12 +92,25 @@ public final class Checker {
 
         Map<String, JSONObject> updated = new HashMap<>();
         int ok = 0, fail = 0;
+        // Seriler aynı anda 3'er 3'er okunur (sırayla okumak çok seri olunca bildirimleri geciktiriyordu)
+        java.util.concurrent.ExecutorService pool = java.util.concurrent.Executors.newFixedThreadPool(3);
+        Map<String, java.util.concurrent.Future<JSONObject>> jobs = new java.util.LinkedHashMap<>();
         for (int i = 0; i < list.length(); i++) {
             String url = list.getJSONObject(i).getString("url");
             JSONObject prev = state.optJSONObject(url);
-            // Telefon her seriyi kendisi kontrol eder (GitHub'ın zamanlanmış kontrolü saatlerce gecikebiliyor)
+            jobs.put(url, pool.submit(() -> readSeries(url, prev)));
+        }
+        pool.shutdown();
+        for (Map.Entry<String, java.util.concurrent.Future<JSONObject>> job : jobs.entrySet()) {
+            String url = job.getKey();
+            JSONObject prev = state.optJSONObject(url);
             try {
-                JSONObject entry = readSeries(url, prev);
+                JSONObject entry;
+                try {
+                    entry = job.getValue().get(3, java.util.concurrent.TimeUnit.MINUTES);
+                } catch (java.util.concurrent.ExecutionException ee) {
+                    throw ee.getCause() instanceof Exception ? (Exception) ee.getCause() : ee;
+                }
                 state.put(url, entry);
                 updated.put(url, entry);
                 ok++;

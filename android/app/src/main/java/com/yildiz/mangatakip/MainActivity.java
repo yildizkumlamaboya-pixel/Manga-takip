@@ -66,6 +66,12 @@ public class MainActivity extends Activity {
         }
         CheckJob.schedule(this);
         Net.applyWebView(this);                                  // gömülü güvenli DNS
+        // Pil tasarrufu arka plan kontrolünü saatlerce geciktirebiliyor: bir kez izin iste
+        if (Build.VERSION.SDK_INT >= 23 && !prefs().getBoolean("askedBattery", false)
+            && !((android.os.PowerManager) getSystemService(POWER_SERVICE)).isIgnoringBatteryOptimizations(getPackageName())) {
+            prefs().edit().putBoolean("askedBattery", true).apply();
+            main.postDelayed(this::askBattery, 1500);
+        }
         new Thread(() -> Offline.cleanup(getApplicationContext())).start(); // 7 günü dolan kopyalar
     }
 
@@ -94,6 +100,16 @@ public class MainActivity extends Activity {
                 Toast.makeText(this, "Çıkmak için tekrar geri bas", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void askBattery() {
+        try {
+            startActivity(new Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                Uri.parse("package:" + getPackageName())));
+        } catch (Exception e) {
+            try { startActivity(new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)); }
+            catch (Exception ignored) { }
+        }
     }
 
     private SharedPreferences prefs() {
@@ -167,6 +183,16 @@ public class MainActivity extends Activity {
                     prefs().edit().putInt(key, Math.max(0, Math.min(23, Integer.parseInt(value)))).apply();
             } catch (Exception ignored) { }
         }
+
+        @JavascriptInterface
+        public boolean batteryFree() {
+            if (Build.VERSION.SDK_INT < 23) return true;
+            android.os.PowerManager pm = (android.os.PowerManager) getSystemService(POWER_SERVICE);
+            return pm.isIgnoringBatteryOptimizations(getPackageName());
+        }
+
+        @JavascriptInterface
+        public void askBatteryFree() { main.post(MainActivity.this::askBattery); }
 
         /** Okuyucunun bu seride kaydettiği konum: {"num":..,"p":..} ya da boş. */
         @JavascriptInterface

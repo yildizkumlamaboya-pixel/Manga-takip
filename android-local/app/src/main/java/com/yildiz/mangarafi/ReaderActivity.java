@@ -513,7 +513,8 @@ public class ReaderActivity extends Activity {
 
     /** Bu manga için çevrimdışı açıksa kaldığın yerden sonraki bölümleri arka planda indir. */
     private void ensureOffline() {
-        if (current < 0 || Offline.wanted(this, seriesUrl) <= 0) return;
+        if (current < 0) return;
+        if (Offline.wanted(this, seriesUrl) <= 0) { Offline.markReadUpTo(this, seriesUrl, current); return; }
         JSONArray arr = new JSONArray();
         for (int k = 0; k < nums.size(); k++) {
             JSONArray c = new JSONArray();

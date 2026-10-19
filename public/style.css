@@ -202,3 +202,4 @@ button[disabled], .btn[aria-disabled="true"] { opacity: .5; pointer-events: none
 .chapters li.off a::before { content: "⬇"; order: 2; margin-left: auto; margin-right: 8px; color: var(--accent); font-size: 13px; }
 .chapters li.off.new a::after { order: 3; }
 #netBox { margin-bottom: 10px; }
+.setting button { white-space: nowrap; }

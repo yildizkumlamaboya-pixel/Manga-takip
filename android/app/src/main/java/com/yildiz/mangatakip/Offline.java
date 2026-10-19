@@ -43,13 +43,15 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Çevrimdışı okuma: her manga için seçilen sayıda sıradaki bölüm uygulamanın kendi
- * klasörüne (başka uygulamaların göremediği yere) kaydedilir ve 7 gün sonra kendiliğinden silinir.
+ * klasörüne (başka uygulamaların göremediği yere) kaydedilir. Okunmamış bölümler okunana kadar kalır,
+ * okunan bölüm okunduktan 7 gün sonra kendiliğinden silinir.
  * İnternet yokken okuyucu bölümü bu kopyadan gösterir.
  */
 final class Offline {
     private Offline() { }
 
-    static final long KEEP_MS = 7L * 24 * 60 * 60 * 1000;
+    static final long KEEP_MS = 7L * 24 * 60 * 60 * 1000; // okunduktan sonra saklama süresi
+    static final int ALL = 9999;                          // "okumadığım tüm bölümler"
     static final String HOST = "offline.local";
     private static final String PREFS = "offline";
 
@@ -65,7 +67,8 @@ final class Offline {
     static int wanted(Context ctx, String series) { return prefs(ctx).getInt("n:" + series, 0); }
 
     static void setWanted(Context ctx, String series, int n) {
-        prefs(ctx).edit().putInt("n:" + series, Math.max(0, Math.min(100, n))).apply();
+        prefs(ctx).edit().putInt("n:" + series, Math.max(0, Math.min(ALL, n))).apply();
+        if (n <= 0) delete(seriesDir(ctx, series)); // kapatınca bu mangadaki kopyalar silinir
     }
 
     static boolean wifiOnly(Context ctx) { return prefs(ctx).getBoolean("wifi", true); }
@@ -100,7 +103,7 @@ final class Offline {
         if (!f.exists()) return null;
         try {
             JSONObject o = new JSONObject(readFile(f));
-            if (System.currentTimeMillis() - o.getLong("at") > KEEP_MS) return null;
+            if (expired(o)) return null;
             return o;
         } catch (Exception e) {
             return null;
@@ -108,6 +111,31 @@ final class Offline {
     }
 
     static boolean has(Context ctx, String series, double num) { return index(ctx, series, num) != null; }
+
+    /** Okunduysa ve üstünden 7 gün geçtiyse süresi dolmuştur; okunmamış bölüm beklemede kalır. */
+    static boolean expired(JSONObject idx) {
+        long readAt = idx.optLong("readAt", 0);
+        return readAt > 0 && System.currentTimeMillis() - readAt > KEEP_MS;
+    }
+
+    /** Kaldığın yere kadar olan kayıtlı bölümleri "okundu" işaretler (7 günlük süre o an başlar). */
+    static void markReadUpTo(Context ctx, String series, double base) {
+        File[] ds = seriesDir(ctx, series).listFiles();
+        if (ds == null) return;
+        long now = System.currentTimeMillis();
+        for (File d : ds) {
+            try {
+                double n = Double.parseDouble(d.getName());
+                if (n > base) continue;
+                File f = new File(d, "index.json");
+                if (!f.exists()) continue;
+                JSONObject o = new JSONObject(readFile(f));
+                if (o.optLong("readAt", 0) > 0) continue;
+                o.put("readAt", now);
+                writeFile(f, o.toString());
+            } catch (Exception ignored) { }
+        }
+    }
 
     static List<Double> nums(Context ctx, String series) {
         List<Double> out = new ArrayList<>();
@@ -148,7 +176,7 @@ final class Offline {
                 boolean old;
                 try {
                     old = !idx.exists() ? now - c.lastModified() > 24 * 3600_000L
-                        : now - new JSONObject(readFile(idx)).getLong("at") > KEEP_MS;
+                        : expired(new JSONObject(readFile(idx)));
                 } catch (Exception e) {
                     old = true;
                 }
@@ -215,6 +243,7 @@ final class Offline {
      */
     static Future<?> ensure(Context ctx, String series, JSONArray chapters, double base) {
         Context app = ctx.getApplicationContext();
+        markReadUpTo(app, series, base);
         int n = wanted(app, series);
         if (n <= 0 || busy.contains(series)) return null;
         List<double[]> nums = new ArrayList<>();
@@ -259,11 +288,12 @@ final class Offline {
             try {
                 JSONObject it = list.getJSONObject(i);
                 String url = it.getString("url");
-                if (wanted(ctx, url) <= 0) continue;
                 JSONObject st = state.optJSONObject(url);
                 if (st == null) continue;
                 double base = !it.isNull("lastRead") && it.has("lastRead") ? it.getDouble("lastRead")
                     : st.has("first") && !st.isNull("first") ? st.getDouble("first") : -1;
+                markReadUpTo(ctx, url, base);
+                if (wanted(ctx, url) <= 0) continue;
                 Future<?> f = ensure(ctx, url, st.optJSONArray("chapters") == null ? new JSONArray() : st.getJSONArray("chapters"), base);
                 if (f != null) jobs.add(f);
             } catch (Exception ignored) { }
