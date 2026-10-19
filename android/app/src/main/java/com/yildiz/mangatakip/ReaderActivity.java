@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -334,6 +335,8 @@ public class ReaderActivity extends Activity {
         s.setDomStorageEnabled(true);
         s.setLoadWithOverviewMode(true);
         s.setUseWideViewPort(true);
+        s.setJavaScriptCanOpenWindowsAutomatically(false); // açılır reklam pencereleri açılmaz
+        s.setSupportMultipleWindows(false);
         CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);
         w.setWebViewClient(new WebViewClient() {
             @Override
@@ -344,8 +347,15 @@ public class ReaderActivity extends Activity {
             }
 
             @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
+                if (adsBlocked() && isAdHost(req.getUrl().getHost())) return empty();
+                return null;
+            }
+
+            @Override
             public void onPageCommitVisible(WebView view, String url) {
                 addTopSpace(view);
+                if (adsBlocked()) view.evaluateJavascript(AD_CSS_JS, null);
             }
 
             @Override
@@ -353,6 +363,7 @@ public class ReaderActivity extends Activity {
                 if ("about:blank".equals(url)) return;
                 addTopSpace(view);
                 view.evaluateJavascript(AUTO_JS, null);
+                if (adsBlocked()) view.evaluateJavascript(AD_CSS_JS, null);
                 if (view != web) { onPreloaded(view); return; } // arkadaki önden yükleme
                 if (pageMode && !harvested) {
                     handler.removeCallbacksAndMessages(harvestToken);
@@ -381,6 +392,49 @@ public class ReaderActivity extends Activity {
         return w;
     }
 
+    /* ---------- Reklam engelleyici ---------- */
+    // Bilinen reklam/açılır pencere ağlarına giden istekler boş yanıtla kesilir.
+    // Sitenin kendi adresi ve Cloudflare doğrulaması asla engellenmez (site güvenliğine takılmamak için).
+    private static final String[] AD_HOSTS = {
+        "doubleclick.net", "googlesyndication.com", "googleadservices.com", "adservice.google.com",
+        "googletagservices.com", "pagead2.googlesyndication.com", "amazon-adsystem.com", "adnxs.com",
+        "criteo.com", "criteo.net", "pubmatic.com", "rubiconproject.com", "openx.net", "taboola.com",
+        "outbrain.com", "mgid.com", "popads.net", "popcash.net", "propellerads.com", "propellerclick.com",
+        "onclickads.net", "onclkds.com", "adsterra.com", "highperformanceformat.com",
+        "profitabledisplaynetwork.com", "effectivegatecpm.com", "exoclick.com", "exosrv.com",
+        "realsrv.com", "tsyndicate.com", "juicyads.com", "trafficjunky.net", "clickadu.com",
+        "hilltopads.net", "a-ads.com", "adcash.com", "ad-maven.com", "admaven.com", "monetag.com",
+        "adfox.ru", "an.yandex.ru", "yandexadexchange.net", "adskeeper.com", "adskeeper.co.uk",
+        "bidvertiser.com", "revcontent.com", "zedo.com", "smartadserver.com", "adform.net",
+        "yieldmo.com", "media.net", "infolinks.com", "chitika.com", "vidoomy.com", "ezoic.net",
+        "adsco.re", "ad.plus", "adtelligent.com", "betweendigital.com", "admatic.com.tr",
+        "reklamstore.com", "reklamaction.com", "tr.adserver", "adgager.com"
+    };
+
+    /** Reklam kutularını gizleyen stil (sitenin kendi reklam alanları). */
+    private static final String AD_CSS_JS =
+        "(function(){if(document.getElementById('__mtAds'))return;var s=document.createElement('style');s.id='__mtAds';"
+        + "s.textContent='ins.adsbygoogle,.adsbygoogle,[id^=div-gpt-ad],[id*=google_ads],iframe[src*=doubleclick],"
+        + "iframe[src*=googlesyndication],iframe[src*=\"/ads\"],.ad-container,.ads-container,.advert,.advertisement,"
+        + ".reklam,.reklamlar,[class*=reklam-],[id*=reklam],.ads-banner,.banner-ads,.ad-banner,.sticky-ads,"
+        + ".popup-ads,.adsbox{display:none!important;visibility:hidden!important;height:0!important}';"
+        + "(document.head||document.documentElement).appendChild(s);})()";
+
+    private boolean adsBlocked() { return rp == null || rp.getBoolean("r_ads", true); }
+
+    private boolean isAdHost(String h) {
+        if (h == null) return false;
+        h = h.toLowerCase(java.util.Locale.ROOT);
+        String site = host.replaceFirst("^www\\.", "");
+        if (h.endsWith(site) || h.endsWith("cloudflare.com") || h.endsWith("cloudflareinsights.com")) return false;
+        for (String a : AD_HOSTS) if (h.equals(a) || h.endsWith("." + a)) return true;
+        return false;
+    }
+
+    private static WebResourceResponse empty() {
+        return new WebResourceResponse("text/plain", "utf-8", new java.io.ByteArrayInputStream(new byte[0]));
+    }
+
     /* ---------- Sıradaki bölümü önden yükleme ---------- */
 
     /** Arkadaki sayfayı baştan sona kaydırıp resimlerin yüklenmesini sağlar, sonra başa döner. */
@@ -398,7 +452,7 @@ public class ReaderActivity extends Activity {
             if (preUrl != null) { preUrl = null; preReady = false; pre.stopLoading(); pre.loadUrl("about:blank"); }
             return;
         }
-        handler.postDelayed(preloadNext, 3000); // önce okunan bölüm rahatça yüklensin
+        handler.postDelayed(preloadNext, 800); // okunan bölüm açılır açılmaz sıradaki hazırlanır
     }
 
     private void startPreload() {
@@ -606,6 +660,7 @@ public class ReaderActivity extends Activity {
         addCheck(box, "Okurken ekran kararmasın", "r_awake", true, this::applyLook);
         addCheck(box, "Ses tuşlarıyla sayfa kaydır", "r_vol", false, null);
         addCheck(box, "Sıradaki bölümü önden yükle", "r_pre", true, this::schedulePreload);
+        addCheck(box, "Reklamları engelle", "r_ads", true, () -> web.reload());
 
         Button brk = navButton(breakLabel(), false);
         brk.setTextSize(15);
