@@ -71,7 +71,7 @@ function view(item) {
     ...item,
     st,
     base,
-    title: st?.title && st.title !== item.url ? st.title : host(item.url),
+    title: st?.title && st.title !== item.url ? st.title : (item.title || host(item.url)),
     unread: unreadList.length,
     pending: !st,
   };
@@ -84,12 +84,16 @@ function render() {
   const rows = list.map(view).sort((a, b) =>
     (recent[b.url] || '').localeCompare(recent[a.url] || '') || b.unread - a.unread || a.title.localeCompare(b.title, 'tr'));
   const q = searchText();
-  const shelfOf = (r) => (r.shelf === 'done' ? 'done' : '');
+  const shelfOf = (r) => (r.shelf === 'done' || r.shelf === 'inbox' ? r.shelf : '');
   // Arama yazılıysa tüm raflarda arar; değilse seçili rafı gösterir
   const shown = q ? rows.filter((r) => r.title.toLocaleLowerCase('tr').includes(q) || r.url.includes(q))
     : filter === 'done' ? rows.filter((r) => shelfOf(r) === 'done')
+    : filter === 'inbox' ? rows.filter((r) => shelfOf(r) === 'inbox')
     : rows.filter((r) => !shelfOf(r) && (filter !== 'unread' || r.unread > 0));
   $('#nDone').textContent = rows.filter((r) => shelfOf(r) === 'done').length || '';
+  const nInbox = rows.filter((r) => shelfOf(r) === 'inbox').length;
+  $('#nInbox').textContent = nInbox || '';
+  $('#chipInbox').hidden = !nInbox && filter !== 'inbox';
   $('#search').hidden = list.length < 6 && !q;
   renderNews();
   $('#list').hidden = filter === 'news';
@@ -112,15 +116,13 @@ function render() {
       li.querySelector('h3').textContent = r.title;
       li.querySelector('.meta').textContent = r.pending
         ? 'Bölümler okunuyor…'
+        : r.shelf === 'inbox' ? `${r.from ? r.from + ' önerdi · ' : ''}` + (r.st.latest == null ? 'henüz okunamadı' : `${fmt(r.st.latest)} bölüm`)
         : r.st.latest == null ? `Okuduğun ${fmt(r.base)} · henüz okunamadı` : `Son ${fmt(r.st.latest)} · Okuduğun ${fmt(r.base)}`;
-      if (r.st?.error) {
-        const e = li.querySelector('.err-line');
-        e.textContent = r.st.phoneError || r.st.error;
-        e.hidden = false;
-      }
+
       const b = li.querySelector('.badge');
       if (r.pending) { b.textContent = '…'; b.classList.add('zero'); }
       else if (r.st?.error && !r.st.chapters?.length) { b.textContent = '!'; b.classList.add('warn'); }
+      else if (r.shelf === 'inbox') { b.textContent = '📥'; b.classList.add('zero'); }
       else if (r.unread) b.textContent = r.unread;
       else { b.textContent = '✓'; b.classList.add('zero'); }
       li.onclick = () => openSeries(r.url);
@@ -130,8 +132,9 @@ function render() {
   $('#empty').hidden = list.length > 0 || filter === 'news';
   const none = $('#none');
   none.hidden = !(list.length > 0 && filter !== 'news' && shown.length === 0);
-  none.textContent = q ? 'Aramana uyan seri yok.' : filter === 'done' ? 'Bitirdiğin seriler burada durur. Seri sayfasından "Bitti" seç.' : filter === 'unread' ? 'Yeni bölümü olan seri yok, güncelsin ✓' : '';
-  const total = rows.reduce((a, r) => a + r.unread, 0);
+  none.textContent = q ? 'Aramana uyan seri yok.' : filter === 'done' ? 'Bitirdiğin seriler burada durur. Seri sayfasından "Bitti" seç.' : filter === 'unread' ? 'Yeni bölümü olan seri yok, güncelsin ✓'
+    : filter === 'inbox' ? 'Arkadaşından liste eklediğinde seriler burada durur.' : '';
+  const total = rows.filter((r) => r.shelf !== 'inbox').reduce((a, r) => a + r.unread, 0);
   document.title = total ? `(${total}) Manga Rafı` : 'Manga Rafı';
 }
 
@@ -242,10 +245,14 @@ function renderDetail(reset = true) {
   $('#dHost').href = v.url;
   setCover($('#dCoverBox'), v.st?.cover, v.title);
   renderOffline(v);
+  const inbox = item.shelf === 'inbox';
+  $('#dInbox').hidden = !inbox;
+  $('#dShelf').hidden = inbox;
+  if (inbox) $('#dInboxFrom').textContent = (item.from ? `${item.from} önerdi` : 'Arkadaştan geldi') + ' · bildirim gelmez';
   document.querySelectorAll('#dShelf button').forEach((b) => b.classList.toggle('active', b.dataset.shelf === (item.shelf === 'done' ? 'done' : '')));
   $('#dStatus').textContent = v.pending
     ? 'Bölümler henüz okunmadı, kontrol bitince gelecek.'
-    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + (v.st.error ? ` · ⚠️ ${v.st.phoneError || v.st.error}` : '');
+    : `Son bölüm ${fmt(v.st.latest)} · Okuduğun ${fmt(v.base)}` + '';
 
   // Sıradaki bölüm listenin derinlerindeyse oraya kadar göster
   const nextIdx = v.base == null ? -1 : chapters.findLastIndex(([n]) => n > v.base);
@@ -465,7 +472,7 @@ function newsEntries() {
   const out = [];
   for (const item of list) {
     const st = state[item.url];
-    if (!st?.news) continue;
+    if (!st?.news || item.shelf === 'inbox') continue;
     const v = view(item);
     const urls = new Map((st.chapters || []).map(([n, u]) => [n, u]));
     for (const [num, at] of st.news) {
@@ -708,7 +715,7 @@ $('#dOffN').onchange = () => {
   if (!box || !NATIVE || !NATIVE.getOffline) return;
   box.hidden = false;
   const dns = $('#dnsOn'), wifi = $('#offWifi');
-  const refresh = () => { $('#offTotal').textContent = mb(NATIVE.offlineTotal() || 0) + ' yer kaplıyor'; };
+  const refresh = () => { $('#offTotal').textContent = mb(NATIVE.offlineTotal() || 0) + ' yer kaplıyor · ayrıntılar için dokun'; };
   dns.checked = NATIVE.getSetting('dns_on') === 'true';
   wifi.checked = NATIVE.getSetting('offline_wifi') === 'true';
   dns.onchange = () => { NATIVE.setSetting('dns_on', String(dns.checked)); toast(dns.checked ? 'Güvenli DNS açık' : 'Güvenli DNS kapalı'); };
@@ -716,9 +723,228 @@ $('#dOffN').onchange = () => {
   $('#offClear').onclick = async () => {
     if (!(await ask('Telefondaki tüm çevrimdışı bölüm kopyaları silinsin mi?', 'Sil'))) return;
     NATIVE.clearOffline();
-    setTimeout(refresh, 800);
+    setTimeout(() => { refresh(); renderOffDetails(); }, 800);
     toast('Kopyalar silindi');
   };
+  $('#offDetails').onclick = () => { renderOffDetails(); $('#dlgOffline').showModal(); };
   $('#btnSettings').addEventListener('click', refresh);
   refresh();
 })();
+
+/* ---------- Liste paylaş ---------- */
+const NAME_KEY = 'mt-name';
+
+function shareText() {
+  const name = ($('#shareName').value || '').trim();
+  const rows = list.filter((i) => i.shelf !== 'inbox').map(view)
+    .sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+  const head = `📚 Manga listem (${rows.length} seri)` + (name ? ` — ${name}` : '');
+  const how = 'Eklemek için: Manga Takip / Manga Rafı → Ayarlar → Liste ekle → bu mesajı yapıştır.';
+  const body = rows.map((r, i) => `${i + 1}. ${r.title}\n${r.url}`).join('\n\n');
+  return { text: `${head}\n${how}\n\n${body}`, count: rows.length };
+}
+
+function openShare() {
+  $('#shareName').value = store.get(NAME_KEY) || '';
+  const upd = () => {
+    const t = shareText();
+    $('#shareText').value = t.text;
+    $('#shareInfo').textContent = `${t.count} seri paylaşılacak (Arkadaştan rafındakiler hariç). Kaldığın bölümler paylaşılmaz.`;
+  };
+  $('#shareName').oninput = () => { store.set(NAME_KEY, $('#shareName').value.trim()); upd(); };
+  upd();
+  $('#dlgShare').showModal();
+}
+
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch {}
+  const ta = $('#shareText');
+  ta.removeAttribute('readonly'); ta.select();
+  const ok = document.execCommand && document.execCommand('copy');
+  ta.setAttribute('readonly', '');
+  return ok;
+}
+
+$('#btnShare').onclick = () => { $('#dlgSettings').close(); openShare(); };
+$('#shareCopy').onclick = async () => toast((await copyText($('#shareText').value)) ? 'Kopyalandı, istediğin yere yapıştır' : 'Kopyalanamadı, metni basılı tutup kopyala');
+$('#shareSend').onclick = async () => {
+  const t = $('#shareText').value;
+  if (NATIVE && NATIVE.share) return NATIVE.share(t);
+  if (navigator.share) { try { await navigator.share({ text: t }); return; } catch {} }
+  toast((await copyText(t)) ? 'Kopyalandı, istediğin yere yapıştır' : 'Metni basılı tutup kopyala');
+};
+
+/* ---------- Liste ekle ---------- */
+let importItems = [];
+let importDest = 'inbox';
+
+function parseList(text) {
+  let from = null;
+  const m = /📚[^\n]*?(?:—|-)\s*([^\n(]+?)\s*$/m.exec(text);
+  if (m) from = m[1].trim().slice(0, 40) || null;
+  const lines = text.split(/\r?\n/);
+  const out = [];
+  const seen = new Set();
+  let prev = '';
+  for (const line of lines) {
+    const urls = line.match(/https?:\/\/[^\s<>"')\]]+/g);
+    if (!urls) { if (line.trim()) prev = line.trim(); continue; }
+    for (const raw of urls) {
+      let url;
+      try { url = normalizeUrl(raw); } catch { continue; }
+      if (seen.has(url)) continue;
+      seen.add(url);
+      const t = line.replace(raw, '').replace(/^\s*\d+[.)-]\s*/, '').trim() || prev.replace(/^\s*\d+[.)-]\s*/, '').trim();
+      out.push({ url, title: t && !/^https?:/.test(t) && !t.startsWith('📚') && !t.startsWith('Eklemek için') ? t : host(url), have: list.some((i) => i.url === url) });
+    }
+    prev = '';
+  }
+  return { from, items: out };
+}
+
+function renderImport() {
+  const ul = $('#importList');
+  ul.replaceChildren(...importItems.map((it, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = '<label><input type="checkbox"><span><b></b><small></small></span></label>';
+    const cb = li.querySelector('input');
+    cb.checked = !it.have && it.on !== false;
+    cb.disabled = it.have;
+    cb.onchange = () => { it.on = cb.checked; updateImportBtn(); };
+    li.querySelector('b').textContent = it.title;
+    li.querySelector('small').textContent = it.have ? 'zaten listende' : host(it.url);
+    if (it.have) li.classList.add('have');
+    return li;
+  }));
+  updateImportBtn();
+}
+
+function updateImportBtn() {
+  const n = importItems.filter((it) => !it.have && it.on !== false).length;
+  const btn = $('#importAdd');
+  btn.disabled = n === 0;
+  btn.textContent = n ? `${n} seriyi ekle` : 'Ekle';
+}
+
+function openImport() {
+  importItems = [];
+  $('#importText').value = '';
+  $('#importPreview').hidden = true;
+  updateImportBtn();
+  $('#dlgImport').showModal();
+}
+
+$('#btnImportList').onclick = () => { $('#dlgSettings').close(); openImport(); };
+$('#openImport').onclick = () => { $('#dlgAdd').close(); openImport(); };
+$('#importRead').onclick = () => {
+  const { from, items } = parseList($('#importText').value);
+  importItems = items.map((it) => ({ ...it, from }));
+  $('#importPreview').hidden = false;
+  $('#importInfo').textContent = !items.length ? 'Metinde manga linki bulunamadı.'
+    : `${from ? 'Gönderen: ' + from + ' · ' : ''}${items.length} seri bulundu` + (items.some((i) => i.have) ? `, ${items.filter((i) => i.have).length} tanesi zaten listende` : '') + '.';
+  renderImport();
+};
+document.querySelectorAll('#importDest button').forEach((b) => (b.onclick = () => {
+  importDest = b.dataset.dest;
+  document.querySelectorAll('#importDest button').forEach((x) => x.classList.toggle('active', x === b));
+  $('#importDestInfo').textContent = importDest === 'inbox'
+    ? 'Arkadaştan rafındaki serilerden bildirim gelmez. Beğendiğini "Okumaya başla" ile Okuyorum\'a alırsın.'
+    : 'Seriler doğrudan Okuyorum\'a eklenir ve yeni bölüm bildirimleri gelir.';
+}));
+$('#importAdd').onclick = async () => {
+  const pick = importItems.filter((it) => !it.have && it.on !== false);
+  if (!pick.length) return;
+  const btn = $('#importAdd');
+  btn.disabled = true;
+  try {
+    const now = new Date().toISOString();
+    list = await mutate('list.json', [], (l) => {
+      for (const it of pick) {
+        if (l.some((i) => i.url === it.url)) continue;
+        const entry = { url: it.url, lastRead: null, added: now };
+        if (it.title && it.title !== host(it.url)) entry.title = it.title;
+        if (importDest === 'inbox') { entry.shelf = 'inbox'; if (it.from) entry.from = it.from; }
+        l.push(entry);
+      }
+      return l;
+    }, `Liste eklendi (${pick.length})`);
+    $('#dlgImport').close();
+    setFilter(importDest === 'inbox' ? 'inbox' : 'all');
+    toast(`${pick.length} seri eklendi, bölümler okunuyor…`);
+    startImportCheck();
+  } catch (e) { toast(e.message); btn.disabled = false; }
+};
+
+/* Arkadaştan rafından Okuyorum'a: ilk bölümden başlar */
+$('#dStart').onclick = async () => {
+  const url = current;
+  const v = view(list.find((i) => i.url === url));
+  const chapters = v.st?.chapters || [];
+  const first = chapters.length ? chapters[chapters.length - 1][0] : null;
+  try {
+    list = await mutate('list.json', [], (l) => {
+      const it = l.find((i) => i.url === url);
+      if (it) { delete it.shelf; delete it.from; it.lastRead = first != null ? first - 1 : null; }
+      return l;
+    }, 'Okumaya başla');
+    render();
+    renderDetail(false);
+    toast("Okuyorum'a taşındı, ilk bölümden başlayabilirsin");
+  } catch (e) { toast(e.message); }
+};
+
+function startImportCheck() { if (NATIVE) { NATIVE.checkNew(); setTimeout(startPolling, 300); } }
+
+/* ---------- Kayıtlı bölümler ayrıntısı ---------- */
+// 41,42,43,45 → "41–43, 45"
+function ranges(nums) {
+  const out = [];
+  let start = null, prev = null;
+  for (const n of nums) {
+    if (start == null) { start = prev = n; continue; }
+    if (n - prev <= 1 && Number.isInteger(n) === Number.isInteger(prev)) { prev = n; continue; }
+    out.push(start === prev ? fmt(start) : `${fmt(start)}–${fmt(prev)}`);
+    start = prev = n;
+  }
+  if (start != null) out.push(start === prev ? fmt(start) : `${fmt(start)}–${fmt(prev)}`);
+  return out.join(', ');
+}
+
+function renderOffDetails() {
+  if (!NATIVE || !NATIVE.offlineDetails) return;
+  const urls = list.map((i) => i.url);
+  let rows = [];
+  try { rows = JSON.parse(NATIVE.offlineDetails(JSON.stringify(urls)) || '[]'); } catch {}
+  const total = rows.reduce((a, r) => a + (r.size || 0), 0);
+  const count = rows.reduce((a, r) => a + (r.nums ? r.nums.length : 0), 0);
+  $('#offSum').textContent = rows.length ? `${count} bölüm · ${mb(total)} yer kaplıyor. Okuduğun bölümler 7 gün sonra silinir, son okuduğun 3 bölüm hep kalır.`
+    : 'Telefonda kayıtlı bölüm yok. Bir mangada "Çevrimdışı okuma"yı açınca bölümler burada görünür.';
+  $('#offClear').hidden = !rows.length;
+  $('#offList').replaceChildren(...rows.map((r) => {
+    const li = document.createElement('li');
+    li.innerHTML = '<div class="cover"><span></span><img alt="" referrerpolicy="no-referrer"></div><div class="txt"><b></b><small></small><small class="nums"></small></div><button type="button" class="ghost small-btn">Sil</button>';
+    const btn = li.querySelector('button');
+    if (!r.url) {
+      li.querySelector('.cover').remove();
+      li.querySelector('b').textContent = 'Listende olmayan seriler';
+      li.querySelector('small').textContent = `${mb(r.size)} · takipten çıkardığın serilerden kalan`;
+      li.querySelector('.nums').remove();
+      btn.onclick = () => { NATIVE.clearOfflineOthers(JSON.stringify(urls)); setTimeout(renderOffDetails, 500); };
+      return li;
+    }
+    const v = view(list.find((i) => i.url === r.url));
+    setCover(li.querySelector('.cover'), v.st?.cover, v.title);
+    li.querySelector('b').textContent = v.title;
+    li.querySelector('small').textContent = `${r.nums.length} bölüm · ${mb(r.size)}` + (r.busy ? ' · indiriliyor…' : '');
+    li.querySelector('.nums').textContent = r.nums.length ? 'Bölüm ' + ranges(r.nums) : '';
+    btn.onclick = async () => {
+      if (!(await ask(`"${v.title}" için kayıtlı ${r.nums.length} bölüm silinsin mi?`, 'Sil'))) return;
+      NATIVE.clearOfflineSeries(r.url);
+      setTimeout(renderOffDetails, 500);
+    };
+    li.querySelector('.txt').onclick = () => { $('#dlgOffline').close(); $('#dlgSettings').close(); openSeries(r.url); };
+    return li;
+  }));
+  const t = $('#offTotal');
+  if (t) t.textContent = mb(total) + ' yer kaplıyor · ayrıntılar için dokun';
+}

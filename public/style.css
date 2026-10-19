@@ -236,3 +236,32 @@ label.set-row { display: flex; margin: 0; color: var(--text); font-size: inherit
 .set-row .txt b { color: var(--text); }
 input.switch { display: block; width: 48px; height: 28px; padding: 0; margin: 0; border: 0; }
 details.fold { padding: 0 !important; margin: 0 !important; background: var(--bg); border: 0; }
+
+/* Liste paylaş / ekle */
+.list-text { width: 100%; box-sizing: border-box; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 14px; resize: vertical; margin: 8px 0; }
+.import-list { list-style: none; padding: 0; margin: 8px 0; max-height: 40vh; overflow-y: auto; background: var(--bg); border-radius: 12px; }
+.import-list li + li { border-top: 1px solid var(--line); }
+.import-list label { display: flex; align-items: center; gap: 12px; margin: 0; padding: 10px 12px; color: var(--text); font-size: 15px; cursor: pointer; }
+.import-list input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--accent); }
+.import-list span { min-width: 0; }
+.import-list b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.import-list small { color: var(--muted); font-size: 12px; }
+.import-list li.have { opacity: .5; }
+#importDest { margin-top: 10px; }
+.inbox-note { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg); border-radius: var(--radius); padding: 10px 12px; margin: 10px 0 4px; color: var(--muted); font-size: 14px; }
+.inbox-note .primary { flex: none; }
+#openImport { display: block; margin: 0 0 4px; }
+
+/* Kayıtlı bölümler ayrıntısı */
+button.row-btn { width: 100%; background: none; border: 0; color: inherit; font: inherit; text-align: left; }
+.row-btn .chev { color: var(--muted); font-size: 22px; }
+.off-list { list-style: none; padding: 0; margin: 8px 0; background: var(--bg); border-radius: 14px; max-height: 55vh; overflow-y: auto; }
+.off-list li { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 10px 12px; }
+.off-list li + li { border-top: 1px solid var(--line); }
+.off-list .cover { width: 40px; height: 56px; border-radius: 8px; }
+.off-list .cover span { font-size: 14px; }
+.off-list .txt { min-width: 0; cursor: pointer; }
+.off-list b { display: block; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.off-list small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.off-list small.nums { color: var(--text); opacity: .8; }
+.off-list li:not(:has(.cover)) { grid-template-columns: 1fr auto; }

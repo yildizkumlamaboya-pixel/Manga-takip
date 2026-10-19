@@ -36,6 +36,7 @@
     <button class="chip" data-filter="unread">Yeni bölümü olanlar</button>
     <button class="chip" data-filter="news">🔔 Bildirimler <span id="newsCount" class="count" hidden></span></button>
     <button class="chip" data-filter="done">Bitti <span class="n" id="nDone"></span></button>
+    <button class="chip" data-filter="inbox" id="chipInbox" hidden>📥 Arkadaştan <span class="n" id="nInbox"></span></button>
   </div>
 
   <ul id="list" class="list"></ul>
@@ -61,6 +62,7 @@
       <input name="lastRead" inputmode="decimal" placeholder="ör. 905">
     </label>
     <p class="hint">Bölüm linki yapıştırsan da olur, seriyi kendim bulurum. Bölümler yaklaşık 1 dakika içinde gelir.</p>
+    <button type="button" class="link-btn" id="openImport">Arkadaşının listesini mi ekleyeceksin? Liste ekle</button>
     <p class="err" id="addErr" hidden></p>
     <div class="row">
       <button type="button" class="ghost" data-close>Vazgeç</button>
@@ -91,6 +93,10 @@
       <a id="dNext" class="primary btn" target="_blank" rel="noopener">Sıradakini oku</a>
     </div>
     <button id="dRestart" class="link-btn restart" hidden>↺ Seriye baştan başla</button>
+  </div>
+  <div class="inbox-note" id="dInbox" hidden>
+    <span id="dInboxFrom"></span>
+    <button id="dStart" class="primary">Okumaya başla</button>
   </div>
   <div class="shelf" id="dShelf">
     <button data-shelf="">Okuyorum</button>
@@ -149,6 +155,20 @@
       </div>
     </div>
 
+    <div class="set-group">
+      <div class="set-title">Liste</div>
+      <div class="set-card">
+        <div class="set-row">
+          <div class="txt"><b>Listemi paylaş</b><small>Okuduğun mangaları arkadaşına gönder</small></div>
+          <button type="button" id="btnShare" class="ghost small-btn">Paylaş</button>
+        </div>
+        <div class="set-row">
+          <div class="txt"><b>Liste ekle</b><small>Arkadaşının gönderdiği listeyi al</small></div>
+          <button type="button" id="btnImportList" class="ghost small-btn">Ekle</button>
+        </div>
+      </div>
+    </div>
+
     <div id="netBox" hidden>
       <div class="set-group">
         <div class="set-title">İnternet</div>
@@ -166,10 +186,10 @@
             <div class="txt"><b>Sadece Wi-Fi ile indir</b><small>Mobil veri harcanmaz</small></div>
             <input type="checkbox" class="switch" id="offWifi">
           </label>
-          <div class="set-row">
+          <button type="button" class="set-row row-btn" id="offDetails">
             <div class="txt"><b>Kayıtlı bölümler</b><small id="offTotal"></small></div>
-            <button type="button" class="ghost small-btn" id="offClear">Temizle</button>
-          </div>
+            <span class="chev">›</span>
+          </button>
         </div>
       </div>
     </div>
@@ -207,6 +227,53 @@
       <button type="button" class="primary" data-close>Kapat</button>
     </div>
   </form>
+</dialog>
+
+<!-- Liste paylaş -->
+<dialog id="dlgShare" class="sheet">
+  <h2>Listemi paylaş</h2>
+  <label>Adın <small>(arkadaşın kimden geldiğini görsün, isteğe bağlı)</small>
+    <input id="shareName" autocomplete="off" placeholder="ör. Yıldız">
+  </label>
+  <p class="muted" id="shareInfo"></p>
+  <textarea id="shareText" class="list-text" readonly rows="7"></textarea>
+  <div class="row">
+    <button type="button" class="ghost" data-close>Kapat</button>
+    <button type="button" class="ghost" id="shareCopy">Kopyala</button>
+    <button type="button" class="primary" id="shareSend">Gönder</button>
+  </div>
+</dialog>
+
+<!-- Liste ekle -->
+<dialog id="dlgImport" class="sheet tall">
+  <h2>Liste ekle</h2>
+  <p class="muted">Arkadaşının gönderdiği listeyi (ya da manga linklerini) buraya yapıştır.</p>
+  <textarea id="importText" class="list-text" rows="5" placeholder="Mesajı buraya yapıştır…"></textarea>
+  <button type="button" class="ghost wide" id="importRead">Listeyi oku</button>
+  <div id="importPreview" hidden>
+    <p class="muted" id="importInfo"></p>
+    <ul class="import-list" id="importList"></ul>
+    <div class="shelf" id="importDest">
+      <button type="button" data-dest="inbox" class="active">📥 Arkadaştan rafına</button>
+      <button type="button" data-dest="">Okuyorum'a</button>
+    </div>
+    <p class="muted small" id="importDestInfo">Arkadaştan rafındaki serilerden bildirim gelmez. Beğendiğini "Okumaya başla" ile Okuyorum'a alırsın.</p>
+  </div>
+  <div class="row">
+    <button type="button" class="ghost" data-close>Vazgeç</button>
+    <button type="button" class="primary" id="importAdd" disabled>Ekle</button>
+  </div>
+</dialog>
+
+<!-- Kayıtlı bölümler -->
+<dialog id="dlgOffline" class="sheet tall">
+  <h2>Kayıtlı bölümler</h2>
+  <p class="muted" id="offSum"></p>
+  <ul class="off-list" id="offList"></ul>
+  <div class="row">
+    <button type="button" class="danger" id="offClear">Hepsini sil</button>
+    <button type="button" class="primary" data-close>Kapat</button>
+  </div>
 </dialog>
 
 <div id="toast" class="toast" hidden></div>

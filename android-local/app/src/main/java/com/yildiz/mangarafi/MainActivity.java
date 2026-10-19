@@ -291,6 +291,20 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public double offlineTotal() { return Offline.size(Offline.root(MainActivity.this)); }
 
+        /** Ayarlar için: hangi mangada hangi bölümler kayıtlı, ne kadar yer kaplıyor. */
+        @JavascriptInterface
+        public String offlineDetails(String urlsJson) {
+            try { return Offline.details(MainActivity.this, new JSONArray(urlsJson)); } catch (Exception e) { return "[]"; }
+        }
+
+        @JavascriptInterface
+        public void clearOfflineSeries(String seriesUrl) { Offline.clearSeries(MainActivity.this, seriesUrl); }
+
+        @JavascriptInterface
+        public void clearOfflineOthers(String urlsJson) {
+            try { Offline.clearOthers(MainActivity.this, new JSONArray(urlsJson)); } catch (Exception ignored) { }
+        }
+
         @JavascriptInterface
         public void clearOffline() { new Thread(() -> Offline.clearAll(MainActivity.this)).start(); }
 
@@ -314,6 +328,17 @@ public class MainActivity extends Activity {
                 else if ("quiet_from".equals(key) || "quiet_to".equals(key))
                     prefs().edit().putInt(key, Math.max(0, Math.min(23, Integer.parseInt(value)))).apply();
             } catch (Exception ignored) { }
+        }
+
+        /** Metni telefonun paylaş menüsüyle gönderir (WhatsApp, Telegram vb.). */
+        @JavascriptInterface
+        public void share(String text) {
+            main.post(() -> {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, text);
+                startActivity(Intent.createChooser(i, "Listeyi paylaş"));
+            });
         }
 
         /** Telefondaki tüm yeni bölüm bildirimlerini kaldırır. */

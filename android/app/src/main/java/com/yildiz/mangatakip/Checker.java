@@ -427,8 +427,9 @@ public final class Checker {
             JSONObject st = state.optJSONObject(url);
             if (st == null || st.isNull("latest")) continue;
             double latest = st.getDouble("latest");
-            if ("dropped".equals(list.getJSONObject(i).optString("shelf"))) {
-                seen.put(url, latest); // bıraktığın seri: bildirim yok
+            String shelf = list.getJSONObject(i).optString("shelf");
+            if ("dropped".equals(shelf) || "inbox".equals(shelf)) {
+                seen.put(url, latest); // Arkadaştan rafı: bildirim yok
                 continue;
             }
             if (!seen.has(url)) {

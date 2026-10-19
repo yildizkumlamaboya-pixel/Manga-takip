@@ -201,6 +201,14 @@ final class Offline {
 
     static void clearAll(Context ctx) { delete(root(ctx)); }
 
+    /** Listede olmayan (takipten çıkarılmış) serilerin kopyalarını siler. */
+    static void clearOthers(Context ctx, JSONArray urls) {
+        Set<String> keep = new HashSet<>();
+        try { for (int i = 0; i < urls.length(); i++) keep.add(key(urls.getString(i))); } catch (Exception ignored) { }
+        File[] all = root(ctx).listFiles();
+        if (all != null) for (File d : all) if (!keep.contains(d.getName())) delete(d);
+    }
+
     /* ---------------- Okuyucuda gösterme ---------------- */
 
     static String baseUrl(String series, double num) {
@@ -477,6 +485,45 @@ final class Offline {
     static void writeFile(File f, String s) throws IOException {
         try (OutputStream out = new FileOutputStream(f)) { out.write(s.getBytes("UTF-8")); }
     }
+
+    /**
+     * Ayarlar ekranı için ayrıntı: verilen serilerden kopyası olanlar
+     * [{"url":..,"nums":[..],"size":..,"busy":..}] ve listede olmayan kopyalar {"url":null,"size":..}.
+     */
+    static String details(Context ctx, JSONArray urls) {
+        JSONArray out = new JSONArray();
+        Set<String> known = new HashSet<>();
+        try {
+            for (int i = 0; i < urls.length(); i++) {
+                String u = urls.getString(i);
+                File d = seriesDir(ctx, u);
+                known.add(d.getName());
+                List<Double> ns = nums(ctx, u);
+                if (ns.isEmpty() && !isBusy(u)) continue;
+                JSONObject o = new JSONObject();
+                o.put("url", u);
+                JSONArray a = new JSONArray();
+                for (double n : ns) a.put(n);
+                o.put("nums", a);
+                o.put("size", size(d));
+                o.put("busy", isBusy(u));
+                out.put(o);
+            }
+            long other = 0;
+            File[] all = root(ctx).listFiles();
+            if (all != null) for (File d : all) if (!known.contains(d.getName())) other += size(d);
+            if (other > 0) {
+                JSONObject o = new JSONObject();
+                o.put("url", JSONObject.NULL);
+                o.put("size", other);
+                out.put(o);
+            }
+        } catch (Exception ignored) { }
+        return out.toString();
+    }
+
+    /** Bir mangadaki tüm kopyaları siler (çevrimdışı ayarı kalır, sonra yeniden iner). */
+    static void clearSeries(Context ctx, String series) { delete(seriesDir(ctx, series)); }
 
     /** Arayüz için özet: {"n":..,"nums":[..],"size":..,"busy":..} */
     static String summary(Context ctx, String series) {

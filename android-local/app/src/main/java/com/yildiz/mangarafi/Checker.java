@@ -138,7 +138,8 @@ public final class Checker {
                     JSONObject it = list.getJSONObject(i);
                     if (!url.equals(it.optString("url"))) continue;
                     still = true;
-                    dropped = "dropped".equals(it.optString("shelf"));
+                    String shelf = it.optString("shelf");
+                    dropped = "dropped".equals(shelf) || "inbox".equals(shelf); // Arkadaştan rafı: bildirim yok
                 }
                 if (!still) return 0;
 
