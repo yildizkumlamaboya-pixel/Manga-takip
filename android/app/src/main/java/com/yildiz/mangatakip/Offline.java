@@ -118,21 +118,33 @@ final class Offline {
         return readAt > 0 && System.currentTimeMillis() - readAt > KEEP_MS;
     }
 
-    /** Kaldığın yere kadar olan kayıtlı bölümleri "okundu" işaretler (7 günlük süre o an başlar). */
+    /** Okuduğun bölüm ve ondan önceki 2 bölüm hiç silinmez (geri dönüp bakabilmen için). */
+    static final int KEEP_LAST = 3;
+
+    /**
+     * Kaldığın yere kadar olan kayıtlı bölümleri "okundu" işaretler (7 günlük süre o an başlar).
+     * Kaldığın bölüm ve önceki 2 bölüm işaretlenmez, telefonda kalır.
+     */
     static void markReadUpTo(Context ctx, String series, double base) {
         File[] ds = seriesDir(ctx, series).listFiles();
         if (ds == null) return;
-        long now = System.currentTimeMillis();
+        List<double[]> read = new ArrayList<>();
         for (File d : ds) {
             try {
                 double n = Double.parseDouble(d.getName());
-                if (n > base) continue;
-                File f = new File(d, "index.json");
-                if (!f.exists()) continue;
+                if (n <= base && new File(d, "index.json").exists()) read.add(new double[]{n});
+            } catch (NumberFormatException ignored) { }
+        }
+        read.sort((x, y) -> Double.compare(y[0], x[0])); // en yeni başta
+        long now = System.currentTimeMillis();
+        for (int i = 0; i < read.size(); i++) {
+            File f = new File(chapterDir(ctx, series, read.get(i)[0]), "index.json");
+            try {
                 JSONObject o = new JSONObject(readFile(f));
-                if (o.optLong("readAt", 0) > 0) continue;
-                o.put("readAt", now);
-                writeFile(f, o.toString());
+                boolean keep = i < KEEP_LAST;
+                long readAt = o.optLong("readAt", 0);
+                if (keep && readAt > 0) { o.remove("readAt"); writeFile(f, o.toString()); }
+                else if (!keep && readAt == 0) { o.put("readAt", now); writeFile(f, o.toString()); }
             } catch (Exception ignored) { }
         }
     }

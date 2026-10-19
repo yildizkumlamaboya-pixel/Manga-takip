@@ -663,9 +663,9 @@ function renderOffline(v) {
   if (![...sel.options].some((x) => +x.value === (o.n || 0))) sel.append(new Option(`Sonraki ${o.n} bölüm`, o.n));
   sel.value = String(o.n || 0);
   const nums = o.nums || [];
-  $('#dOffInfo').textContent = !o.n && !nums.length ? 'Açarsan kaldığın yerden sonraki bölümler telefona kaydedilir, internetsiz okursun. Okuduğun bölüm 7 gün sonra silinir.'
+  $('#dOffInfo').textContent = !o.n && !nums.length ? 'Açarsan kaldığın yerden sonraki bölümler telefona kaydedilir, internetsiz okursun. Okuduğun bölümler 7 gün sonra silinir; son okuduğun 3 bölüm hep kalır.'
     : `${nums.length} bölüm telefonda hazır` + (nums.length ? ` (${fmt(nums[0])}–${fmt(nums[nums.length - 1])}) · ${mb(o.size || 0)}` : '')
-      + (o.busy ? ' · indiriliyor…' : '') + ' · okuduktan 7 gün sonra silinir';
+      + (o.busy ? ' · indiriliyor…' : '') + ' · son okuduğun 3 bölüm hep kalır';
   // Bölüm listesinde kayıtlı olanları işaretle
   const set = new Set(nums.map(Number));
   setTimeout(() => document.querySelectorAll('#dChapters li').forEach((li) => li.classList.toggle('off', set.has(Number(li.dataset.num)))), 0);
