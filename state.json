@@ -3777,7 +3777,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T20:28:37Z",
+  "phoneAt": "2026-10-19T20:50:25Z",
   "news": [
    [
     924,
@@ -5444,7 +5444,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T20:28:40Z",
+  "phoneAt": "2026-10-19T20:50:28Z",
   "news": [
    [
     179,
@@ -5766,7 +5766,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T20:28:41Z"
+  "phoneAt": "2026-10-19T20:50:30Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -7703,7 +7703,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T20:28:42Z",
+  "phoneAt": "2026-10-19T20:50:36Z",
   "news": [
    [
     123,
@@ -8013,7 +8013,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T20:28:42Z"
+  "phoneAt": "2026-10-19T20:50:35Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -13434,6 +13434,6 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-19T20:28:39Z"
+  "phoneAt": "2026-10-19T20:50:27Z"
  }
 }
