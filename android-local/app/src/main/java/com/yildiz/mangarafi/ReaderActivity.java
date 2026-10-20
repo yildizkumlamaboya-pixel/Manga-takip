@@ -362,7 +362,7 @@ public class ReaderActivity extends Activity {
             @Override
             public void onPageCommitVisible(WebView view, String url) {
                 addTopSpace(view);
-                if (adsBlocked()) view.evaluateJavascript(AD_CSS_JS, null);
+                if (adsBlocked()) { view.evaluateJavascript(AD_CSS_JS, null); view.evaluateJavascript(AD_CLEAN_JS, null); }
             }
 
             @Override
@@ -370,7 +370,7 @@ public class ReaderActivity extends Activity {
                 if ("about:blank".equals(url)) return;
                 addTopSpace(view);
                 view.evaluateJavascript(AUTO_JS, null);
-                if (adsBlocked()) view.evaluateJavascript(AD_CSS_JS, null);
+                if (adsBlocked()) { view.evaluateJavascript(AD_CSS_JS, null); view.evaluateJavascript(AD_CLEAN_JS, null); }
                 if (view != web) { onPreloaded(view); return; } // arkadaki önden yükleme
                 offlineShown = url.startsWith("https://" + Offline.HOST);
                 if (pageMode && !harvested) {
@@ -416,7 +416,13 @@ public class ReaderActivity extends Activity {
         "bidvertiser.com", "revcontent.com", "zedo.com", "smartadserver.com", "adform.net",
         "yieldmo.com", "media.net", "infolinks.com", "chitika.com", "vidoomy.com", "ezoic.net",
         "adsco.re", "ad.plus", "adtelligent.com", "betweendigital.com", "admatic.com.tr",
-        "reklamstore.com", "reklamaction.com", "tr.adserver", "adgager.com"
+        "reklamstore.com", "reklamaction.com", "tr.adserver", "adgager.com",
+        "acscdn.com", "aclib.net", "adtng.com", "pemsrv.com", "onclicka.com", "onclickalgo.com", "bidgear.com",
+        "galaksion.com", "richads.com", "rtmark.net", "propu.sh", "pubfuture-ad.com", "pubfuture.com",
+        "adpushup.com", "push-sdk.com", "pushame.com", "clickunder.ru", "admitad.com", "adsco.re",
+        "dolohen.com", "whos.amung.us", "histats.com", "popmyads.com", "poptival.com", "popunder.net",
+        "adxpremium.services", "notifpush.com", "pushwhy.com", "displayvertising.com", "wpadmngr.com",
+        "landingtrk.com", "trafficstars.com", "tsyndicate.com", "magsrv.com", "a.magsrv.com"
     };
 
     /** Reklam kutularını gizleyen stil (sitenin kendi reklam alanları). */
@@ -427,6 +433,26 @@ public class ReaderActivity extends Activity {
         + ".reklam,.reklamlar,[class*=reklam-],[id*=reklam],.ads-banner,.banner-ads,.ad-banner,.sticky-ads,"
         + ".popup-ads,.adsbox{display:none!important;visibility:hidden!important;height:0!important}';"
         + "(document.head||document.documentElement).appendChild(s);})()";
+
+    /**
+     * Ekranı kaplayan reklam pencerelerini temizler: sayfaya sonradan eklenen sabit (fixed) katmanlar
+     * "indir / kazandın / bahis" gibi yazı ya da başka siteden çerçeve içeriyorsa, ya da sayfayı karartan
+     * boş perde ise gizlenir. Okunan manga resimleri ve sitenin kendi menüleri dokunulmaz.
+     */
+    private static final String AD_CLEAN_JS =
+        "(function(){if(window.__mtClean)return;window.__mtClean=1;"
+        + "var bad=/(dosyay\\u0131 indir|dosyayi indir|indirme haz\\u0131r|indir\\b|download|kazand\\u0131n|tebrikler|bahis|casino|bonus|\\u00f6d\\u00fcl|hemen t\\u0131kla|virus|vir\\u00fcs|g\\u00fcncelle)/i;"
+        + "function big(r){return r.width*r.height>innerWidth*innerHeight*0.6;}"
+        + "function check(e){if(!e||e.__mtOk||e.tagName==='SCRIPT'||e.tagName==='STYLE')return false;var cs=getComputedStyle(e);"
+        + "if(cs.position!=='fixed'&&cs.position!=='sticky')return false;var z=parseInt(cs.zIndex)||0;var r=e.getBoundingClientRect();"
+        + "if(r.width<40||r.height<40)return false;var raw=(e.innerText||'').slice(0,400).replace(/\\u0130/g,'i');var txt=raw.toLowerCase()+' '+raw.replace(/I/g,'\\u0131').toLowerCase();"
+        + "var ifr=e.tagName==='IFRAME'||!!e.querySelector('iframe');var manga=!!e.querySelector('img[src*=chapter],img[data-src]');"
+        + "var hit=(z>=50&&bad.test(txt))||(ifr&&z>=50&&!manga)||(big(r)&&z>=100&&raw.trim().length<40&&!manga&&!e.querySelector('img'));"
+        + "if(hit){e.style.setProperty('display','none','important');return true;}return false;}"
+        + "function clean(){if(!document.body)return;var hid=false;var kids=document.body.children;"
+        + "for(var i=0;i<kids.length;i++){var k=kids[i];if(check(k))hid=true;else for(var j=0;j<k.children.length&&j<30;j++){if(check(k.children[j]))hid=true;}}"
+        + "if(hid){document.documentElement.style.overflow='';document.body.style.overflow='';}}"
+        + "clean();setInterval(clean,1000);})()";
 
     private boolean adsBlocked() { return rp == null || rp.getBoolean("r_ads", true); }
 

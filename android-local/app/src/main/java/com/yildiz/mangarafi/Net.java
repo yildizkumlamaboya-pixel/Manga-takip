@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Gömülü güvenli DNS: alan adları operatörün DNS'i yerine şifreli DNS (DNS-over-HTTPS,
- * Cloudflare 1.1.1.1 / Google 8.8.8.8) ile çözülür. Uygulama içinde küçük bir yerel vekil
+ * Cloudflare 1.1.1.2 zararlı site korumalı / Google 8.8.8.8) ile çözülür. Uygulama içinde küçük bir yerel vekil
  * (127.0.0.1) çalışır; sayfalar ve kontroller bu vekil üzerinden gider. DNS ile yapılan
  * engeller böylece aşılır. Vekil sadece bağlantıyı aktarır, içeriğe dokunmaz (HTTPS şifreli kalır).
  */
@@ -50,8 +50,9 @@ final class Net {
 
     private static final Map<String, Object[]> cache = new ConcurrentHashMap<>(); // host -> {InetAddress[], expiresAt}
     private static final String[] DOH = {
-        "https://1.1.1.1/dns-query?type=A&name=",
-        "https://1.0.0.1/dns-query?type=A&name=",
+        // 1.1.1.2: Cloudflare'in zararlı siteleri (sahte indirme, dolandırıcılık reklamları) engelleyen DNS'i
+        "https://1.1.1.2/dns-query?type=A&name=",
+        "https://1.0.0.2/dns-query?type=A&name=",
         "https://8.8.8.8/resolve?type=A&name="
     };
 
