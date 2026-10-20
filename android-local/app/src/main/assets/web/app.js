@@ -501,7 +501,9 @@ function renderNews() {
   const cnt = $('#newsCount');
   cnt.textContent = fresh;
   cnt.hidden = !fresh;
-  $('#newsAllRead').hidden = !fresh;
+  // Düğmeler: okunmamış varsa "okundu say", liste doluysa "temizle"
+  $('#newsActions').hidden = !entries.length;
+  $('#newsAllRead').hidden = !entries.some((e) => !e.read);
   $('#newsEmpty').hidden = entries.length > 0;
   if (filter !== 'news') return;
 
@@ -948,3 +950,13 @@ function renderOffDetails() {
   const t = $('#offTotal');
   if (t) t.textContent = mb(total) + ' yer kaplıyor · ayrıntılar için dokun';
 }
+
+/* Bildirimleri temizle: okundu saymadan listeyi ve telefondaki bildirimleri boşaltır */
+$('#newsClear').onclick = async () => {
+  if (!(await ask('Bildirim listesi ve telefondaki bildirimler temizlensin mi? Okuduğun yer değişmez.', 'Temizle'))) return;
+  store.set('mt-news-cleared', new Date().toISOString());
+  store.set(NEWS_SEEN_KEY, new Date().toISOString());
+  if (NATIVE && NATIVE.clearNotifications) NATIVE.clearNotifications();
+  render();
+  toast('Bildirimler temizlendi');
+};

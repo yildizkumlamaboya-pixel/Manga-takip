@@ -699,6 +699,13 @@ public class ReaderActivity extends Activity {
         bp.topMargin = dp(4);
         box.addView(brk, bp);
 
+        Button reset = navButton("Ayarları sıfırla", false);
+        reset.setTextSize(15);
+        reset.setOnClickListener(v -> resetLook());
+        LinearLayout.LayoutParams zp = new LinearLayout.LayoutParams(-1, dp(46));
+        zp.topMargin = dp(12);
+        box.addView(reset, zp);
+
         Button ok = navButton("Tamam", true);
         ok.setOnClickListener(v -> togglePanel());
         LinearLayout.LayoutParams op = new LinearLayout.LayoutParams(-1, dp(48));
@@ -708,6 +715,25 @@ public class ReaderActivity extends Activity {
         sv.addView(box);
         sv.setVisibility(View.GONE);
         return sv;
+    }
+
+    /** Görünüm menüsündeki ayarları ilk haline döndürür (filtre, karartma, parlaklık vb.). */
+    private void resetLook() {
+        rp.edit()
+            .remove("r_warm").remove("r_dim").remove("r_bright").remove("r_brightSys")
+            .remove("r_speed").remove("r_full").remove("r_awake").remove("r_vol")
+            .remove("r_pre").remove("r_ads").remove("r_break")
+            .apply();
+        stopAutoScroll();
+        applyLook();
+        // Menüyü yeni değerlerle yeniden kur
+        int idx = root.indexOfChild(panel);
+        root.removeView(panel);
+        panel = buildPanel();
+        panel.setVisibility(View.VISIBLE);
+        root.addView(panel, idx, new FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM));
+        schedulePreload();
+        Toast.makeText(this, "Görünüm ayarları sıfırlandı", Toast.LENGTH_SHORT).show();
     }
 
     private void togglePanel() {
