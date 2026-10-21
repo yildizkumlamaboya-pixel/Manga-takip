@@ -36,7 +36,45 @@ final class Music {
         {"jpop", "Anime şarkıları (LISTEN.moe, sözlü)", "https://listen.moe/fallback"},
     };
 
-    static String[] sourceCodes() { return new String[]{"spotify", "ost", "lofi", "jpop", "files", "gen"}; }
+    static String[] sourceCodes() { return new String[]{"youtube", "spotify", "ost", "lofi", "jpop", "files", "gen"}; }
+
+    /* ---------------- YouTube ---------------- */
+    // YouTube'un resmi gömülü oynatıcısı okuyucuda küçük bir pencerede çalar (kural gereği görünür kalır).
+    static final String YT = "r_yt", YT_SEL = "r_ytSel";
+    private static final String YT_DEFAULT = "[[\"2 Hour Beautiful Piano Music for Studying and Sleeping\",\"HSOtku1j600\",\"\"]]";
+
+    static JSONArray ytLists(Context ctx) {
+        try { return new JSONArray(prefs(ctx).getString(YT, YT_DEFAULT)); } catch (Exception e) { return new JSONArray(); }
+    }
+
+    static void saveYtLists(Context ctx, JSONArray a) { prefs(ctx).edit().putString(YT, a.toString()).apply(); }
+
+    static int ytSel(Context ctx) { return prefs(ctx).getInt(YT_SEL, 0); }
+
+    /** Seçili video: {ad, videoId, listId} */
+    static String[] ytCurrent(Context ctx) {
+        try {
+            JSONArray a = ytLists(ctx).getJSONArray(ytSel(ctx));
+            return new String[]{a.getString(0), a.optString(1), a.optString(2)};
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** youtu.be/ID, youtube.com/watch?v=ID, /shorts/ID, list=ID → {videoId, listId} */
+    static String[] ytParse(String link) {
+        if (link == null) return null;
+        java.util.regex.Matcher v = java.util.regex.Pattern.compile("(?:youtu\\.be/|v=|/shorts/|/embed/|/live/)([A-Za-z0-9_-]{11})").matcher(link);
+        java.util.regex.Matcher l = java.util.regex.Pattern.compile("[?&]list=([A-Za-z0-9_-]+)").matcher(link);
+        String vid = v.find() ? v.group(1) : "";
+        String list = l.find() ? l.group(1) : "";
+        return vid.isEmpty() && list.isEmpty() ? null : new String[]{vid, list};
+    }
+
+    static void selectYt(Context ctx, int index) {
+        setSource(ctx, "youtube");
+        prefs(ctx).edit().putInt(YT_SEL, index).apply();
+    }
 
     /* ---------------- Spotify ---------------- */
     // Spotify şarkıları başka uygulamada çalınamaz; telefondaki Spotify uygulaması listeyi çalar,
@@ -109,6 +147,7 @@ final class Music {
         for (String[] st : STATIONS) if (st[0].equals(code)) return st[1];
         if ("files".equals(code)) return "Telefonumdaki müzikler";
         if ("spotify".equals(code)) return "Spotify listelerim";
+        if ("youtube".equals(code)) return "YouTube (uygulama içinde)";
         return "Uygulamanın sakin müziği (internetsiz)";
     }
 
@@ -146,6 +185,7 @@ final class Music {
         Context ctx = c.getApplicationContext();
         stopInternal(ctx);
         if ("spotify".equals(source(ctx))) { startSpotify(c); return; }
+        if ("youtube".equals(source(ctx))) return; // okuyucudaki küçük oynatıcı çalar
         volume = prefs(ctx).getInt(VOL, 40) / 100f;
         AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
         focus = change -> {

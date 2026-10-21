@@ -733,7 +733,7 @@ public class ReaderActivity extends Activity {
         box.addView(line2, l2);
         box.addView(panelText("Arka plan müziği", 14, true));
         addCheck(box, "Okurken müzik çal", Music.ON, false, () -> {
-            if (Music.enabled(this)) Music.start(this); else Music.stop(this);
+            applyMusic();
         });
         musicSrcBtn = navButton(musicLabel(), false);
         musicSrcBtn.setTextSize(14);
@@ -741,7 +741,10 @@ public class ReaderActivity extends Activity {
         LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(-1, dp(46));
         mp.bottomMargin = dp(6);
         box.addView(musicSrcBtn, mp);
-        addSlider(box, "Müzik sesi", Music.VOL, 40, 100, v -> Music.setVolume(this, v));
+        addSlider(box, "Müzik sesi", Music.VOL, 40, 100, v -> {
+            Music.setVolume(this, v);
+            if (yt != null) yt.evaluateJavascript("window.player&&player.setVolume&&player.setVolume(" + v + ")", null);
+        });
 
         Button reset = navButton("Ayarları sıfırla", false);
         reset.setTextSize(15);
@@ -770,6 +773,7 @@ public class ReaderActivity extends Activity {
         String name = Music.sourceName(code);
         if ("files".equals(code)) name += " (" + Music.uris(this).size() + " parça)";
         if ("spotify".equals(code)) name = "Spotify · " + Music.spotifyName(this);
+        if ("youtube".equals(code)) { String[] c = Music.ytCurrent(this); name = "YouTube · " + (c == null ? "video seçilmedi" : c[0]); }
         return "Kaynak: " + name;
     }
 
@@ -787,9 +791,189 @@ public class ReaderActivity extends Activity {
                 d.dismiss();
                 if ("files".equals(codes[which])) { pickMusicFiles(); return; }
                 if ("spotify".equals(codes[which])) { chooseSpotify(); return; }
+                if ("youtube".equals(codes[which])) { chooseYouTube(); return; }
                 Music.setSource(this, codes[which]);
                 musicSrcBtn.setText(musicLabel());
-                if (Music.enabled(this)) Music.start(this);
+                applyMusic();
+            })
+            .setNegativeButton("Vazgeç", null)
+            .show();
+    }
+
+    /** Müziği ayara göre başlat/durdur (YouTube okuyucudaki küçük oynatıcıda çalar). */
+    private void applyMusic() {
+        if (Music.enabled(this)) Music.start(this); else Music.stop(this);
+        updateYouTube();
+    }
+
+    /* ---------- YouTube küçük oynatıcı ---------- */
+    private WebView yt;
+    private LinearLayout ytBox;
+    private String ytLoaded = null;
+
+    private void updateYouTube() {
+        boolean on = Music.enabled(this) && "youtube".equals(Music.source(this));
+        String[] cur = on ? Music.ytCurrent(this) : null;
+        if (cur == null) {
+            if (ytBox != null) { ytBox.setVisibility(View.GONE); if (yt != null) yt.loadUrl("about:blank"); ytLoaded = null; }
+            return;
+        }
+        if (ytBox == null) buildYtBox();
+        ytBox.setVisibility(View.VISIBLE);
+        String key = cur[1] + "|" + cur[2];
+        if (key.equals(ytLoaded)) { yt.evaluateJavascript("window.player&&player.playVideo&&player.playVideo()", null); return; }
+        ytLoaded = key;
+        int vol = Music.prefs(this).getInt(Music.VOL, 40);
+        String vid = cur[1], list = cur[2];
+        String vars = "autoplay:1,playsinline:1,rel:0,modestbranding:1,origin:'https://mangatakip.app'"
+            + (list.isEmpty() ? ",loop:1,playlist:'" + vid + "'" : ",listType:'playlist',list:'" + list + "',loop:1");
+        String html = "<!doctype html><html><head><meta name=viewport content='width=device-width,initial-scale=1'>"
+            + "<meta name=referrer content='strict-origin-when-cross-origin'>"
+            + "<style>html,body{margin:0;background:#000;height:100%;overflow:hidden}#p{position:absolute;inset:0;width:100%;height:100%}</style>"
+            + "</head><body><div id=p></div><script src='https://www.youtube.com/iframe_api'></script><script>"
+            + "var player;function onYouTubeIframeAPIReady(){player=new YT.Player('p',{"
+            + (vid.isEmpty() ? "" : "videoId:'" + vid + "',")
+            + "playerVars:{" + vars + "},events:{onReady:function(e){e.target.setVolume(" + vol + ");e.target.playVideo();},"
+            + "onError:function(e){MangaYT.error(String(e.data));}}});}</script></body></html>";
+        yt.loadDataWithBaseURL("https://mangatakip.app/", html, "text/html", "utf-8", null);
+    }
+
+    private void ytPause() {
+        if (yt != null) yt.evaluateJavascript("window.player&&player.pauseVideo&&player.pauseVideo()", null);
+    }
+
+    /** Sürüklenebilir küçük pencere: üstte tutma şeridi (♪ ad, ✕), altında YouTube oynatıcısı. */
+    private void buildYtBox() {
+        ytBox = new LinearLayout(this);
+        ytBox.setOrientation(LinearLayout.VERTICAL);
+        GradientDrawable bg = new GradientDrawable();
+        bg.setColor(Color.parseColor("#1f1c28"));
+        bg.setCornerRadius(dp(12));
+        ytBox.setBackground(bg);
+        ytBox.setClipToOutline(true);
+        ytBox.setElevation(dp(10));
+
+        LinearLayout strip = new LinearLayout(this);
+        strip.setGravity(Gravity.CENTER_VERTICAL);
+        strip.setPadding(dp(8), 0, dp(2), 0);
+        TextView t = new TextView(this);
+        t.setText("♪ müzik · sürükle");
+        t.setTextColor(Color.parseColor("#a9a3b8"));
+        t.setTextSize(11);
+        strip.addView(t, new LinearLayout.LayoutParams(0, -2, 1f));
+        TextView x = new TextView(this);
+        x.setText("✕");
+        x.setTextColor(Color.parseColor("#f1eef6"));
+        x.setTextSize(15);
+        x.setPadding(dp(10), dp(2), dp(10), dp(2));
+        x.setOnClickListener(v -> {
+            Music.prefs(this).edit().putBoolean(Music.ON, false).apply();
+            applyMusic();
+            Toast.makeText(this, "Müzik kapatıldı (Aa menüsünden açabilirsin)", Toast.LENGTH_SHORT).show();
+        });
+        strip.addView(x);
+        ytBox.addView(strip, new LinearLayout.LayoutParams(-1, dp(26)));
+
+        yt = new WebView(this);
+        yt.setBackgroundColor(Color.BLACK);
+        WebSettings s = yt.getSettings();
+        s.setJavaScriptEnabled(true);
+        s.setDomStorageEnabled(true);
+        s.setMediaPlaybackRequiresUserGesture(false);
+        yt.setWebChromeClient(new android.webkit.WebChromeClient());
+        yt.setWebViewClient(new WebViewClient() {
+            @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
+                // YouTube logosuna basılırsa uygulama dışına çıkma
+                return true;
+            }
+        });
+        yt.addJavascriptInterface(new Object() {
+            @android.webkit.JavascriptInterface public void error(String code) {
+                runOnUiThread(() -> Toast.makeText(ReaderActivity.this,
+                    "Bu video uygulama içinde oynatılamıyor (sahibi izin vermemiş). Başka bir video seç.", Toast.LENGTH_LONG).show());
+            }
+        }, "MangaYT");
+        // 16:9 ve YouTube'un en küçük oynatıcı boyutundan büyük
+        ytBox.addView(yt, new LinearLayout.LayoutParams(dp(192), dp(108)));
+
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START);
+        lp.leftMargin = dp(12);
+        lp.bottomMargin = dp(90);
+        root.addView(ytBox, root.indexOfChild(panel), lp);
+
+        // Şeritten tutup sürükle
+        final float[] down = new float[4];
+        strip.setOnTouchListener((v, e) -> {
+            switch (e.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    down[0] = e.getRawX(); down[1] = e.getRawY(); down[2] = ytBox.getTranslationX(); down[3] = ytBox.getTranslationY();
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    ytBox.setTranslationX(down[2] + e.getRawX() - down[0]);
+                    ytBox.setTranslationY(down[3] + e.getRawY() - down[1]);
+                    return true;
+                default:
+                    return false;
+            }
+        });
+    }
+
+    /** Kayıtlı YouTube videoları/listeleri: birini seç ya da link ekle. */
+    private void chooseYouTube() {
+        JSONArray lists = Music.ytLists(this);
+        String[] items = new String[lists.length() + 1];
+        for (int i = 0; i < lists.length(); i++) items[i] = lists.optJSONArray(i).optString(0);
+        items[lists.length()] = "＋ YouTube linki ekle (video ya da oynatma listesi)";
+        new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle("YouTube")
+            .setItems(items, (d, which) -> {
+                if (which == lists.length()) { addYouTube(); return; }
+                Music.selectYt(this, which);
+                musicSrcBtn.setText(musicLabel());
+                applyMusic();
+            })
+            .setNegativeButton("Vazgeç", null)
+            .show();
+    }
+
+    private void addYouTube() {
+        android.widget.EditText in = new android.widget.EditText(this);
+        in.setHint("https://youtu.be/…");
+        in.setSingleLine(true);
+        new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle("YouTube linki ekle")
+            .setMessage("YouTube'da videoda Paylaş → Kopyala, sonra buraya yapıştır. Oynatma listesi linki de olur.")
+            .setView(in)
+            .setPositiveButton("Ekle", (d, w) -> {
+                String link = in.getText().toString().trim();
+                String[] ids = Music.ytParse(link);
+                if (ids == null) { Toast.makeText(this, "Bu bir YouTube linki değil", Toast.LENGTH_LONG).show(); return; }
+                final Context ctx = getApplicationContext();
+                new Thread(() -> {
+                    String name = ids[0].isEmpty() ? "YouTube listesi" : "YouTube videosu";
+                    try {
+                        String u = ids[0].isEmpty() ? "https://www.youtube.com/playlist?list=" + ids[1] : "https://www.youtube.com/watch?v=" + ids[0];
+                        java.net.HttpURLConnection c = Net.open(ctx, "https://www.youtube.com/oembed?format=json&url=" + java.net.URLEncoder.encode(u, "UTF-8"));
+                        c.setConnectTimeout(8000);
+                        c.setReadTimeout(8000);
+                        if (c.getResponseCode() == 200) name = new JSONObject(Net.readAll(c.getInputStream())).optString("title", name);
+                        c.disconnect();
+                    } catch (Exception ignored) { }
+                    JSONArray a = Music.ytLists(ctx);
+                    JSONArray item = new JSONArray();
+                    item.put(name);
+                    item.put(ids[0]);
+                    item.put(ids[1]);
+                    a.put(item);
+                    Music.saveYtLists(ctx, a);
+                    final String n = name;
+                    runOnUiThread(() -> {
+                        Music.selectYt(this, a.length() - 1);
+                        musicSrcBtn.setText(musicLabel());
+                        Toast.makeText(this, "Eklendi: " + n, Toast.LENGTH_SHORT).show();
+                        applyMusic();
+                    });
+                }).start();
             })
             .setNegativeButton("Vazgeç", null)
             .show();
@@ -808,7 +992,7 @@ public class ReaderActivity extends Activity {
                 Music.selectSpotify(this, which);
                 musicSrcBtn.setText(musicLabel());
                 Toast.makeText(this, "Spotify açılacak; müzik başlayınca geri dön", Toast.LENGTH_LONG).show();
-                if (Music.enabled(this)) Music.start(this);
+                applyMusic();
             })
             .setNegativeButton("Vazgeç", null)
             .show();
@@ -848,7 +1032,7 @@ public class ReaderActivity extends Activity {
                         Music.selectSpotify(this, a.length() - 1);
                         musicSrcBtn.setText(musicLabel());
                         Toast.makeText(this, "Eklendi: " + n, Toast.LENGTH_SHORT).show();
-                        if (Music.enabled(this)) Music.start(this);
+                        applyMusic();
                     });
                 }).start();
             })
@@ -1237,7 +1421,7 @@ public class ReaderActivity extends Activity {
         super.onResume();
         handler.postDelayed(saver, 4000);
         scheduleBreak();
-        if (Music.enabled(this)) Music.start(this);
+        applyMusic();
     }
 
     @Override
@@ -1245,6 +1429,7 @@ public class ReaderActivity extends Activity {
         handler.removeCallbacks(saver);
         handler.removeCallbacks(breakAlert);
         Music.stop(this);
+        ytPause();
         pauseScroll();
         savePos(current);
         super.onPause();
@@ -1264,6 +1449,7 @@ public class ReaderActivity extends Activity {
     @Override
     protected void onDestroy() {
         handler.removeCallbacksAndMessages(null);
+        if (yt != null) yt.destroy();
         if (pre != null) pre.destroy();
         if (web != null) web.destroy();
         super.onDestroy();
