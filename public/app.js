@@ -1152,3 +1152,12 @@ $('#newsClear').onclick = async () => {
   render();
   toast('Bildirimler temizlendi');
 };
+
+/* ---------- Okurken müzik ---------- */
+(function setupMusic() {
+  if (!NATIVE || !NATIVE.getSetting || !['true', 'false'].includes(NATIVE.getSetting('music_on'))) return;
+  $('#musicBox').hidden = false;
+  const on = $('#musicOn');
+  on.checked = NATIVE.getSetting('music_on') === 'true';
+  on.onchange = () => { NATIVE.setSetting('music_on', String(on.checked)); toast(on.checked ? 'Okurken müzik çalacak' : 'Müzik kapalı'); };
+})();

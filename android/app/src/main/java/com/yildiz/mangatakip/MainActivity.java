@@ -179,6 +179,7 @@ public class MainActivity extends Activity {
         /** Uygulama ayarları (sessiz saatler): quiet_on, quiet_from, quiet_to. */
         @JavascriptInterface
         public String getSetting(String key) {
+            if ("music_on".equals(key)) return String.valueOf(Music.enabled(MainActivity.this));
             if ("dns_on".equals(key)) return String.valueOf(Net.dnsOn(MainActivity.this));
             if ("offline_wifi".equals(key)) return String.valueOf(Offline.wifiOnly(MainActivity.this));
             if ("quiet_on".equals(key)) return String.valueOf(prefs().getBoolean(key, false));
@@ -190,7 +191,8 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void setSetting(String key, String value) {
             try {
-                if ("dns_on".equals(key)) Net.setDnsOn(MainActivity.this, "true".equals(value));
+                if ("music_on".equals(key)) Music.prefs(MainActivity.this).edit().putBoolean(Music.ON, "true".equals(value)).apply();
+                else if ("dns_on".equals(key)) Net.setDnsOn(MainActivity.this, "true".equals(value));
                 else if ("offline_wifi".equals(key)) Offline.setWifiOnly(MainActivity.this, "true".equals(value));
                 else if ("quiet_on".equals(key)) prefs().edit().putBoolean(key, "true".equals(value)).apply();
                 else if ("quiet_from".equals(key) || "quiet_to".equals(key))

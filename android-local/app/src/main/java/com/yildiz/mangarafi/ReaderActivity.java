@@ -725,6 +725,24 @@ public class ReaderActivity extends Activity {
         bp.topMargin = dp(4);
         box.addView(brk, bp);
 
+        // Arka plan müziği
+        View line2 = new View(this);
+        line2.setBackgroundColor(Color.parseColor("#2f2a3b"));
+        LinearLayout.LayoutParams l2 = new LinearLayout.LayoutParams(-1, dp(1));
+        l2.setMargins(0, dp(10), 0, dp(8));
+        box.addView(line2, l2);
+        box.addView(panelText("Arka plan müziği", 14, true));
+        addCheck(box, "Okurken müzik çal", Music.ON, false, () -> {
+            if (Music.enabled(this)) Music.start(this); else Music.stop(this);
+        });
+        musicSrcBtn = navButton(musicLabel(), false);
+        musicSrcBtn.setTextSize(14);
+        musicSrcBtn.setOnClickListener(v -> chooseMusicSource());
+        LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(-1, dp(46));
+        mp.bottomMargin = dp(6);
+        box.addView(musicSrcBtn, mp);
+        addSlider(box, "Müzik sesi", Music.VOL, 40, 100, v -> Music.setVolume(this, v));
+
         Button reset = navButton("Ayarları sıfırla", false);
         reset.setTextSize(15);
         reset.setOnClickListener(v -> resetLook());
@@ -741,6 +759,67 @@ public class ReaderActivity extends Activity {
         sv.addView(box);
         sv.setVisibility(View.GONE);
         return sv;
+    }
+
+    /* ---------- Müzik ---------- */
+    private Button musicSrcBtn;
+    private static final int REQ_MUSIC = 31;
+
+    private String musicLabel() {
+        String code = Music.source(this);
+        String name = Music.sourceName(code);
+        if ("files".equals(code)) name += " (" + Music.uris(this).size() + " parça)";
+        return "Kaynak: " + name;
+    }
+
+    private void chooseMusicSource() {
+        String[] codes = Music.sourceCodes();
+        String[] names = new String[codes.length];
+        int checked = 0;
+        for (int i = 0; i < codes.length; i++) {
+            names[i] = Music.sourceName(codes[i]);
+            if (codes[i].equals(Music.source(this))) checked = i;
+        }
+        new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle("Müzik kaynağı")
+            .setSingleChoiceItems(names, checked, (d, which) -> {
+                d.dismiss();
+                if ("files".equals(codes[which])) { pickMusicFiles(); return; }
+                Music.prefs(this).edit().putString(Music.SRC, codes[which]).apply();
+                musicSrcBtn.setText(musicLabel());
+                if (Music.enabled(this)) Music.start(this);
+            })
+            .setNegativeButton("Vazgeç", null)
+            .show();
+    }
+
+    private void pickMusicFiles() {
+        Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("audio/*");
+        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        try { startActivityForResult(i, REQ_MUSIC); } catch (Exception e) {
+            Toast.makeText(this, "Dosya seçici açılamadı", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int req, int res, Intent data) {
+        super.onActivityResult(req, res, data);
+        if (req != REQ_MUSIC || res != RESULT_OK || data == null) return;
+        JSONArray arr = new JSONArray();
+        List<Uri> picked = new ArrayList<>();
+        if (data.getClipData() != null) {
+            for (int k = 0; k < data.getClipData().getItemCount(); k++) picked.add(data.getClipData().getItemAt(k).getUri());
+        } else if (data.getData() != null) picked.add(data.getData());
+        for (Uri u : picked) {
+            try { getContentResolver().takePersistableUriPermission(u, Intent.FLAG_GRANT_READ_URI_PERMISSION); } catch (Exception ignored) { }
+            arr.put(u.toString());
+        }
+        if (arr.length() == 0) return;
+        Music.prefs(this).edit().putString(Music.URIS, arr.toString()).putString(Music.SRC, "files").apply();
+        if (musicSrcBtn != null) musicSrcBtn.setText(musicLabel());
+        Toast.makeText(this, arr.length() + " parça seçildi", Toast.LENGTH_SHORT).show();
     }
 
     /** Görünüm menüsündeki ayarları ilk haline döndürür (filtre, karartma, parlaklık vb.). */
@@ -1070,12 +1149,14 @@ public class ReaderActivity extends Activity {
         super.onResume();
         handler.postDelayed(saver, 4000);
         scheduleBreak();
+        if (Music.enabled(this)) Music.start(this);
     }
 
     @Override
     protected void onPause() {
         handler.removeCallbacks(saver);
         handler.removeCallbacks(breakAlert);
+        Music.stop(this);
         pauseScroll();
         savePos(current);
         super.onPause();
