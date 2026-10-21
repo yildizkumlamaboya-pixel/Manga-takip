@@ -5379,7 +5379,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-21T00:12:39Z",
+  "phoneAt": "2026-10-21T00:17:52Z",
   "news": [
    [
     393,
@@ -5684,7 +5684,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-21T00:17:53Z"
  },
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
@@ -6412,7 +6413,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-21T00:12:41Z",
+  "phoneAt": "2026-10-21T00:17:55Z",
   "news": [
    [
     179,
@@ -6769,7 +6770,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-21T00:17:52Z",
   "news": [
    [
     82,
@@ -7046,7 +7048,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-21T00:17:53Z",
   "news": [
    [
     64,
@@ -7356,7 +7359,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-21T00:12:41Z"
+  "phoneAt": "2026-10-21T00:17:56Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -7884,7 +7887,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-21T00:12:46Z",
+  "phoneAt": "2026-10-21T00:17:57Z",
   "news": [
    [
     124,
@@ -9293,7 +9296,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-21T00:17:55Z",
   "news": [
    [
     347,
@@ -9611,7 +9615,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-21T00:12:42Z"
+  "phoneAt": "2026-10-21T00:17:57Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -10510,7 +10514,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-21T00:17:56Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -11311,10 +11316,10 @@
     "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-21T00:12:01.139Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-20T23:59:24Z",
+  "phoneAt": "2026-10-21T00:18:22Z",
   "news": [
    [
     198,
@@ -11793,10 +11798,10 @@
     "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-21T00:12:01.151Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-20T23:59:24Z",
+  "phoneAt": "2026-10-21T00:18:21Z",
   "news": [
    [
     116,
@@ -12821,7 +12826,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-21T00:18:15Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
@@ -13452,6 +13458,7 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "jina"
+  "via": "phone",
+  "phoneAt": "2026-10-21T00:17:58Z"
  }
 }
