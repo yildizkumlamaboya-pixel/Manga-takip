@@ -769,6 +769,7 @@ public class ReaderActivity extends Activity {
         String code = Music.source(this);
         String name = Music.sourceName(code);
         if ("files".equals(code)) name += " (" + Music.uris(this).size() + " parça)";
+        if ("spotify".equals(code)) name = "Spotify · " + Music.spotifyName(this);
         return "Kaynak: " + name;
     }
 
@@ -785,9 +786,71 @@ public class ReaderActivity extends Activity {
             .setSingleChoiceItems(names, checked, (d, which) -> {
                 d.dismiss();
                 if ("files".equals(codes[which])) { pickMusicFiles(); return; }
-                Music.prefs(this).edit().putString(Music.SRC, codes[which]).apply();
+                if ("spotify".equals(codes[which])) { chooseSpotify(); return; }
+                Music.setSource(this, codes[which]);
                 musicSrcBtn.setText(musicLabel());
                 if (Music.enabled(this)) Music.start(this);
+            })
+            .setNegativeButton("Vazgeç", null)
+            .show();
+    }
+
+    /** Kayıtlı Spotify listeleri: birini seç ya da yeni link ekle. */
+    private void chooseSpotify() {
+        JSONArray lists = Music.spotifyLists(this);
+        String[] items = new String[lists.length() + 1];
+        for (int i = 0; i < lists.length(); i++) items[i] = lists.optJSONArray(i).optString(0);
+        items[lists.length()] = "＋ Spotify listesi ekle (link yapıştır)";
+        new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle("Spotify listesi")
+            .setItems(items, (d, which) -> {
+                if (which == lists.length()) { addSpotifyList(); return; }
+                Music.selectSpotify(this, which);
+                musicSrcBtn.setText(musicLabel());
+                Toast.makeText(this, "Spotify açılacak; müzik başlayınca geri dön", Toast.LENGTH_LONG).show();
+                if (Music.enabled(this)) Music.start(this);
+            })
+            .setNegativeButton("Vazgeç", null)
+            .show();
+    }
+
+    private void addSpotifyList() {
+        android.widget.EditText in = new android.widget.EditText(this);
+        in.setHint("https://open.spotify.com/playlist/…");
+        in.setSingleLine(true);
+        new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle("Spotify listesi ekle")
+            .setMessage("Spotify'da listede ⋯ → Paylaş → Bağlantıyı kopyala, sonra buraya yapıştır.")
+            .setView(in)
+            .setPositiveButton("Ekle", (d, w) -> {
+                String link = in.getText().toString().trim();
+                String id = Music.playlistId(link);
+                if (id == null) { Toast.makeText(this, "Bu bir Spotify liste linki değil", Toast.LENGTH_LONG).show(); return; }
+                final Context ctx = getApplicationContext();
+                new Thread(() -> {
+                    // Liste adını Spotify'ın herkese açık bilgisinden al
+                    String name = "Spotify listesi";
+                    try {
+                        java.net.HttpURLConnection c = Net.open(ctx, "https://open.spotify.com/oembed?url=https://open.spotify.com/playlist/" + id);
+                        c.setConnectTimeout(8000);
+                        c.setReadTimeout(8000);
+                        if (c.getResponseCode() == 200) name = new JSONObject(Net.readAll(c.getInputStream())).optString("title", name);
+                        c.disconnect();
+                    } catch (Exception ignored) { }
+                    JSONArray a = Music.spotifyLists(ctx);
+                    JSONArray item = new JSONArray();
+                    item.put(name);
+                    item.put("https://open.spotify.com/playlist/" + id);
+                    a.put(item);
+                    Music.saveSpotifyLists(ctx, a);
+                    final String n = name;
+                    runOnUiThread(() -> {
+                        Music.selectSpotify(this, a.length() - 1);
+                        musicSrcBtn.setText(musicLabel());
+                        Toast.makeText(this, "Eklendi: " + n, Toast.LENGTH_SHORT).show();
+                        if (Music.enabled(this)) Music.start(this);
+                    });
+                }).start();
             })
             .setNegativeButton("Vazgeç", null)
             .show();
@@ -817,7 +880,8 @@ public class ReaderActivity extends Activity {
             arr.put(u.toString());
         }
         if (arr.length() == 0) return;
-        Music.prefs(this).edit().putString(Music.URIS, arr.toString()).putString(Music.SRC, "files").apply();
+        Music.setSource(this, "files");
+        Music.prefs(this).edit().putString(Music.URIS, arr.toString()).apply();
         if (musicSrcBtn != null) musicSrcBtn.setText(musicLabel());
         Toast.makeText(this, arr.length() + " parça seçildi", Toast.LENGTH_SHORT).show();
     }

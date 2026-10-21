@@ -1,6 +1,8 @@
 package com.yildiz.mangarafi;
 
 import android.content.Context;
+import android.content.Intent;
+import android.view.KeyEvent;
 import android.content.SharedPreferences;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -34,11 +36,79 @@ final class Music {
         {"jpop", "Anime şarkıları (LISTEN.moe, sözlü)", "https://listen.moe/fallback"},
     };
 
-    static String[] sourceCodes() { return new String[]{"ost", "lofi", "jpop", "files", "gen"}; }
+    static String[] sourceCodes() { return new String[]{"spotify", "ost", "lofi", "jpop", "files", "gen"}; }
+
+    /* ---------------- Spotify ---------------- */
+    // Spotify şarkıları başka uygulamada çalınamaz; telefondaki Spotify uygulaması listeyi çalar,
+    // okuyucu açılınca/kapanınca medya tuşlarıyla devam ettirilir/duraklatılır.
+    static final String SPOT = "r_spot", SPOT_SEL = "r_spotSel";
+    private static final String SPOT_DEFAULT = "[[\"Relaxing Anime Music – Chill Soundtracks\",\"https://open.spotify.com/playlist/5ri4Wnbva5arEBnxjQrDU3\"],"
+        + "[\"Relaxing Anime Music 💤 Sleep & Study BGM\",\"https://open.spotify.com/playlist/78VlARyHurL68msCzABnXJ\"]]";
+    private static boolean spotifyStarted = false;   // bu oturumda liste Spotify'da açıldı mı
+    private static boolean spotifyLaunching = false; // Spotify açılırken okuyucunun durması müziği durdurmasın
+
+    static JSONArray spotifyLists(Context ctx) {
+        try { return new JSONArray(prefs(ctx).getString(SPOT, SPOT_DEFAULT)); } catch (Exception e) { return new JSONArray(); }
+    }
+
+    static void saveSpotifyLists(Context ctx, JSONArray a) { prefs(ctx).edit().putString(SPOT, a.toString()).apply(); }
+
+    static int spotifySel(Context ctx) { return prefs(ctx).getInt(SPOT_SEL, 0); }
+
+    static String spotifyName(Context ctx) {
+        try { return spotifyLists(ctx).getJSONArray(spotifySel(ctx)).getString(0); } catch (Exception e) { return "liste seçilmedi"; }
+    }
+
+    /** Linkten liste kimliğini çıkarır: open.spotify.com/playlist/ID ya da spotify:playlist:ID */
+    static String playlistId(String link) {
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("playlist[/:]([A-Za-z0-9]{10,})").matcher(link == null ? "" : link);
+        return m.find() ? m.group(1) : null;
+    }
+
+    static void selectSpotify(Context ctx, int index) {
+        prefs(ctx).edit().putInt(SPOT_SEL, index).putString(SRC, "spotify").apply();
+        spotifyStarted = false;
+    }
+
+    private static void mediaKey(Context ctx, int code) {
+        AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        am.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, code));
+        am.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, code));
+    }
+
+    private static void startSpotify(Context ctx) {
+        if (spotifyStarted) { mediaKey(ctx, KeyEvent.KEYCODE_MEDIA_PLAY); return; }
+        String link;
+        try { link = spotifyLists(ctx).getJSONArray(spotifySel(ctx)).getString(1); } catch (Exception e) { return; }
+        String id = playlistId(link);
+        if (id == null) return;
+        spotifyStarted = true;
+        spotifyLaunching = true;
+        try {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("spotify:playlist:" + id + ":play"));
+            i.setPackage("com.spotify.music");
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(i);
+        } catch (Exception e) {
+            try {
+                Intent w = new Intent(Intent.ACTION_VIEW, Uri.parse("https://open.spotify.com/playlist/" + id));
+                w.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(w);
+            } catch (Exception ignored) { spotifyLaunching = false; }
+        }
+    }
+
+    /** Okuyucu durduğunda: Spotify o an açılıyorsa (bizim açtığımız) durdurma. */
+    static boolean consumeLaunching() {
+        boolean l = spotifyLaunching;
+        spotifyLaunching = false;
+        return l;
+    }
 
     static String sourceName(String code) {
         for (String[] st : STATIONS) if (st[0].equals(code)) return st[1];
         if ("files".equals(code)) return "Telefonumdaki müzikler";
+        if ("spotify".equals(code)) return "Spotify listelerim";
         return "Uygulamanın sakin müziği (internetsiz)";
     }
 
@@ -74,7 +144,8 @@ final class Music {
 
     static synchronized void start(Context c) {
         Context ctx = c.getApplicationContext();
-        stop(ctx);
+        stopInternal(ctx);
+        if ("spotify".equals(source(ctx))) { startSpotify(c); return; }
         volume = prefs(ctx).getInt(VOL, 40) / 100f;
         AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
         focus = change -> {
@@ -168,7 +239,23 @@ final class Music {
         }
     }
 
+    /** Okuyucu kapanınca: kendi çalarımızı durdur, Spotify çalıyorsa duraklat. */
     static synchronized void stop(Context ctx) {
+        if (consumeLaunching()) return;
+        if ("spotify".equals(source(ctx)) && spotifyStarted) mediaKey(ctx.getApplicationContext(), KeyEvent.KEYCODE_MEDIA_PAUSE);
+        stopInternal(ctx);
+    }
+
+    /** Kaynak değiştirirken: eski kaynak Spotify ise duraklat. */
+    static void setSource(Context ctx, String code) {
+        if ("spotify".equals(source(ctx)) && !"spotify".equals(code) && spotifyStarted) {
+            mediaKey(ctx.getApplicationContext(), KeyEvent.KEYCODE_MEDIA_PAUSE);
+            spotifyStarted = false;
+        }
+        prefs(ctx).edit().putString(SRC, code).apply();
+    }
+
+    private static synchronized void stopInternal(Context ctx) {
         playing = false;
         if (thread != null) {
             try { thread.join(500); } catch (InterruptedException ignored) { }
