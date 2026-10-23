@@ -96,8 +96,8 @@ final class ReaderViewController: UIViewController, WKNavigationDelegate, WKUIDe
             b.layer.cornerRadius = 12
             b.heightAnchor.constraint(equalToConstant: 48).isActive = true
         }
-        prevBtn.addTarget(self, action: #selector(prev), for: .touchUpInside)
-        nextBtn.addTarget(self, action: #selector(next), for: .touchUpInside)
+        prevBtn.addTarget(self, action: #selector(goPrev), for: .touchUpInside)
+        nextBtn.addTarget(self, action: #selector(goNext), for: .touchUpInside)
         let nav = UIStackView(arrangedSubviews: [prevBtn, nextBtn])
         nav.spacing = 8
         nav.distribution = .fillEqually
@@ -159,8 +159,8 @@ final class ReaderViewController: UIViewController, WKNavigationDelegate, WKUIDe
 
     private func fmt(_ n: Double) -> String { n == n.rounded() ? String(Int(n)) : String(n) }
 
-    @objc private func prev() { step(-1) }
-    @objc private func next() { step(1) }
+    @objc private func goPrev() { step(-1) }
+    @objc private func goNext() { step(1) }
 
     private func step(_ d: Int) {
         savePos()
