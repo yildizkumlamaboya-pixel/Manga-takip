@@ -39,8 +39,12 @@ jobs:
           xcodebuild -project ios/MangaRafi.xcodeproj -scheme MangaRafi -configuration Release \
             -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
             CURRENT_PROJECT_VERSION=${{ github.run_number }} MARKETING_VERSION=1.0.${{ github.run_number }} \
-            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build 2>&1 | tee build.log | grep -E "error:|warning: unre|BUILD" || true
-          test -d build/Build/Products/Release-iphoneos/MangaRafi.app
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build > build.log 2>&1 || { grep -E "error:" -A3 build.log | head -80; exit 1; }
+          grep -E "BUILD (SUCCEEDED|FAILED)" build.log
+          # Çalıştırılabilir dosya ve Info.plist gerçekten oluştu mu
+          test -f build/Build/Products/Release-iphoneos/MangaRafi.app/MangaRafi
+          test -f build/Build/Products/Release-iphoneos/MangaRafi.app/Info.plist
+          ls -la build/Build/Products/Release-iphoneos/MangaRafi.app
 
       - name: .ipa paketle
         run: |
@@ -64,7 +68,7 @@ jobs:
         run: |
           git config user.name "manga-takip-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          { grep -E "error:" -A3 build.log | head -150; echo "-----"; tail -n 150 build.log; } > /tmp/last-build.log 2>/dev/null || echo "kayıt yok" > /tmp/last-build.log
+          { grep -E "error:|warning:" -A3 build.log | head -150; echo "-----"; tail -n 200 build.log; ls -laR build/Build/Products 2>/dev/null | head -60; } > /tmp/last-build.log 2>/dev/null || echo "kayıt yok" > /tmp/last-build.log
           echo "(iOS derlemesi)" >> /tmp/last-build.log
           git checkout --orphan build-logs
           git rm -rf --cached . -q
