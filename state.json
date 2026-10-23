@@ -3781,7 +3781,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:38:18Z",
+  "phoneAt": "2026-10-23T17:48:04Z",
   "news": [
    [
     925,
@@ -5387,7 +5387,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:38:19Z",
+  "phoneAt": "2026-10-23T17:48:04Z",
   "news": [
    [
     393,
@@ -6121,7 +6121,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:38:20Z",
+  "phoneAt": "2026-10-23T17:48:05Z",
   "news": [
    [
     179,
@@ -6438,7 +6438,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-23T17:48:04Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -6777,7 +6778,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-23T17:48:03Z",
   "news": [
    [
     82,
@@ -7054,7 +7056,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-23T17:48:04Z",
   "news": [
    [
     64,
@@ -7364,7 +7367,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:38:22Z"
+  "phoneAt": "2026-10-23T17:48:05Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -7892,7 +7895,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:38:23Z",
+  "phoneAt": "2026-10-23T17:48:05Z",
   "news": [
    [
     124,
@@ -9301,7 +9304,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-23T17:48:04Z",
   "news": [
    [
     347,
@@ -9619,7 +9623,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:38:22Z"
+  "phoneAt": "2026-10-23T17:48:05Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -10420,10 +10424,10 @@
     "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-23T17:31:49.041Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:29:31Z",
+  "phoneAt": "2026-10-23T17:48:31Z",
   "news": [
    [
     198,
@@ -10902,10 +10906,10 @@
     "https:\/\/merlintoon.com\/seri\/ragnarin-donusu\/bolum-1\/"
    ]
   ],
-  "error": "Site bot korumasına takıldı (403); Okuma servisi de bot korumasına takıldı",
-  "errorSince": "2026-10-23T17:31:49.054Z",
+  "error": null,
+  "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-23T17:29:31Z",
+  "phoneAt": "2026-10-23T17:48:31Z",
   "news": [
    [
     116,
@@ -11926,7 +11930,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct"
+  "via": "phone",
+  "phoneAt": "2026-10-23T17:48:05Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
@@ -12557,7 +12562,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "jina"
+  "via": "phone",
+  "phoneAt": "2026-10-23T17:48:06Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/gel-beni-al": {
   "title": "Gel Beni Al",
@@ -13464,7 +13470,8 @@
   ],
   "error": null,
   "errorSince": null,
-  "via": "direct",
+  "via": "phone",
+  "phoneAt": "2026-10-23T17:48:06Z",
   "news": [
    [
     224,
