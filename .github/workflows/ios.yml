@@ -1,0 +1,73 @@
+name: Manga Rafı iOS derle
+
+on:
+  push:
+    branches: [main]
+    paths: ['ios/**', 'android-local/app/src/main/assets/web/**', 'lib/**', '.github/workflows/ios.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Arayüz dosyalarını hazırla
+        run: |
+          set -e
+          mkdir -p ios/web
+          cp android-local/app/src/main/assets/web/* ios/web/
+          cp lib/parse.js lib/chapters.js lib/sites.js lib/url.js ios/web/
+          cp ios/webextra/* ios/web/
+          # iPhone'a özel metinler
+          sed -i '' "s/Açık · telefon yaklaşık 15 dakikada bir yeni bölüm arar./Açık · iPhone kontrol zamanını kendisi seçer (genelde günde birkaç kez); uygulamayı açınca hemen kontrol edilir./" ios/web/app.js
+          sed -i '' "s/Telefon her 15 dakikada bir yeni bölüm arar./iPhone kontrol zamanını kendisi seçer./" ios/web/index.html
+
+      - name: Xcode projesi
+        run: |
+          brew install xcodegen
+          cd ios && xcodegen generate
+
+      - name: Derle
+        run: |
+          set -o pipefail
+          xcodebuild -project ios/MangaRafi.xcodeproj -scheme MangaRafi -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
+            CURRENT_PROJECT_VERSION=${{ github.run_number }} MARKETING_VERSION=1.0.${{ github.run_number }} \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build 2>&1 | tee build.log | grep -E "error:|warning: unre|BUILD" || true
+          test -d build/Build/Products/Release-iphoneos/MangaRafi.app
+
+      - name: .ipa paketle
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/MangaRafi.app Payload/
+          zip -qr manga-rafi.ipa Payload
+
+      - name: İndirme bağlantısına koy
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: manga-rafi-ios
+          name: Manga Rafı iPhone uygulaması
+          body: |
+            iPhone için Manga Rafı (.ipa). Sideloadly ya da AltStore ile kendi Apple kimliğinle kurulur.
+            Sürüm: 1.0.${{ github.run_number }}
+          make_latest: false
+          files: manga-rafi.ipa
+
+      - name: Hata kaydını sakla
+        if: failure()
+        run: |
+          git config user.name "manga-takip-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          { grep -E "error:" -A3 build.log | head -150; echo "-----"; tail -n 150 build.log; } > /tmp/last-build.log 2>/dev/null || echo "kayıt yok" > /tmp/last-build.log
+          echo "(iOS derlemesi)" >> /tmp/last-build.log
+          git checkout --orphan build-logs
+          git rm -rf --cached . -q
+          cp /tmp/last-build.log last-build.log
+          git add last-build.log
+          git commit -m "Son iOS derleme hatası"
+          git push -f origin build-logs

@@ -1,0 +1,43 @@
+name: MangaRafi
+options:
+  bundleIdPrefix: com.yildiz
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  MangaRafi:
+    type: application
+    platform: iOS
+    sources:
+      - path: MangaRafi
+      - path: web
+        type: folder
+        buildPhase: resources
+    info:
+      path: MangaRafi/Info.plist
+      properties:
+        CFBundleDisplayName: Manga Rafı
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen:
+          UIColorName: ""
+        UIBackgroundModes: [fetch]
+        BGTaskSchedulerPermittedIdentifiers: [com.yildiz.mangarafi.refresh]
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UIViewControllerBasedStatusBarAppearance: true
+        UIRequiresFullScreen: true
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yildiz.mangarafi
+        PRODUCT_NAME: MangaRafi
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGN_IDENTITY: ""
+        ENABLE_BITCODE: "NO"

@@ -1,0 +1,1 @@
+(function(){var n=0;document.querySelectorAll('img').forEach(function(i){if(i.complete&&i.naturalWidth===0&&(i.currentSrc||i.src)){var s=i.currentSrc||i.src;i.removeAttribute('src');setTimeout(function(){i.src=s;},60);n++;}});return n;})()

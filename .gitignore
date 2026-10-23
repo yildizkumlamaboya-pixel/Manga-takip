@@ -2,3 +2,5 @@ node_modules
 .env
 store/
 public/url.js
+ios/web/
+ios/*.xcodeproj/
