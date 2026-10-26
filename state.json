@@ -297,7 +297,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:45Z"
+  "phoneAt": "2026-10-26T17:51:24Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri": {
   "title": "Tang Klanının Günceleri",
@@ -565,7 +565,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:45Z",
+  "phoneAt": "2026-10-26T17:51:24Z",
   "news": [
    [
     64,
@@ -4363,7 +4363,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:44Z",
+  "phoneAt": "2026-10-26T17:51:24Z",
   "news": [
    [
     927,
@@ -5797,7 +5797,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:46Z",
+  "phoneAt": "2026-10-26T17:51:25Z",
   "news": [
    [
     348,
@@ -7399,7 +7399,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:45Z",
+  "phoneAt": "2026-10-26T17:51:24Z",
   "news": [
    [
     393,
@@ -8133,7 +8133,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:46Z",
+  "phoneAt": "2026-10-26T17:51:25Z",
   "news": [
    [
     179,
@@ -9051,7 +9051,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:46Z"
+  "phoneAt": "2026-10-26T17:51:25Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -9579,7 +9579,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:48Z",
+  "phoneAt": "2026-10-26T17:51:26Z",
   "news": [
    [
     124,
@@ -9893,7 +9893,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:47Z"
+  "phoneAt": "2026-10-26T17:51:26Z"
  },
  "https:\/\/eskimangalar.com\/manga\/gecmise-donen-polisin-ikinci-sansi": {
   "title": "Geçmişe Dönen Polisin İkinci Şansı",
@@ -10197,7 +10197,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:47Z"
+  "phoneAt": "2026-10-26T17:51:26Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -10673,7 +10673,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:58Z",
+  "phoneAt": "2026-10-26T17:51:30Z",
   "news": [
    [
     116,
@@ -11599,7 +11599,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:59Z",
+  "phoneAt": "2026-10-26T17:51:31Z",
   "news": [
    [
     198,
@@ -12513,7 +12513,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:59Z",
+  "phoneAt": "2026-10-26T17:51:31Z",
   "news": [
    [
     224,
@@ -13527,7 +13527,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:59Z"
+  "phoneAt": "2026-10-26T17:51:31Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
@@ -14159,7 +14159,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-10-26T17:44:48Z"
+  "phoneAt": "2026-10-26T17:51:27Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -14511,5 +14511,721 @@
    ]
   ],
   "phoneError": "HTTP 522"
+ },
+ "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu": {
+  "title": "Kahramanın Dönüşü",
+  "cover": "https:\/\/c2.skycdn.online\/series-thumbnail\/1791259400_6dc4fd8d94c32bde1371842e50930cf4.webp",
+  "latest": 176,
+  "first": 176,
+  "chapters": [
+   [
+    176,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-176"
+   ],
+   [
+    175,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-175"
+   ],
+   [
+    174,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-174"
+   ],
+   [
+    173,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-173"
+   ],
+   [
+    172,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-172"
+   ],
+   [
+    171,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-171"
+   ],
+   [
+    170,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-170"
+   ],
+   [
+    169,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-169"
+   ],
+   [
+    168,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-168"
+   ],
+   [
+    167,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-167"
+   ],
+   [
+    166,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-166"
+   ],
+   [
+    165,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-165"
+   ],
+   [
+    164,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-164"
+   ],
+   [
+    163,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-163"
+   ],
+   [
+    162,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-162"
+   ],
+   [
+    161,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-161"
+   ],
+   [
+    160,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-160"
+   ],
+   [
+    159,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-159"
+   ],
+   [
+    158,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-158"
+   ],
+   [
+    157,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-157"
+   ],
+   [
+    156,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-156"
+   ],
+   [
+    155,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-155"
+   ],
+   [
+    154,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-154"
+   ],
+   [
+    153,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-153"
+   ],
+   [
+    152,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-152"
+   ],
+   [
+    151,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-151"
+   ],
+   [
+    150,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-150"
+   ],
+   [
+    149,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-149"
+   ],
+   [
+    148,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-148"
+   ],
+   [
+    147,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-147"
+   ],
+   [
+    146,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-146"
+   ],
+   [
+    145,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-145"
+   ],
+   [
+    144,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-144"
+   ],
+   [
+    143,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-143"
+   ],
+   [
+    142,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-142"
+   ],
+   [
+    141,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-141"
+   ],
+   [
+    140,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-140"
+   ],
+   [
+    139,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-139"
+   ],
+   [
+    138,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-138"
+   ],
+   [
+    137,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-137"
+   ],
+   [
+    136,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-136"
+   ],
+   [
+    135,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-135"
+   ],
+   [
+    134,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-134"
+   ],
+   [
+    133,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-133"
+   ],
+   [
+    132,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-132"
+   ],
+   [
+    131,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-131"
+   ],
+   [
+    130,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-130"
+   ],
+   [
+    129,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-129"
+   ],
+   [
+    128,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-128"
+   ],
+   [
+    127,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-127"
+   ],
+   [
+    126,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-126"
+   ],
+   [
+    125,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-125"
+   ],
+   [
+    124,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-124"
+   ],
+   [
+    123,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-123"
+   ],
+   [
+    122,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-122"
+   ],
+   [
+    121,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-121"
+   ],
+   [
+    120,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-120"
+   ],
+   [
+    119,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-119"
+   ],
+   [
+    118,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-118"
+   ],
+   [
+    117,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-117"
+   ],
+   [
+    116,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-116"
+   ],
+   [
+    115,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-115"
+   ],
+   [
+    114,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-114"
+   ],
+   [
+    113,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-113"
+   ],
+   [
+    112,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-112"
+   ],
+   [
+    111,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-111"
+   ],
+   [
+    110,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-110"
+   ],
+   [
+    109,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-109"
+   ],
+   [
+    108,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-108"
+   ],
+   [
+    107,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-107"
+   ],
+   [
+    106,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-106"
+   ],
+   [
+    105,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-105"
+   ],
+   [
+    104,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-104"
+   ],
+   [
+    103,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-103"
+   ],
+   [
+    102,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-102"
+   ],
+   [
+    101,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-101"
+   ],
+   [
+    100,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-100"
+   ],
+   [
+    99,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-99"
+   ],
+   [
+    98,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-98"
+   ],
+   [
+    97,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-97"
+   ],
+   [
+    96,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-96"
+   ],
+   [
+    95,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-95"
+   ],
+   [
+    94,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-94"
+   ],
+   [
+    93,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-93"
+   ],
+   [
+    92,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-92"
+   ],
+   [
+    91,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-91"
+   ],
+   [
+    90,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-90"
+   ],
+   [
+    89,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-89"
+   ],
+   [
+    88,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-88"
+   ],
+   [
+    87,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-87"
+   ],
+   [
+    86,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-86"
+   ],
+   [
+    85,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-85"
+   ],
+   [
+    84,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-84"
+   ],
+   [
+    83,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-83"
+   ],
+   [
+    82,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-82"
+   ],
+   [
+    81,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-81"
+   ],
+   [
+    80,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-80"
+   ],
+   [
+    79,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-79"
+   ],
+   [
+    78,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-78"
+   ],
+   [
+    77,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-77"
+   ],
+   [
+    76,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-76"
+   ],
+   [
+    75,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-75"
+   ],
+   [
+    74,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-74"
+   ],
+   [
+    73,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-73"
+   ],
+   [
+    72,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-72"
+   ],
+   [
+    71,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-71"
+   ],
+   [
+    70,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-70"
+   ],
+   [
+    69,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-69"
+   ],
+   [
+    68,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-68"
+   ],
+   [
+    67,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-67"
+   ],
+   [
+    66,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-66"
+   ],
+   [
+    65,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-65"
+   ],
+   [
+    64,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-64"
+   ],
+   [
+    63,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-63"
+   ],
+   [
+    62,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-62"
+   ],
+   [
+    61,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-61"
+   ],
+   [
+    60,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-60"
+   ],
+   [
+    59,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-59"
+   ],
+   [
+    58,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-58"
+   ],
+   [
+    57,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-57"
+   ],
+   [
+    56,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-56"
+   ],
+   [
+    55,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-55"
+   ],
+   [
+    54,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-54"
+   ],
+   [
+    53,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-53"
+   ],
+   [
+    52,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-52"
+   ],
+   [
+    51,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-51"
+   ],
+   [
+    50,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-50"
+   ],
+   [
+    49,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-49"
+   ],
+   [
+    48,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-48"
+   ],
+   [
+    47,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-47"
+   ],
+   [
+    46,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-46"
+   ],
+   [
+    45,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-45"
+   ],
+   [
+    44,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-44"
+   ],
+   [
+    43,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-43"
+   ],
+   [
+    42,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-42"
+   ],
+   [
+    41,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-41"
+   ],
+   [
+    40,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-40"
+   ],
+   [
+    39,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-39"
+   ],
+   [
+    38,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-38"
+   ],
+   [
+    37,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-37"
+   ],
+   [
+    36,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-36"
+   ],
+   [
+    35,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-35"
+   ],
+   [
+    34,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-34"
+   ],
+   [
+    33,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-33"
+   ],
+   [
+    32,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-32"
+   ],
+   [
+    31,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-31"
+   ],
+   [
+    30,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-30"
+   ],
+   [
+    29,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-29"
+   ],
+   [
+    28,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-28"
+   ],
+   [
+    27,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-27"
+   ],
+   [
+    26,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-26"
+   ],
+   [
+    25,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-25"
+   ],
+   [
+    24,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-24"
+   ],
+   [
+    23,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-23"
+   ],
+   [
+    22,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-22"
+   ],
+   [
+    21,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-21"
+   ],
+   [
+    20,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-20"
+   ],
+   [
+    19,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-19"
+   ],
+   [
+    18,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-18"
+   ],
+   [
+    17,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-17"
+   ],
+   [
+    16,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-16"
+   ],
+   [
+    15,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-15"
+   ],
+   [
+    14,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-14"
+   ],
+   [
+    13,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-13"
+   ],
+   [
+    12,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-12"
+   ],
+   [
+    11,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-11"
+   ],
+   [
+    10,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-10"
+   ],
+   [
+    9,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-9"
+   ],
+   [
+    8,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-8"
+   ],
+   [
+    7,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-7"
+   ],
+   [
+    6,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-6"
+   ],
+   [
+    5,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-5"
+   ],
+   [
+    4,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-4"
+   ],
+   [
+    3,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-3"
+   ],
+   [
+    2,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-2"
+   ],
+   [
+    1,
+    "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu\/bolum\/chapter-1"
+   ]
+  ],
+  "error": null,
+  "errorSince": null,
+  "via": "phone",
+  "phoneAt": "2026-10-26T17:51:31Z"
  }
 }
