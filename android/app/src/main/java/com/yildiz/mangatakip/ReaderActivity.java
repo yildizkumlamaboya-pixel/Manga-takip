@@ -423,7 +423,7 @@ public class ReaderActivity extends Activity {
         "adfox.ru", "an.yandex.ru", "yandexadexchange.net", "adskeeper.com", "adskeeper.co.uk",
         "bidvertiser.com", "revcontent.com", "zedo.com", "smartadserver.com", "adform.net",
         "yieldmo.com", "media.net", "infolinks.com", "chitika.com", "vidoomy.com", "ezoic.net",
-        "adsco.re", "ad.plus", "adtelligent.com", "betweendigital.com", "admatic.com.tr",
+        "adsco.re", "fundingchoicesmessages.google.com", "googleads.g.doubleclick.net", "tpc.googlesyndication.com", "ep1.adtrafficquality.google", "ep2.adtrafficquality.google", "ad.plus", "adtelligent.com", "betweendigital.com", "admatic.com.tr",
         "reklamstore.com", "reklamaction.com", "tr.adserver", "adgager.com",
         "acscdn.com", "aclib.net", "adtng.com", "pemsrv.com", "onclicka.com", "onclickalgo.com", "bidgear.com",
         "galaksion.com", "richads.com", "rtmark.net", "propu.sh", "pubfuture-ad.com", "pubfuture.com",
@@ -449,18 +449,23 @@ public class ReaderActivity extends Activity {
      */
     private static final String AD_CLEAN_JS =
         "(function(){if(window.__mtClean)return;window.__mtClean=1;"
-        + "var bad=/(dosyay\\u0131 indir|dosyayi indir|indirme haz\\u0131r|indir\\b|download|kazand\\u0131n|tebrikler|bahis|casino|bonus|\\u00f6d\\u00fcl|hemen t\\u0131kla|virus|vir\\u00fcs|g\\u00fcncelle)/i;"
-        + "function big(r){return r.width*r.height>innerWidth*innerHeight*0.6;}"
-        + "function check(e){if(!e||e.__mtOk||e.tagName==='SCRIPT'||e.tagName==='STYLE')return false;var cs=getComputedStyle(e);"
-        + "if(cs.position!=='fixed'&&cs.position!=='sticky')return false;var z=parseInt(cs.zIndex)||0;var r=e.getBoundingClientRect();"
-        + "if(r.width<40||r.height<40)return false;var raw=(e.innerText||'').slice(0,400).replace(/\\u0130/g,'i');var txt=raw.toLowerCase()+' '+raw.replace(/I/g,'\\u0131').toLowerCase();"
-        + "var ifr=e.tagName==='IFRAME'||!!e.querySelector('iframe');var manga=!!e.querySelector('img[src*=chapter],img[data-src]');"
-        + "var hit=(z>=50&&bad.test(txt))||(ifr&&z>=50&&!manga)||(big(r)&&z>=100&&raw.trim().length<40&&!manga&&!e.querySelector('img'));"
-        + "if(hit){e.style.setProperty('display','none','important');return true;}return false;}"
-        + "function clean(){if(!document.body)return;var hid=false;var kids=document.body.children;"
-        + "for(var i=0;i<kids.length;i++){var k=kids[i];if(check(k))hid=true;else for(var j=0;j<k.children.length&&j<30;j++){if(check(k.children[j]))hid=true;}}"
-        + "if(hid){document.documentElement.style.overflow='';document.body.style.overflow='';}}"
-        + "clean();setInterval(clean,1000);})()";
+        + "var bad=/(dosyay\\u0131 indir|dosyayi indir|indirme haz\\u0131r|indirme hazir|indir\\b|download|kazand\\u0131n|tebrikler|bahis|casino|bonus|\\u00f6d\\u00fcl|hemen t\\u0131kla|virus|vir\\u00fcs|g\\u00fcncelle)/i;"
+        + "var AD='ins.adsbygoogle,.adsbygoogle-noablate,[data-vignette-loaded],[id*=google_vignette],iframe[id^=aswift],iframe[name^=aswift],iframe[id^=google_ads],iframe[src*=googleads],iframe[src*=doubleclick],iframe[src*=googlesyndication]';"
+        + "function hide(e){e.style.setProperty('display','none','important');e.style.setProperty('visibility','hidden','important');e.__mtHid=1;}"
+        + "function manga(e){return !!e.querySelector('img[src*=chapter],img[data-src],img[src*=uploads],img[src*=manga]');}"
+        + "function check(e){if(!e||e.__mtHid||e.tagName==='SCRIPT'||e.tagName==='STYLE'||e.tagName==='LINK')return false;var cs=getComputedStyle(e);"
+        + "if(cs.position!=='fixed'&&cs.position!=='sticky')return false;if(cs.display==='none')return false;var z=parseInt(cs.zIndex)||0;var r=e.getBoundingClientRect();"
+        + "if(r.width<40||r.height<30)return false;var raw=(e.innerText||'').slice(0,500).replace(/\\u0130/g,'i');var txt=raw.toLowerCase()+' '+raw.replace(/I/g,'\\u0131').toLowerCase();"
+        + "var area=r.width*r.height/(innerWidth*innerHeight);var ifr=e.tagName==='IFRAME'||!!e.querySelector('iframe');var m=manga(e);"
+        + "var hit=(bad.test(txt)&&(z>=10||area>0.15))||(ifr&&!m&&(z>=10||area>0.25))||(area>0.5&&z>=100&&raw.trim().length<40&&!m&&!e.querySelector('img'));"
+        + "if(hit){hide(e);return true;}return false;}"
+        + "function walk(n,d){var hid=false;for(var i=0;i<n.children.length&&i<60;i++){var k=n.children[i];if(check(k))hid=true;else if(d<4&&k.children.length)hid=walk(k,d+1)||hid;}return hid;}"
+        + "function clean(){if(!document.body)return;var hid=false;var a=document.querySelectorAll(AD);for(var i=0;i<a.length;i++){if(!manga(a[i])){hide(a[i]);hid=true;}}"
+        + "if(walk(document.body,0))hid=true;"
+        + "if(location.hash.indexOf('google_vignette')>=0){history.replaceState(null,'',location.href.split('#')[0]);hid=true;}"
+        + "if(hid){document.documentElement.style.overflow='';document.body.style.overflow='';document.body.style.position='';document.documentElement.style.position='';}}"
+        + "clean();setInterval(clean,700);var t=0;try{new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=0;clean();},60);}).observe(document.documentElement,{childList:true,subtree:true});}catch(x){}"
+        + "addEventListener('hashchange',clean);})()";
 
     private boolean adsBlocked() { return rp == null || rp.getBoolean("r_ads", true); }
 
