@@ -375,32 +375,68 @@ final class Offline {
     }
 
     private static void saveChapter(Context ctx, String series, double num, String url) throws Exception {
-        // Önce hafif yol: sayfayı düz indirip resim adreslerini oradan bul; olmazsa görünmez tarayıcı
-        List<String> imgs = pickImages(grabFast(ctx, url));
-        if (imgs.size() < 3) imgs = pickImages(grab(ctx, url, 45000));
-        if (imgs.size() < 3) throw new IOException("bölüm resimleri bulunamadı");
-        imgTotal = imgs.size();
         File dir = chapterDir(ctx, series, num);
         File tmp = new File(dir.getPath() + ".tmp");
         delete(tmp);
         tmp.mkdirs();
-        String ua = WebSettings.getDefaultUserAgent(ctx);
-        JSONArray names = new JSONArray();
-        for (int i = 0; i < imgs.size(); i++) {
-            if (paused(ctx)) throw new IOException("duraklatıldı");
-            String name = download(ctx, imgs.get(i), url, ua, tmp, i);
-            names.put(baseUrl(series, num) + name);
-            imgDone = i + 1;
-            SystemClock.sleep(60); // ağı ve işlemciyi tek seferde boğmamak için
-        }
         JSONObject idx = new JSONObject();
         idx.put("num", num);
         idx.put("url", url);
-        idx.put("images", names);
+
+        boolean viaImages = false;
+        try {
+            viaImages = saveImages(ctx, series, num, url, tmp, idx);
+        } catch (IOException e) {
+            if ("duraklatıldı".equals(e.getMessage())) { delete(tmp); throw e; }
+        }
+        if (!viaImages) {
+            // Resimler bulunamadı ya da düzgün inmedi: bölümü sayfa olarak kaydet
+            if (paused(ctx)) { delete(tmp); throw new IOException("duraklatıldı"); }
+            for (File f : tmp.listFiles() == null ? new File[0] : tmp.listFiles()) delete(f);
+            imgDone = 0;
+            imgTotal = 0;
+            File page = new File(tmp, "sayfa.mht");
+            if (!saveArchive(ctx, url, page, 60000)) { delete(tmp); throw new IOException("bölüm kaydedilemedi"); }
+            idx.put("archive", page.getName());
+            idx.put("images", new JSONArray());
+        }
         idx.put("at", System.currentTimeMillis());
         writeFile(new File(tmp, "index.json"), idx.toString());
         delete(dir);
         if (!tmp.renameTo(dir)) throw new IOException("kaydedilemedi");
+    }
+
+    /**
+     * Resim resim indirir ve kontrol eder. Bozuk resim tekrar indirilir; küçük (ikon/reklam) resimler atılır.
+     * Sonuç şüpheliyse (çok az resim, çok hata) false döner, sayfa olarak kaydedilir.
+     */
+    private static boolean saveImages(Context ctx, String series, double num, String url, File tmp, JSONObject idx) throws Exception {
+        // Önce hafif yol: sayfayı düz indirip resim adreslerini oradan bul; olmazsa görünmez tarayıcı
+        List<String> imgs = pickImages(grabFast(ctx, url));
+        if (imgs.size() < 3) imgs = pickImages(grab(ctx, url, 45000));
+        if (imgs.size() < 3) return false;
+        imgTotal = imgs.size();
+        String ua = WebSettings.getDefaultUserAgent(ctx);
+        JSONArray names = new JSONArray();
+        int failed = 0;
+        for (int i = 0; i < imgs.size(); i++) {
+            if (paused(ctx)) throw new IOException("duraklatıldı");
+            try {
+                String name = download(ctx, imgs.get(i), url, ua, tmp, i);
+                int[] wh = imageSize(new File(tmp, name));
+                // Bölüm sayfası olamayacak kadar küçük resimleri (ikon, reklam) at
+                if (wh != null && (wh[0] < 250 || wh[1] < 120)) new File(tmp, name).delete();
+                else names.put(baseUrl(series, num) + name);
+            } catch (IOException e) {
+                failed++;
+            }
+            imgDone = i + 1;
+            SystemClock.sleep(60); // ağı ve işlemciyi tek seferde boğmamak için
+        }
+        // Resimlerin %15'inden fazlası inmediyse ya da 3'ten az geçerli resim kaldıysa güvenme
+        if (names.length() < 3 || failed > Math.max(1, imgs.size() * 0.15)) return false;
+        idx.put("images", names);
+        return true;
     }
 
     private static String download(Context ctx, String img, String referer, String ua, File dir, int i) throws IOException {
@@ -419,14 +455,21 @@ final class Offline {
                 int code = c.getResponseCode();
                 if (code != 200) throw new IOException("resim " + code);
                 String type = String.valueOf(c.getContentType()).toLowerCase(Locale.ROOT);
+                if (type.startsWith("text/") || type.contains("html") || type.contains("json")) throw new IOException("resim değil: " + type);
                 String ext = type.contains("png") ? ".png" : type.contains("webp") ? ".webp" : type.contains("gif") ? ".gif"
                     : type.contains("avif") ? ".avif" : ".jpg";
                 String name = String.format(Locale.ROOT, "%03d%s", i, ext);
-                try (InputStream in = c.getInputStream(); OutputStream out = new FileOutputStream(new File(dir, name))) {
+                File f = new File(dir, name);
+                long expected = c.getContentLengthLong();
+                try (InputStream in = c.getInputStream(); OutputStream out = new FileOutputStream(f)) {
                     byte[] buf = new byte[32768];
                     int r;
                     while ((r = in.read(buf)) > 0) out.write(buf, 0, r);
                 }
+                // Yarım inen ya da bozuk dosyayı tekrar indir
+                if (expected > 0 && f.length() < expected) throw new IOException("yarım indi");
+                int[] wh = imageSize(f);
+                if (wh == null && !ext.equals(".avif")) throw new IOException("bozuk resim");
                 return name;
             } catch (IOException e) {
                 last = e;
@@ -437,6 +480,98 @@ final class Offline {
         }
         throw last;
     }
+
+    /** Resmin boyutunu çözmeden okur; resim değilse ya da bozuksa null. */
+    static int[] imageSize(File f) {
+        android.graphics.BitmapFactory.Options o = new android.graphics.BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        android.graphics.BitmapFactory.decodeFile(f.getPath(), o);
+        return o.outWidth > 0 && o.outHeight > 0 ? new int[]{o.outWidth, o.outHeight} : null;
+    }
+
+    /* ---------------- Sayfa olarak kaydetme (resimler düzgün inmezse) ---------------- */
+
+    /** Bölüm sayfa olarak kaydedildiyse dosyası, değilse null. */
+    static File archiveFile(Context ctx, String series, double num) {
+        JSONObject idx = index(ctx, series, num);
+        if (idx == null || !idx.has("archive")) return null;
+        File f = new File(chapterDir(ctx, series, num), idx.optString("archive"));
+        return f.isFile() ? f : null;
+    }
+
+    /** Tembel yüklenen resimleri hemen yükletir; hepsi yüklenince/zaman dolunca 'ok' döner. */
+    private static final String EAGER_JS =
+        "(function(){document.querySelectorAll('img').forEach(function(i){i.loading='eager';"
+        + "var d=i.getAttribute('data-src')||i.getAttribute('data-lazy-src')||i.getAttribute('data-original');"
+        + "if(d&&(!i.getAttribute('src')||i.getAttribute('src').indexOf('data:')===0||i.src.indexOf('loading')>=0))i.src=d;});"
+        + "var imgs=[].slice.call(document.images).filter(function(i){return i.src&&i.src.indexOf('data:')!==0;});"
+        + "var left=imgs.filter(function(i){return !i.complete;}).length;return imgs.length+':'+left;})()";
+
+    /** Bölüm sayfasını görünmez tarayıcıda açar, resimleri yükletir ve sayfayı tek dosya (MHTML) olarak kaydeder. */
+    static boolean saveArchive(Context ctx, String url, File out, long timeoutMs) {
+        try {
+            if (!HIDDEN_WEB.tryAcquire(3, TimeUnit.MINUTES)) return false;
+        } catch (InterruptedException e) {
+            return false;
+        }
+        Handler main = new Handler(Looper.getMainLooper());
+        CountDownLatch done = new CountDownLatch(1);
+        boolean[] ok = {false};
+        WebView[] holder = new WebView[1];
+        try {
+            main.post(() -> {
+                try {
+                    WebView w = new WebView(ctx);
+                    holder[0] = w;
+                    WebSettings st = w.getSettings();
+                    st.setJavaScriptEnabled(true);
+                    st.setDomStorageEnabled(true);
+                    w.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    if (android.os.Build.VERSION.SDK_INT >= 26) w.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_WAIVED, true);
+                    w.setWebViewClient(new WebViewClient() {
+                        @Override public boolean onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail d) {
+                            done.countDown();
+                            return true;
+                        }
+                    });
+                    w.loadUrl(url);
+                    long start = SystemClock.uptimeMillis();
+                    Runnable poll = new Runnable() {
+                        @Override public void run() {
+                            if (done.getCount() == 0) return;
+                            boolean late = SystemClock.uptimeMillis() - start > timeoutMs;
+                            if (w.getProgress() < 100 && !late) { main.postDelayed(this, 1000); return; }
+                            w.evaluateJavascript(EAGER_JS, v -> {
+                                String r = v == null ? "" : v.replace("\"", "");
+                                String[] p = r.split(":");
+                                int total = p.length == 2 ? safeInt(p[0]) : 0, left = p.length == 2 ? safeInt(p[1]) : 1;
+                                if ((total >= 3 && left == 0) || late) {
+                                    if (total < 3) { done.countDown(); return; }
+                                    // Resimler yerleşsin diye kısa bekle, sonra kaydet
+                                    main.postDelayed(() -> w.saveWebArchive(out.getPath(), false, path -> {
+                                        ok[0] = path != null && out.length() > 50_000;
+                                        done.countDown();
+                                    }), 1500);
+                                } else {
+                                    main.postDelayed(this, 1500);
+                                }
+                            });
+                        }
+                    };
+                    main.postDelayed(poll, 2500);
+                } catch (Throwable t) {
+                    done.countDown();
+                }
+            });
+            try { done.await(timeoutMs + 15000, TimeUnit.MILLISECONDS); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        } finally {
+            main.post(() -> { if (holder[0] != null) { holder[0].stopLoading(); holder[0].destroy(); } });
+            HIDDEN_WEB.release();
+        }
+        return ok[0];
+    }
+
+    private static int safeInt(String s) { try { return Integer.parseInt(s.trim()); } catch (Exception e) { return 0; } }
 
     /* ---------------- Bölüm sayfasından resim adreslerini bulma ---------------- */
 

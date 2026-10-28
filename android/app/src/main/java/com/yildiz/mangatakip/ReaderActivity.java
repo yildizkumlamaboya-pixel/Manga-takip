@@ -380,7 +380,7 @@ public class ReaderActivity extends Activity {
                 view.evaluateJavascript(AUTO_JS, null);
                 if (adsBlocked()) { view.evaluateJavascript(AD_CSS_JS, null); view.evaluateJavascript(AD_CLEAN_JS, null); }
                 if (view != web) { onPreloaded(view); return; } // arkadaki önden yükleme
-                offlineShown = url.startsWith("https://" + Offline.HOST);
+                offlineShown = url.startsWith("https://" + Offline.HOST) || url.startsWith("file:");
                 if (pageMode && !harvested) {
                     handler.removeCallbacksAndMessages(harvestToken);
                     harvestLast = -1;
@@ -1327,7 +1327,14 @@ public class ReaderActivity extends Activity {
         endFab.setVisibility(View.GONE);
         setHeaderHidden(false);
         updateBar();
-        if (Offline.has(this, seriesUrl, current)) {
+        java.io.File archive = Offline.archiveFile(this, seriesUrl, current);
+        if (archive != null) {
+            // Sayfa olarak kaydedilmiş bölüm
+            offlineShown = true;
+            updateBar();
+            web.getSettings().setAllowFileAccess(true);
+            web.loadUrl(android.net.Uri.fromFile(archive).toString());
+        } else if (Offline.has(this, seriesUrl, current)) {
             // Çevrimdışı kopya var: beklemeden telefondan aç (internet gerekmez)
             offlineShown = true;
             updateBar();
