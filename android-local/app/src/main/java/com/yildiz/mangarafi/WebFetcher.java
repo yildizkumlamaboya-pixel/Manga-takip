@@ -24,6 +24,20 @@ final class WebFetcher {
 
     static String fetch(Context ctx, String url, long timeoutMs) throws IOException {
         if (Looper.myLooper() == Looper.getMainLooper()) throw new IOException("ana iş parçacığında çalıştırılamaz");
+        // Aynı anda tek görünmez tarayıcı (çevrimdışı indirmeyle ortak kilit)
+        try {
+            if (!Offline.HIDDEN_WEB.tryAcquire(2, TimeUnit.MINUTES)) throw new IOException("meşgul");
+        } catch (InterruptedException e) {
+            throw new IOException("kesildi");
+        }
+        try {
+            return fetchLocked(ctx, url, timeoutMs);
+        } finally {
+            Offline.HIDDEN_WEB.release();
+        }
+    }
+
+    private static String fetchLocked(Context ctx, String url, long timeoutMs) throws IOException {
         Handler main = new Handler(Looper.getMainLooper());
         CountDownLatch done = new CountDownLatch(1);
         String[] out = new String[1];
@@ -37,7 +51,16 @@ final class WebFetcher {
                 s.setDomStorageEnabled(true);
                 s.setLoadsImagesAutomatically(false);
                 s.setBlockNetworkImage(true);
-                w.setWebViewClient(new WebViewClient());
+                w.setLayerType(android.view.View.LAYER_TYPE_SOFTWARE, null);
+                if (android.os.Build.VERSION.SDK_INT >= 26) {
+                    w.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_WAIVED, true);
+                }
+                w.setWebViewClient(new WebViewClient() {
+                    @Override public boolean onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail d) {
+                        done.countDown();
+                        return true;
+                    }
+                });
                 w.loadUrl(url);
                 long start = SystemClock.uptimeMillis();
                 int[] last = {-1};

@@ -271,3 +271,10 @@ button.row-btn { width: 100%; background: none; border: 0; color: inherit; font:
 
 .news-actions { display: flex; gap: 8px; margin: 0 0 10px; flex-wrap: wrap; }
 .news-actions .small-btn { padding: 9px 14px; font-size: 14px; border: 0; border-radius: 12px; background: var(--panel-2); color: var(--text); cursor: pointer; }
+
+/* İndirme ilerlemesi */
+.off-progress { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.off-progress .bar { flex: 1; height: 6px; background: var(--panel-2); border-radius: 3px; overflow: hidden; }
+.off-progress .bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s; }
+.off-progress .small-btn, .off-status .small-btn { padding: 8px 12px; font-size: 14px; border: 0; border-radius: 10px; background: var(--panel-2); color: var(--text); white-space: nowrap; }
+.off-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg); border-radius: 12px; padding: 10px 12px; margin: 8px 0; font-size: 14px; }

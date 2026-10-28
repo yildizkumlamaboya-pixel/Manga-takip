@@ -55,8 +55,49 @@ final class Offline {
     static final String HOST = "offline.local";
     private static final String PREFS = "offline";
 
-    private static final ExecutorService pool = Executors.newSingleThreadExecutor();
+    /** Bölümler tek tek, sırayla, düşük öncelikli bir iş parçacığında iner (ekran takılmasın). */
+    private static final ExecutorService pool = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(() -> {
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+            r.run();
+        }, "cevrimdisi");
+        t.setPriority(Thread.MIN_PRIORITY);
+        return t;
+    });
     private static final Set<String> busy = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<String> queued = Collections.synchronizedSet(new java.util.LinkedHashSet<>());
+
+    /**
+     * Uygulamada aynı anda en fazla bir görünmez tarayıcı (WebView) açık olsun.
+     * Birden fazlası telefonun tarayıcı bileşenini zorlayıp ekranın beyazlamasına yol açıyordu.
+     */
+    static final java.util.concurrent.Semaphore HIDDEN_WEB = new java.util.concurrent.Semaphore(1, true);
+
+    // İndirme durumu (arayüzde ilerleme göstermek için)
+    private static volatile String curSeries = null;
+    private static volatile double curNum = -1;
+    private static volatile int imgDone = 0, imgTotal = 0;
+
+    static boolean paused(Context ctx) { return prefs(ctx).getBoolean("paused", false); }
+
+    /** Duraklat: süren bölüm yarıda bırakılır (sonra baştan iner), yenileri başlamaz. */
+    static void setPaused(Context ctx, boolean p) { prefs(ctx).edit().putBoolean("paused", p).apply(); }
+
+    /** {"paused":..,"series":..,"num":..,"done":..,"total":..,"queue":..} */
+    static String status(Context ctx) {
+        try {
+            JSONObject o = new JSONObject();
+            o.put("paused", paused(ctx));
+            o.put("series", curSeries == null ? JSONObject.NULL : curSeries);
+            o.put("num", curNum);
+            o.put("done", imgDone);
+            o.put("total", imgTotal);
+            o.put("queue", queued.size());
+            return o.toString();
+        } catch (Exception e) {
+            return "{}";
+        }
+    }
 
     /* ---------------- Ayarlar ---------------- */
 
@@ -265,7 +306,7 @@ final class Offline {
         Context app = ctx.getApplicationContext();
         markReadUpTo(app, series, base);
         int n = wanted(app, series);
-        if (n <= 0 || busy.contains(series)) return null;
+        if (n <= 0 || busy.contains(series) || queued.contains(series) || paused(app)) return null;
         List<double[]> nums = new ArrayList<>();
         Map<Double, String> urls = new HashMap<>();
         try {
@@ -286,16 +327,25 @@ final class Offline {
         boolean missing = false;
         for (double t : targets) if (!has(app, series, t)) missing = true;
         if (!missing) return null;
-        busy.add(series);
+        queued.add(series);
         return pool.submit(() -> {
+            queued.remove(series);
+            busy.add(series);
+            curSeries = series;
             try {
                 for (double t : targets) {
-                    if (wanted(app, series) <= 0 || !networkAllowed(app)) break;
+                    if (paused(app) || wanted(app, series) <= 0 || !networkAllowed(app)) break;
                     if (has(app, series, t)) continue;
+                    curNum = t;
+                    imgDone = 0;
+                    imgTotal = 0;
                     try { saveChapter(app, series, t, urls.get(t)); } catch (Exception ignored) { }
                 }
             } finally {
                 busy.remove(series);
+                curSeries = null;
+                curNum = -1;
+                imgDone = imgTotal = 0;
             }
         });
     }
@@ -325,8 +375,11 @@ final class Offline {
     }
 
     private static void saveChapter(Context ctx, String series, double num, String url) throws Exception {
-        List<String> imgs = pickImages(grab(ctx, url, 45000));
+        // Önce hafif yol: sayfayı düz indirip resim adreslerini oradan bul; olmazsa görünmez tarayıcı
+        List<String> imgs = pickImages(grabFast(ctx, url));
+        if (imgs.size() < 3) imgs = pickImages(grab(ctx, url, 45000));
         if (imgs.size() < 3) throw new IOException("bölüm resimleri bulunamadı");
+        imgTotal = imgs.size();
         File dir = chapterDir(ctx, series, num);
         File tmp = new File(dir.getPath() + ".tmp");
         delete(tmp);
@@ -334,8 +387,11 @@ final class Offline {
         String ua = WebSettings.getDefaultUserAgent(ctx);
         JSONArray names = new JSONArray();
         for (int i = 0; i < imgs.size(); i++) {
+            if (paused(ctx)) throw new IOException("duraklatıldı");
             String name = download(ctx, imgs.get(i), url, ua, tmp, i);
             names.put(baseUrl(series, num) + name);
+            imgDone = i + 1;
+            SystemClock.sleep(60); // ağı ve işlemciyi tek seferde boğmamak için
         }
         JSONObject idx = new JSONObject();
         idx.put("num", num);
@@ -395,9 +451,64 @@ final class Offline {
         + "for(var k=0;k<c.length;k++){var v=c[k];if(v&&v.trim()&&v.indexOf('data:')!==0){try{out.push(new URL(v.trim(),location.href).href);}catch(e){}break;}}});"
         + "return JSON.stringify(out);})()";
 
+    private static final java.util.regex.Pattern IMG_TAG = java.util.regex.Pattern.compile("<img\\b[^>]*>", java.util.regex.Pattern.CASE_INSENSITIVE);
+    private static final String[] IMG_ATTRS = {"data-src", "data-lazy-src", "data-original", "data-url", "src"};
+
+    /** Bölüm sayfasını düz HTTP ile indirip <img> adreslerini çıkarır (tarayıcı açmadan). */
+    static List<String> grabFast(Context ctx, String url) {
+        List<String> out = new ArrayList<>();
+        try {
+            HttpURLConnection c = Net.open(ctx, url);
+            try {
+                c.setConnectTimeout(20000);
+                c.setReadTimeout(30000);
+                c.setInstanceFollowRedirects(true);
+                c.setRequestProperty("User-Agent", WebSettings.getDefaultUserAgent(ctx));
+                c.setRequestProperty("Accept", "text/html,application/xhtml+xml,*/*;q=0.8");
+                c.setRequestProperty("Accept-Language", "tr-TR,tr;q=0.9");
+                String cookie = CookieManager.getInstance().getCookie(url);
+                if (cookie != null) c.setRequestProperty("Cookie", cookie);
+                if (c.getResponseCode() != 200) return out;
+                String html = Net.readAll(c.getInputStream());
+                java.net.URL base = new java.net.URL(url);
+                java.util.regex.Matcher m = IMG_TAG.matcher(html);
+                while (m.find()) {
+                    String tag = m.group();
+                    for (String a : IMG_ATTRS) {
+                        java.util.regex.Matcher v = java.util.regex.Pattern.compile("\\s" + a + "\\s*=\\s*[\"']([^\"']+)[\"']",
+                            java.util.regex.Pattern.CASE_INSENSITIVE).matcher(tag);
+                        if (v.find()) {
+                            String src = v.group(1).trim().replace("&amp;", "&");
+                            if (!src.isEmpty() && !src.startsWith("data:")) {
+                                try { out.add(new java.net.URL(base, src).toString()); } catch (Exception ignored) { }
+                                break;
+                            }
+                        }
+                    }
+                }
+            } finally {
+                c.disconnect();
+            }
+        } catch (Exception ignored) { }
+        return out;
+    }
+
     /** Bölüm sayfasını görünmez tarayıcıda açar, kaydırır ve sayfadaki resim adreslerini döndürür. */
     static List<String> grab(Context ctx, String url, long timeoutMs) throws IOException {
         if (Looper.myLooper() == Looper.getMainLooper()) throw new IOException("ana iş parçacığı");
+        try {
+            if (!HIDDEN_WEB.tryAcquire(3, TimeUnit.MINUTES)) throw new IOException("meşgul");
+        } catch (InterruptedException e) {
+            throw new IOException("kesildi");
+        }
+        try {
+            return grabLocked(ctx, url, timeoutMs);
+        } finally {
+            HIDDEN_WEB.release();
+        }
+    }
+
+    private static List<String> grabLocked(Context ctx, String url, long timeoutMs) {
         Handler main = new Handler(Looper.getMainLooper());
         CountDownLatch done = new CountDownLatch(1);
         List<String> out = new ArrayList<>();
@@ -412,11 +523,17 @@ final class Offline {
                 s.setBlockNetworkImage(true); // resimleri ayrıca indiriyoruz
                 s.setUseWideViewPort(true);
                 s.setLoadWithOverviewMode(true);
-                w.setWebViewClient(new WebViewClient());
-                // Görünmez ama boyutlu: sitenin "görününce yükle" düzeni çalışsın
-                w.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
-                    View.MeasureSpec.makeMeasureSpec(2340, View.MeasureSpec.EXACTLY));
-                w.layout(0, 0, 1080, 2340);
+                // Ekrandaki sayfalarla çizim yarışına girmesin: yazılımla çiz, ekrana hiç takma
+                w.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                if (android.os.Build.VERSION.SDK_INT >= 26) {
+                    w.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_WAIVED, true);
+                }
+                w.setWebViewClient(new WebViewClient() {
+                    @Override public boolean onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail d) {
+                        done.countDown();
+                        return true;
+                    }
+                });
                 w.loadUrl(url);
                 long start = SystemClock.uptimeMillis();
                 Runnable poll = new Runnable() {

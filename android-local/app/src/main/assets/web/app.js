@@ -700,8 +700,22 @@ function renderOffline(v) {
   // Bölüm listesinde kayıtlı olanları işaretle
   const set = new Set(nums.map(Number));
   setTimeout(() => document.querySelectorAll('#dChapters li').forEach((li) => li.classList.toggle('off', set.has(Number(li.dataset.num)))), 0);
+  // İndirme ilerlemesi ve duraklat/devam
+  const stt = offStatus();
+  const mine = stt.series === v.url;
+  const waiting = !!o.n && stt.paused && nums.length < (o.n >= 9999 ? Infinity : o.n);
+  $('#dOffProg').hidden = !(mine || waiting || (o.busy && stt.paused));
+  if (mine) {
+    $('#dOffInfo').textContent = `İndiriliyor: Bölüm ${fmt(stt.num)}` + (stt.total ? ` · ${stt.done}/${stt.total} resim` : ' · hazırlanıyor…')
+      + ` · ${nums.length} bölüm hazır · ${mb(o.size || 0)}`;
+    $('#dOffBar').style.width = (stt.total ? Math.round((stt.done / stt.total) * 100) : 3) + '%';
+  } else if (stt.paused && o.n) {
+    $('#dOffInfo').textContent = `İndirme duraklatıldı · ${nums.length} bölüm hazır · ${mb(o.size || 0)}`;
+    $('#dOffBar').style.width = '0%';
+  }
+  $('#dOffPause').textContent = stt.paused ? '▶ Devam et' : '⏸ Duraklat';
   clearTimeout(offTimer);
-  if (o.busy && $('#dlgSeries').open) offTimer = setTimeout(() => { if (current === v.url) renderOffline(view(list.find((i) => i.url === v.url))); }, 3000);
+  if ((o.busy || mine || (stt.queue > 0 && !stt.paused)) && $('#dlgSeries').open) offTimer = setTimeout(() => { if (current === v.url) renderOffline(view(list.find((i) => i.url === v.url))); }, 2000);
 }
 
 $('#dOffN').onchange = () => {
@@ -914,6 +928,7 @@ function ranges(nums) {
 
 function renderOffDetails() {
   if (!NATIVE || !NATIVE.offlineDetails) return;
+  if (typeof renderOffStatus === 'function') setTimeout(renderOffStatus, 0);
   const urls = list.map((i) => i.url);
   let rows = [];
   try { rows = JSON.parse(NATIVE.offlineDetails(JSON.stringify(urls)) || '[]'); } catch {}
@@ -969,3 +984,41 @@ $('#newsClear').onclick = async () => {
   on.checked = NATIVE.getSetting('music_on') === 'true';
   on.onchange = () => { NATIVE.setSetting('music_on', String(on.checked)); toast(on.checked ? 'Okurken müzik çalacak' : 'Müzik kapalı'); };
 })();
+
+/* ---------- İndirme durumu, duraklat / devam ---------- */
+function offStatus() {
+  try { return JSON.parse((NATIVE && NATIVE.offlineStatus && NATIVE.offlineStatus()) || '{}'); } catch { return {}; }
+}
+
+function toggleOfflinePause() {
+  if (!NATIVE || !NATIVE.offlinePause) return;
+  const p = !offStatus().paused;
+  NATIVE.offlinePause(p, JSON.stringify(list), JSON.stringify(state));
+  toast(p ? 'İndirmeler duraklatıldı' : 'İndirmeler kaldığı yerden devam ediyor');
+  setTimeout(() => {
+    if ($('#dlgSeries').open && current) renderOffline(view(list.find((i) => i.url === current)));
+    if ($('#dlgOffline').open) renderOffDetails();
+  }, 400);
+}
+$('#dOffPause').onclick = toggleOfflinePause;
+$('#offPauseAll').onclick = toggleOfflinePause;
+
+let offAllTimer = null;
+function renderOffStatus() {
+  const box = $('#offStatus');
+  if (!NATIVE || !NATIVE.offlineStatus) { box.hidden = true; return; }
+  const s = offStatus();
+  const active = !!s.series || s.queue > 0;
+  box.hidden = !active && !s.paused;
+  let t = '';
+  if (s.series) {
+    const it = list.find((i) => i.url === s.series);
+    const name = it ? view(it).title : 'manga';
+    t = `İndiriliyor: ${name} · Bölüm ${fmt(s.num)}` + (s.total ? ` (${s.done}/${s.total} resim)` : '') + (s.queue ? ` · sırada ${s.queue} manga` : '');
+  } else if (s.paused) t = 'İndirmeler duraklatıldı';
+  else if (s.queue) t = `Sırada ${s.queue} manga`;
+  $('#offStatusText').textContent = t;
+  $('#offPauseAll').textContent = s.paused ? '▶ Devam et' : '⏸ Duraklat';
+  clearTimeout(offAllTimer);
+  if (active && $('#dlgOffline').open) offAllTimer = setTimeout(() => { renderOffStatus(); renderOffDetails(); }, 2000);
+}

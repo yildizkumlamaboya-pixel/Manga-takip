@@ -195,6 +195,7 @@ public class ReaderActivity extends Activity {
 
         // Arkada (görünmez) sıradaki bölüm, önde okunan bölüm
         pre = makeWeb(bg);
+        if (android.os.Build.VERSION.SDK_INT >= 26) pre.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_WAIVED, true);
         root.addView(pre, new FrameLayout.LayoutParams(-1, -1));
         web = makeWeb(bg);
         root.addView(web, new FrameLayout.LayoutParams(-1, -1));
@@ -350,6 +351,13 @@ public class ReaderActivity extends Activity {
             }
 
             @Override
+            public boolean onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail d) {
+                // Tarayıcı bileşeni çöktü: o sayfayı yenisiyle değiştir (beyaz ekranda kalmasın)
+                handler.post(() -> replaceWeb(view));
+                return true;
+            }
+
+            @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
                 if (Offline.HOST.equals(req.getUrl().getHost())) {
                     WebResourceResponse r = Offline.serve(getApplicationContext(), req.getUrl());
@@ -467,6 +475,28 @@ public class ReaderActivity extends Activity {
 
     private static WebResourceResponse empty() {
         return new WebResourceResponse("text/plain", "utf-8", new java.io.ByteArrayInputStream(new byte[0]));
+    }
+
+    /** Çöken sayfayı yenisiyle değiştirir; okunan sayfaysa bölümü yeniden açar. */
+    private void replaceWeb(WebView dead) {
+        int bg = Color.parseColor("#14121a");
+        int idx = root.indexOfChild(dead);
+        if (idx < 0) return;
+        boolean wasFront = dead == web;
+        root.removeView(dead);
+        try { dead.destroy(); } catch (Exception ignored) { }
+        WebView fresh = makeWeb(bg);
+        root.addView(fresh, idx, new FrameLayout.LayoutParams(-1, -1));
+        if (wasFront) {
+            web = fresh;
+            if (android.os.Build.VERSION.SDK_INT >= 26) web.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false);
+            Toast.makeText(this, "Sayfa yeniden yükleniyor…", Toast.LENGTH_SHORT).show();
+            if (pageMode) web.loadUrl(seriesUrl); else open(current);
+        } else {
+            pre = fresh;
+            preUrl = null;
+            preReady = false;
+        }
     }
 
     /* ---------- Sıradaki bölümü önden yükleme ---------- */

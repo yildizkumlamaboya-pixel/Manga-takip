@@ -63,6 +63,13 @@ public class MainActivity extends Activity {
         web.addJavascriptInterface(new Bridge(), "MangaApp");
         web.setWebViewClient(new WebViewClient() {
             @Override
+            public boolean onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail d) {
+                // Tarayıcı bileşeni çöktüyse beyaz ekranda kalma: ekranı yeniden kur
+                main.post(MainActivity.this::recreate);
+                return true;
+            }
+
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
                 if (APP_HOST.equals(u.getHost())) return false;
@@ -78,6 +85,7 @@ public class MainActivity extends Activity {
                 return asset(u.getPath());
             }
         });
+        if (android.os.Build.VERSION.SDK_INT >= 26) web.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false);
         setContentView(web);
         web.loadUrl(APP_URL);
 
@@ -121,6 +129,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (web != null) { web.onResume(); web.invalidate(); }
         // Okuyucudan dönünce listeyi tazele (kaldığın yer güncellenmiş olur)
         if (!firstResume) js("window.__nativeCheckDone && window.__nativeCheckDone('')");
         firstResume = false;
@@ -303,6 +312,21 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void clearOfflineOthers(String urlsJson) {
             try { Offline.clearOthers(MainActivity.this, new JSONArray(urlsJson)); } catch (Exception ignored) { }
+        }
+
+        /** İndirme durumu: {"paused","series","num","done","total","queue"} */
+        @JavascriptInterface
+        public String offlineStatus() { return Offline.status(MainActivity.this); }
+
+        /** Duraklat (true) / devam et (false). Devam ederken kaldığı yerden sırayla iner. */
+        @JavascriptInterface
+        public void offlinePause(boolean p, String listJson, String stateJson) {
+            Offline.setPaused(MainActivity.this, p);
+            if (p) return;
+            new Thread(() -> {
+                try { Offline.ensureAll(MainActivity.this, new JSONArray(listJson), new JSONObject(stateJson), 0); }
+                catch (Exception ignored) { }
+            }).start();
         }
 
         @JavascriptInterface
