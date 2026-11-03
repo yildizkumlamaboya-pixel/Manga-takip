@@ -3801,7 +3801,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:36Z",
+  "phoneAt": "2026-11-03T22:01:44Z",
   "news": [
    [
     930,
@@ -5435,7 +5435,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:36Z",
+  "phoneAt": "2026-11-03T22:01:44Z",
   "news": [
    [
     395,
@@ -5749,7 +5749,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:36Z"
+  "phoneAt": "2026-11-03T22:01:44Z"
  },
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
@@ -6485,7 +6485,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:37Z",
+  "phoneAt": "2026-11-03T22:01:45Z",
   "news": [
    [
     181,
@@ -6859,7 +6859,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:35Z",
+  "phoneAt": "2026-11-03T22:01:44Z",
   "news": [
    [
     84,
@@ -6882,9 +6882,13 @@
  "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri": {
   "title": "Tang Klanının Günceleri",
   "cover": "https:\/\/c3.skycdn.online\/golge\/series-thumbnail\/1787950040_69e6f8a0b904e2f1e003024e61b49951.webp?w=1024&q=85",
-  "latest": 67,
+  "latest": 68,
   "first": 63,
   "chapters": [
+   [
+    68,
+    "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri\/bolum\/chapter-68"
+   ],
    [
     67,
     "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri\/bolum\/chapter-67"
@@ -7157,8 +7161,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:37Z",
+  "phoneAt": "2026-11-03T22:01:45Z",
   "news": [
+   [
+    68,
+    "2026-11-03T22:01:45Z"
+   ],
    [
     67,
     "2026-10-28T20:15:21Z"
@@ -7479,7 +7487,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:38Z"
+  "phoneAt": "2026-11-03T22:01:46Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8015,7 +8023,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:38Z",
+  "phoneAt": "2026-11-03T22:01:46Z",
   "news": [
    [
     126,
@@ -8337,7 +8345,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:38Z"
+  "phoneAt": "2026-11-03T22:01:46Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9741,7 +9749,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:37Z",
+  "phoneAt": "2026-11-03T22:01:45Z",
   "news": [
    [
     348,
@@ -10659,7 +10667,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:38Z"
+  "phoneAt": "2026-11-03T22:01:46Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -11143,7 +11151,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:44Z",
+  "phoneAt": "2026-11-03T22:01:52Z",
   "news": [
    [
     118,
@@ -12069,7 +12077,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:50Z",
+  "phoneAt": "2026-11-03T22:01:58Z",
   "news": [
    [
     198,
@@ -13095,7 +13103,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:40Z",
+  "phoneAt": "2026-11-03T22:01:48Z",
   "news": [
    [
     250,
@@ -14021,7 +14029,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:39Z",
+  "phoneAt": "2026-11-03T22:01:47Z",
   "news": [
    [
     225,
@@ -14663,7 +14671,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:38Z"
+  "phoneAt": "2026-11-03T22:01:47Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu": {
   "title": "Kahramanın Dönüşü",
@@ -15383,7 +15391,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-03T21:58:40Z",
+  "phoneAt": "2026-11-03T22:01:49Z",
   "news": [
    [
     177,
