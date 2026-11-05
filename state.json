@@ -3801,7 +3801,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:47Z",
+  "phoneAt": "2026-11-05T22:16:17Z",
   "news": [
    [
     930,
@@ -5435,7 +5435,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:46Z",
+  "phoneAt": "2026-11-05T22:16:16Z",
   "news": [
    [
     395,
@@ -6185,7 +6185,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:47Z",
+  "phoneAt": "2026-11-05T22:16:18Z",
   "news": [
    [
     181,
@@ -6511,7 +6511,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:46Z"
+  "phoneAt": "2026-11-05T22:16:17Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -6859,7 +6859,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:46Z",
+  "phoneAt": "2026-11-05T22:16:16Z",
   "news": [
    [
     84,
@@ -7181,7 +7181,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:47Z"
+  "phoneAt": "2026-11-05T22:16:20Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri": {
   "title": "Tang Klanının Günceleri",
@@ -7465,7 +7465,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:47Z",
+  "phoneAt": "2026-11-05T22:16:20Z",
   "news": [
    [
     68,
@@ -8023,7 +8023,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:48Z",
+  "phoneAt": "2026-11-05T22:16:20Z",
   "news": [
    [
     126,
@@ -8345,7 +8345,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:48Z"
+  "phoneAt": "2026-11-05T22:16:21Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9749,7 +9749,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:47Z",
+  "phoneAt": "2026-11-05T22:16:18Z",
   "news": [
    [
     348,
@@ -10667,7 +10667,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:48Z"
+  "phoneAt": "2026-11-05T22:16:19Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -11471,7 +11471,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:47:20Z",
+  "phoneAt": "2026-11-05T22:16:29Z",
   "news": [
    [
     198,
@@ -12497,7 +12497,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:50Z",
+  "phoneAt": "2026-11-05T22:16:23Z",
   "news": [
    [
     250,
@@ -13143,7 +13143,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:48Z"
+  "phoneAt": "2026-11-05T22:16:21Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/gel-beni-al": {
   "title": "Gel Beni Al",
@@ -14059,7 +14059,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:49Z",
+  "phoneAt": "2026-11-05T22:16:22Z",
   "news": [
    [
     226,
@@ -14793,7 +14793,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-05T21:46:50Z",
+  "phoneAt": "2026-11-05T22:16:24Z",
   "news": [
    [
     177,
@@ -15410,6 +15410,6 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "tarayıcı doğrulaması geçilemedi"
+  "phoneError": "tarayıcıyla da açılamadı"
  }
 }
