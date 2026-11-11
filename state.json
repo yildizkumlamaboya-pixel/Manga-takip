@@ -3813,7 +3813,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:13Z",
+  "phoneAt": "2026-11-11T10:17:12Z",
   "news": [
    [
     933,
@@ -4167,7 +4167,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:13Z"
+  "phoneAt": "2026-11-11T10:17:16Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -4519,7 +4519,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:12Z",
+  "phoneAt": "2026-11-11T10:17:15Z",
   "news": [
    [
     85,
@@ -4825,7 +4825,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:13Z",
+  "phoneAt": "2026-11-11T10:17:16Z",
   "news": [
    [
     68,
@@ -5913,7 +5913,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:14Z"
+  "phoneAt": "2026-11-11T10:17:20Z"
  },
  "https:\/\/mangawt.com\/manga\/iskelet-asker": {
   "title": "İskelet Asker",
@@ -7509,7 +7509,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:12Z",
+  "phoneAt": "2026-11-11T10:17:14Z",
   "news": [
    [
     396,
@@ -7532,9 +7532,13 @@
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
   "cover": "https:\/\/uzaymanga.com\/upload\/thumbnail\/1772098468672___99\/thumbnail.avif?w=512",
-  "latest": 126,
+  "latest": 127,
   "first": 122,
   "chapters": [
+   [
+    127,
+    "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen\/127-bolum-oku"
+   ],
    [
     126,
     "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen\/126-bolum-oku"
@@ -8063,8 +8067,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:15Z",
+  "phoneAt": "2026-11-11T10:17:22Z",
   "news": [
+   [
+    127,
+    "2026-11-11T10:17:22Z"
+   ],
    [
     126,
     "2026-11-03T09:00:57Z"
@@ -9485,7 +9493,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:14Z",
+  "phoneAt": "2026-11-11T10:17:19Z",
   "news": [
    [
     348,
@@ -9807,7 +9815,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:15Z"
+  "phoneAt": "2026-11-11T10:17:22Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -10707,7 +10715,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:14Z"
+  "phoneAt": "2026-11-11T10:17:21Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
@@ -11339,7 +11347,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:15Z"
+  "phoneAt": "2026-11-11T10:17:23Z"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -12359,7 +12367,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:16Z",
+  "phoneAt": "2026-11-11T10:17:25Z",
   "news": [
    [
     250,
@@ -13289,7 +13297,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:16Z",
+  "phoneAt": "2026-11-11T10:17:25Z",
   "news": [
    [
     226,
@@ -13899,7 +13907,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:17Z",
+  "phoneAt": "2026-11-11T10:17:28Z",
   "news": [
    [
     146,
@@ -14181,7 +14189,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:17Z"
+  "phoneAt": "2026-11-11T10:17:29Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu": {
   "title": "Kahramanın Dönüşü",
@@ -14905,7 +14913,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-11T10:13:16Z",
+  "phoneAt": "2026-11-11T10:17:26Z",
   "news": [
    [
     178,
