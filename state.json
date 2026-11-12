@@ -3813,7 +3813,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:13Z",
+  "phoneAt": "2026-11-12T18:40:09Z",
   "news": [
    [
     933,
@@ -5463,7 +5463,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:13Z",
+  "phoneAt": "2026-11-12T18:40:09Z",
   "news": [
    [
     396,
@@ -6221,7 +6221,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:14Z",
+  "phoneAt": "2026-11-12T18:40:11Z",
   "news": [
    [
     182,
@@ -6256,9 +6256,17 @@
  "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi": {
   "title": "Barbarın Fantezi Dünyası",
   "cover": "https:\/\/c3.skycdn.online\/golge\/series-thumbnail\/1790829741_0e102b7da6073e224c3359d329b1048d.webp?w=1024&q=85",
-  "latest": 72,
+  "latest": 74,
   "first": 72,
   "chapters": [
+   [
+    74,
+    "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi\/bolum\/chapter-74"
+   ],
+   [
+    73,
+    "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi\/bolum\/chapter-73"
+   ],
    [
     72,
     "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi\/bolum\/chapter-72"
@@ -6551,7 +6559,17 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:13Z"
+  "phoneAt": "2026-11-12T18:40:09Z",
+  "news": [
+   [
+    74,
+    "2026-11-12T18:40:09Z"
+   ],
+   [
+    73,
+    "2026-11-12T18:40:09Z"
+   ]
+  ]
  },
  "https:\/\/eskimangalar.com\/manga\/gecmise-donen-polisin-ikinci-sansi": {
   "title": "Geçmişe Dönen Polisin İkinci Şansı",
@@ -6855,7 +6873,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:15Z"
+  "phoneAt": "2026-11-12T18:40:11Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri": {
   "title": "Tang Klanının Günceleri",
@@ -7143,7 +7161,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:14Z",
+  "phoneAt": "2026-11-12T18:40:10Z",
   "news": [
    [
     69,
@@ -7521,7 +7539,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:12Z",
+  "phoneAt": "2026-11-12T18:40:08Z",
   "news": [
    [
     85,
@@ -7847,7 +7865,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:15Z"
+  "phoneAt": "2026-11-12T18:40:12Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8387,7 +8405,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:15Z",
+  "phoneAt": "2026-11-12T18:40:12Z",
   "news": [
    [
     127,
@@ -9813,7 +9831,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:14Z",
+  "phoneAt": "2026-11-12T18:40:10Z",
   "news": [
    [
     348,
@@ -10731,7 +10749,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:15Z"
+  "phoneAt": "2026-11-12T18:40:11Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -13173,7 +13191,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:16Z",
+  "phoneAt": "2026-11-12T18:40:13Z",
   "news": [
    [
     250,
@@ -13783,7 +13801,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:17Z",
+  "phoneAt": "2026-11-12T18:40:14Z",
   "news": [
    [
     146,
@@ -14709,7 +14727,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:16Z",
+  "phoneAt": "2026-11-12T18:40:13Z",
   "news": [
    [
     227,
@@ -15003,7 +15021,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:18Z"
+  "phoneAt": "2026-11-12T18:40:22Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/kahramanin-donusu": {
   "title": "Kahramanın Dönüşü",
@@ -15727,7 +15745,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T18:38:16Z",
+  "phoneAt": "2026-11-12T18:40:13Z",
   "news": [
    [
     178,
