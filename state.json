@@ -3813,7 +3813,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:29Z",
+  "phoneAt": "2026-11-12T09:10:22Z",
   "news": [
    [
     933,
@@ -5463,7 +5463,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:29Z",
+  "phoneAt": "2026-11-12T09:10:21Z",
   "news": [
    [
     396,
@@ -5486,9 +5486,13 @@
  "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu": {
   "title": "Kontun Kucuk Oglu Bir Oyuncu",
   "cover": null,
-  "latest": 181,
+  "latest": 182,
   "first": 175,
   "chapters": [
+   [
+    182,
+    "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu\/chapter\/182"
+   ],
    [
     181,
     "https:\/\/mangawt.com\/manga\/kontun-kucuk-oglu-bir-oyuncu\/chapter\/181"
@@ -6217,8 +6221,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:30Z",
+  "phoneAt": "2026-11-12T09:10:23Z",
   "news": [
+   [
+    182,
+    "2026-11-12T09:10:23Z"
+   ],
    [
     181,
     "2026-11-03T09:24:53Z"
@@ -6543,7 +6551,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:29Z"
+  "phoneAt": "2026-11-12T09:10:22Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -6895,7 +6903,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:28Z",
+  "phoneAt": "2026-11-12T09:10:22Z",
   "news": [
    [
     85,
@@ -7205,7 +7213,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:29Z",
+  "phoneAt": "2026-11-12T09:10:23Z",
   "news": [
    [
     69,
@@ -7535,7 +7543,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:31Z"
+  "phoneAt": "2026-11-12T09:10:24Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8075,7 +8083,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:31Z",
+  "phoneAt": "2026-11-12T09:10:25Z",
   "news": [
    [
     127,
@@ -8401,7 +8409,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:31Z"
+  "phoneAt": "2026-11-12T09:10:24Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9805,7 +9813,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:30Z",
+  "phoneAt": "2026-11-12T09:10:23Z",
   "news": [
    [
     348,
@@ -10723,7 +10731,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:30Z"
+  "phoneAt": "2026-11-12T09:10:24Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -13165,7 +13173,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:32Z",
+  "phoneAt": "2026-11-12T09:10:25Z",
   "news": [
    [
     250,
@@ -13775,7 +13783,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:42:30Z",
+  "phoneAt": "2026-11-12T09:10:26Z",
   "news": [
    [
     146,
@@ -14505,7 +14513,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:33Z",
+  "phoneAt": "2026-11-12T09:10:25Z",
   "news": [
    [
     178,
@@ -15435,7 +15443,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:32Z",
+  "phoneAt": "2026-11-12T09:10:25Z",
   "news": [
    [
     227,
@@ -15729,7 +15737,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-12T08:55:34Z"
+  "phoneAt": "2026-11-12T09:10:26Z"
  },
  "https:\/\/mangaruhu.com\/manga\/reloaded-into-the-other-world": {
   "title": "Yeniden Başka Bir Dünyada",
