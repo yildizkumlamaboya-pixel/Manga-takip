@@ -3821,7 +3821,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:53Z",
+  "phoneAt": "2026-11-15T09:13:47Z",
   "news": [
    [
     935,
@@ -5483,7 +5483,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:52Z",
+  "phoneAt": "2026-11-15T09:13:47Z",
   "news": [
    [
     397,
@@ -6245,7 +6245,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:54Z",
+  "phoneAt": "2026-11-15T09:13:48Z",
   "news": [
    [
     182,
@@ -6583,7 +6583,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:53Z",
+  "phoneAt": "2026-11-15T09:13:47Z",
   "news": [
    [
     74,
@@ -6945,7 +6945,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:52Z",
+  "phoneAt": "2026-11-15T09:13:46Z",
   "news": [
    [
     85,
@@ -7255,7 +7255,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:53Z",
+  "phoneAt": "2026-11-15T09:13:47Z",
   "news": [
    [
     69,
@@ -7585,7 +7585,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:54Z"
+  "phoneAt": "2026-11-15T09:13:48Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8125,7 +8125,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:55Z",
+  "phoneAt": "2026-11-15T09:13:49Z",
   "news": [
    [
     127,
@@ -8451,7 +8451,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:55Z"
+  "phoneAt": "2026-11-15T09:13:49Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9855,7 +9855,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:54Z",
+  "phoneAt": "2026-11-15T09:13:48Z",
   "news": [
    [
     348,
@@ -12315,7 +12315,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:57Z",
+  "phoneAt": "2026-11-15T09:13:52Z",
   "news": [
    [
     250,
@@ -13229,14 +13229,18 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:54Z"
+  "phoneAt": "2026-11-15T09:13:48Z"
  },
  "https:\/\/mangawt.com\/manga\/yeniden-dogan-murim-lordu": {
   "title": "Yeniden Dogan Murim Lordu",
   "cover": null,
-  "latest": 146,
+  "latest": 147,
   "first": 145,
   "chapters": [
+   [
+    147,
+    "https:\/\/mangawt.com\/manga\/yeniden-dogan-murim-lordu\/chapter\/147"
+   ],
    [
     146,
     "https:\/\/mangawt.com\/manga\/yeniden-dogan-murim-lordu\/chapter\/146"
@@ -13825,8 +13829,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:58Z",
+  "phoneAt": "2026-11-15T09:13:53Z",
   "news": [
+   [
+    147,
+    "2026-11-15T09:13:53Z"
+   ],
    [
     146,
     "2026-11-11T09:10:39Z"
@@ -14111,7 +14119,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:58Z",
+  "phoneAt": "2026-11-15T09:13:53Z",
   "news": [
    [
     67,
@@ -15037,7 +15045,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:57Z",
+  "phoneAt": "2026-11-15T09:13:52Z",
   "news": [
    [
     227,
@@ -16412,7 +16420,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-15T09:00:57Z",
+  "phoneAt": "2026-11-15T09:13:52Z",
   "news": [
    [
     178,
