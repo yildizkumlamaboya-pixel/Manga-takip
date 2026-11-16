@@ -3825,7 +3825,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:48Z",
+  "phoneAt": "2026-11-16T13:20:47Z",
   "news": [
    [
     936,
@@ -5491,7 +5491,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:48Z",
+  "phoneAt": "2026-11-16T13:20:43Z",
   "news": [
    [
     397,
@@ -6253,7 +6253,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:49Z",
+  "phoneAt": "2026-11-16T13:20:44Z",
   "news": [
    [
     182,
@@ -6591,7 +6591,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:48Z",
+  "phoneAt": "2026-11-16T13:20:43Z",
   "news": [
    [
     74,
@@ -6889,7 +6889,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:48Z",
+  "phoneAt": "2026-11-16T13:20:44Z",
   "news": [
    [
     69,
@@ -7219,7 +7219,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:50Z"
+  "phoneAt": "2026-11-16T13:20:45Z"
  },
  "https:\/\/tenshimanga.com\/manga\/tanri-arenasinda-bir-oyuncu": {
   "title": "Tanrı Arenasında Bir Oyuncu",
@@ -7523,7 +7523,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:50Z"
+  "phoneAt": "2026-11-16T13:20:46Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -8927,7 +8927,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:49Z",
+  "phoneAt": "2026-11-16T13:20:44Z",
   "news": [
    [
     348,
@@ -8950,9 +8950,13 @@
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
   "cover": "https:\/\/cdn.toontaku.com\/manga\/68d108a0434e6\/thumbnail\/2025-05-31-03-07-46-1748704066230.jpg",
-  "latest": 85,
+  "latest": 86,
   "first": 80,
   "chapters": [
+   [
+    86,
+    "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi\/bolum\/86"
+   ],
    [
     85,
     "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi\/bolum\/85"
@@ -9297,8 +9301,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:47Z",
+  "phoneAt": "2026-11-16T13:20:42Z",
   "news": [
+   [
+    86,
+    "2026-11-16T13:20:42Z"
+   ],
    [
     85,
     "2026-11-10T01:40:34Z"
@@ -9859,7 +9867,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:50Z",
+  "phoneAt": "2026-11-16T13:20:50Z",
   "news": [
    [
     127,
@@ -10781,7 +10789,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:49Z"
+  "phoneAt": "2026-11-16T13:20:45Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -13223,7 +13231,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:51Z",
+  "phoneAt": "2026-11-16T13:20:48Z",
   "news": [
    [
     250,
@@ -13837,7 +13845,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:52Z",
+  "phoneAt": "2026-11-16T13:20:49Z",
   "news": [
    [
     147,
@@ -14767,7 +14775,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:51Z",
+  "phoneAt": "2026-11-16T13:20:47Z",
   "news": [
    [
     227,
@@ -15065,7 +15073,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:52Z",
+  "phoneAt": "2026-11-16T13:20:49Z",
   "news": [
    [
     67,
@@ -15795,7 +15803,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-16T13:06:51Z",
+  "phoneAt": "2026-11-16T13:20:48Z",
   "news": [
    [
     178,
