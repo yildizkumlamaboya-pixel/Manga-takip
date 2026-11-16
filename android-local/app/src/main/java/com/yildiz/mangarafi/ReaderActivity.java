@@ -363,7 +363,7 @@ public class ReaderActivity extends Activity {
                     WebResourceResponse r = Offline.serve(getApplicationContext(), req.getUrl());
                     return r != null ? r : empty();
                 }
-                if (adsBlocked() && isAdHost(req.getUrl().getHost())) return empty();
+                if (adsBlocked() && isAdHost(req.getUrl().getHost())) return adStub(req.getUrl());
                 return null;
             }
 
@@ -436,10 +436,10 @@ public class ReaderActivity extends Activity {
     /** Reklam kutularını gizleyen stil (sitenin kendi reklam alanları). */
     private static final String AD_CSS_JS =
         "(function(){if(document.getElementById('__mtAds'))return;var s=document.createElement('style');s.id='__mtAds';"
-        + "s.textContent='ins.adsbygoogle,.adsbygoogle,[id^=div-gpt-ad],[id*=google_ads],iframe[src*=doubleclick],"
+        + "s.textContent='ins.adsbygoogle,[id^=div-gpt-ad],[id*=google_ads],iframe[src*=doubleclick],"
         + "iframe[src*=googlesyndication],iframe[src*=\"/ads\"],.ad-container,.ads-container,.advert,.advertisement,"
         + ".reklam,.reklamlar,[class*=reklam-],[id*=reklam],.ads-banner,.banner-ads,.ad-banner,.sticky-ads,"
-        + ".popup-ads,.adsbox{display:none!important;visibility:hidden!important;height:0!important}';"
+        + ".popup-ads{display:none!important;visibility:hidden!important;height:0!important}';"
         + "(document.head||document.documentElement).appendChild(s);})()";
 
     /**
@@ -451,19 +451,20 @@ public class ReaderActivity extends Activity {
         "(function(){if(window.__mtClean)return;window.__mtClean=1;"
         + "var bad=/(dosyay\\u0131 indir|dosyayi indir|indirme haz\\u0131r|indirme hazir|indir\\b|download|kazand\\u0131n|tebrikler|bahis|casino|bonus|\\u00f6d\\u00fcl|hemen t\\u0131kla|virus|vir\\u00fcs|g\\u00fcncelle)/i;"
         + "var AD='ins.adsbygoogle,.adsbygoogle-noablate,[data-vignette-loaded],[id*=google_vignette],iframe[id^=aswift],iframe[name^=aswift],iframe[id^=google_ads],iframe[src*=googleads],iframe[src*=doubleclick],iframe[src*=googlesyndication]';"
+        + "var wall=/(ad ?-?block|ads? blocker|adblocker|block ads|disabling these ad|disable (your |the |these )?ad|whitelist|reklam engel|beyaz listeye)/i;"
         + "function hide(e){e.style.setProperty('display','none','important');e.style.setProperty('visibility','hidden','important');e.__mtHid=1;}"
         + "function manga(e){return !!e.querySelector('img[src*=chapter],img[data-src],img[src*=uploads],img[src*=manga]');}"
         + "function check(e){if(!e||e.__mtHid||e.tagName==='SCRIPT'||e.tagName==='STYLE'||e.tagName==='LINK')return false;var cs=getComputedStyle(e);"
         + "if(cs.position!=='fixed'&&cs.position!=='sticky')return false;if(cs.display==='none')return false;var z=parseInt(cs.zIndex)||0;var r=e.getBoundingClientRect();"
         + "if(r.width<40||r.height<30)return false;var raw=(e.innerText||'').slice(0,500).replace(/\\u0130/g,'i');var txt=raw.toLowerCase()+' '+raw.replace(/I/g,'\\u0131').toLowerCase();"
         + "var area=r.width*r.height/(innerWidth*innerHeight);var ifr=e.tagName==='IFRAME'||!!e.querySelector('iframe');var m=manga(e);"
-        + "var hit=(bad.test(txt)&&(z>=10||area>0.15))||(ifr&&!m&&(z>=10||area>0.25))||(area>0.5&&z>=100&&raw.trim().length<40&&!m&&!e.querySelector('img'));"
+        + "if(wall.test(txt)&&area>0.02){hide(e);window.__mtWall=1;return true;}var hit=(bad.test(txt)&&(z>=10||area>0.15))||(ifr&&!m&&(z>=10||area>0.25))||(area>0.5&&z>=100&&raw.trim().length<40&&!m&&!e.querySelector('img'));"
         + "if(hit){hide(e);return true;}return false;}"
         + "function walk(n,d){var hid=false;for(var i=0;i<n.children.length&&i<60;i++){var k=n.children[i];if(check(k))hid=true;else if(d<4&&k.children.length)hid=walk(k,d+1)||hid;}return hid;}"
         + "function clean(){if(!document.body)return;var hid=false;var a=document.querySelectorAll(AD);for(var i=0;i<a.length;i++){if(!manga(a[i])){hide(a[i]);hid=true;}}"
         + "if(walk(document.body,0))hid=true;"
         + "if(location.hash.indexOf('google_vignette')>=0){history.replaceState(null,'',location.href.split('#')[0]);hid=true;}"
-        + "if(hid){document.documentElement.style.overflow='';document.body.style.overflow='';document.body.style.position='';document.documentElement.style.position='';}}"
+        + "if(hid){document.documentElement.style.overflow='';document.body.style.overflow='';document.body.style.position='';document.documentElement.style.position='';}if(window.__mtWall){[document.documentElement,document.body].forEach(function(x){x.style.setProperty('overflow','auto','important');x.style.setProperty('overflow-y','auto','important');if(getComputedStyle(x).position==='fixed')x.style.setProperty('position','static','important');x.style.removeProperty('filter');x.style.setProperty('pointer-events','auto','important');});}}"
         + "clean();setInterval(clean,700);var t=0;try{new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=0;clean();},60);}).observe(document.documentElement,{childList:true,subtree:true});}catch(x){}"
         + "addEventListener('hashchange',clean);})()";
 
@@ -476,6 +477,22 @@ public class ReaderActivity extends Activity {
         if (h.endsWith(site) || h.endsWith("cloudflare.com") || h.endsWith("cloudflareinsights.com")) return false;
         for (String a : AD_HOSTS) if (h.equals(a) || h.endsWith("." + a)) return true;
         return false;
+    }
+
+    /** Reklam betiği yerine zararsız boş taklit: reklam gelmez ama site "reklam engelleyici var" uyarısı göstermez. */
+    private static final String AD_STUB =
+        "window.adsbygoogle=window.adsbygoogle||[];try{window.adsbygoogle.loaded=true;window.adsbygoogle.push=function(){};}catch(e){}"
+        + "window.googletag=window.googletag||{cmd:[]};";
+
+    private static WebResourceResponse adStub(Uri u) {
+        String p = u.getPath() == null ? "" : u.getPath().toLowerCase(java.util.Locale.ROOT);
+        boolean js = p.endsWith(".js") || p.contains("/js/") || p.contains("gpt") || p.contains("adsbygoogle");
+        java.util.Map<String, String> h = new java.util.HashMap<>();
+        h.put("Access-Control-Allow-Origin", "*");
+        h.put("Cache-Control", "no-store");
+        byte[] body = js ? AD_STUB.getBytes(java.nio.charset.StandardCharsets.UTF_8) : new byte[0];
+        return new WebResourceResponse(js ? "application/javascript" : "text/plain", "utf-8", 200, "OK", h,
+            new java.io.ByteArrayInputStream(body));
     }
 
     private static WebResourceResponse empty() {
