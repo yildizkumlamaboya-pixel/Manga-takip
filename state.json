@@ -3825,7 +3825,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:06:59Z",
+  "phoneAt": "2026-11-18T15:14:27Z",
   "news": [
    [
     936,
@@ -5491,7 +5491,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:06:58Z",
+  "phoneAt": "2026-11-18T15:14:27Z",
   "news": [
    [
     397,
@@ -6253,7 +6253,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:06:59Z",
+  "phoneAt": "2026-11-18T15:14:28Z",
   "news": [
    [
     182,
@@ -6591,7 +6591,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:06:59Z",
+  "phoneAt": "2026-11-18T15:14:27Z",
   "news": [
    [
     74,
@@ -6957,7 +6957,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:06:58Z",
+  "phoneAt": "2026-11-18T15:14:26Z",
   "news": [
    [
     86,
@@ -7271,7 +7271,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:06:59Z",
+  "phoneAt": "2026-11-18T15:14:27Z",
   "news": [
    [
     69,
@@ -7601,7 +7601,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:00Z"
+  "phoneAt": "2026-11-18T15:14:29Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8145,7 +8145,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:01Z",
+  "phoneAt": "2026-11-18T15:14:29Z",
   "news": [
    [
     128,
@@ -8475,7 +8475,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:01Z"
+  "phoneAt": "2026-11-18T15:14:29Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -9375,7 +9375,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:00Z"
+  "phoneAt": "2026-11-18T15:14:28Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -10779,7 +10779,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:06:59Z",
+  "phoneAt": "2026-11-18T15:14:28Z",
   "news": [
    [
     348,
@@ -12219,7 +12219,7 @@
     "2026-10-15T16:37:07Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -13239,7 +13239,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:02Z",
+  "phoneAt": "2026-11-18T15:14:30Z",
   "news": [
    [
     250,
@@ -13258,9 +13258,13 @@
  "https:\/\/golgebahcesi.com\/manga\/gel-beni-al": {
   "title": "Gel Beni Al",
   "cover": "https:\/\/c3.skycdn.online\/golge\/series\/gel-beni-al\/cover.webp?w=1024&q=85",
-  "latest": 227,
+  "latest": 228,
   "first": 223,
   "chapters": [
+   [
+    228,
+    "https:\/\/golgebahcesi.com\/manga\/gel-beni-al\/bolum\/chapter-228"
+   ],
    [
     227,
     "https:\/\/golgebahcesi.com\/manga\/gel-beni-al\/bolum\/chapter-227"
@@ -14173,8 +14177,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:02Z",
+  "phoneAt": "2026-11-18T15:14:30Z",
   "news": [
+   [
+    228,
+    "2026-11-18T15:14:30Z"
+   ],
    [
     227,
     "2026-11-11T19:41:01Z"
@@ -14791,7 +14799,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:03Z",
+  "phoneAt": "2026-11-18T15:14:31Z",
   "news": [
    [
     147,
@@ -15529,7 +15537,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:02Z",
+  "phoneAt": "2026-11-18T15:14:30Z",
   "news": [
    [
     179,
@@ -15823,7 +15831,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T15:07:03Z",
+  "phoneAt": "2026-11-18T15:14:31Z",
   "news": [
    [
     67,
