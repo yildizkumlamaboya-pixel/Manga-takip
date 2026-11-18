@@ -3825,7 +3825,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:10Z",
+  "phoneAt": "2026-11-18T13:27:48Z",
   "news": [
    [
     936,
@@ -5491,7 +5491,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:10Z",
+  "phoneAt": "2026-11-18T13:27:47Z",
   "news": [
    [
     397,
@@ -6253,7 +6253,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:11Z",
+  "phoneAt": "2026-11-18T13:27:48Z",
   "news": [
    [
     182,
@@ -6591,7 +6591,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:11Z",
+  "phoneAt": "2026-11-18T13:27:48Z",
   "news": [
    [
     74,
@@ -6957,7 +6957,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:10Z",
+  "phoneAt": "2026-11-18T13:27:47Z",
   "news": [
    [
     86,
@@ -7271,7 +7271,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:11Z",
+  "phoneAt": "2026-11-18T13:27:48Z",
   "news": [
    [
     69,
@@ -7601,7 +7601,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:12Z"
+  "phoneAt": "2026-11-18T13:27:49Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8145,7 +8145,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:13Z",
+  "phoneAt": "2026-11-18T13:27:50Z",
   "news": [
    [
     128,
@@ -8475,7 +8475,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:13Z"
+  "phoneAt": "2026-11-18T13:27:51Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/yildirim-bicagi-ustasi": {
   "title": "Yıldırım Bıçağı Ustası",
@@ -9375,7 +9375,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:12Z"
+  "phoneAt": "2026-11-18T13:27:49Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -10779,7 +10779,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:12Z",
+  "phoneAt": "2026-11-18T13:27:49Z",
   "news": [
    [
     348,
@@ -11408,7 +11408,7 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -13239,7 +13239,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:14Z",
+  "phoneAt": "2026-11-18T13:27:51Z",
   "news": [
    [
     250,
@@ -14173,7 +14173,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:13Z",
+  "phoneAt": "2026-11-18T13:27:51Z",
   "news": [
    [
     227,
@@ -14194,8 +14194,8 @@
   ]
  },
  "https:\/\/mangawt.com\/manga\/yeniden-dogan-murim-lordu": {
-  "title": "Yeniden Doğan Murim Lordu",
-  "cover": "https:\/\/mangawt.com\/uploads\/69c0a40e7861a8fbc18521ed\/cover-1783039679516.webp",
+  "title": "Yeniden Dogan Murim Lordu",
+  "cover": null,
   "latest": 147,
   "first": 145,
   "chapters": [
@@ -14791,7 +14791,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:17Z",
+  "phoneAt": "2026-11-18T13:27:52Z",
   "news": [
    [
     147,
@@ -15529,7 +15529,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:15Z",
+  "phoneAt": "2026-11-18T13:27:51Z",
   "news": [
    [
     179,
@@ -15546,8 +15546,8 @@
   ]
  },
  "https:\/\/mangawt.com\/manga\/gezgin-sovalyenin-hayatta-kalma-hikayesi": {
-  "title": "Gezgin Şövalyenin Hayatta Kalma Hikayesi",
-  "cover": "https:\/\/mangawt.com\/uploads\/69c0a08620a0291102370971\/cover-1783038706926.webp",
+  "title": "Gezgin Sovalyenin Hayatta Kalma Hikayesi",
+  "cover": null,
   "latest": 67,
   "first": 66,
   "chapters": [
@@ -15823,7 +15823,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-18T13:20:17Z",
+  "phoneAt": "2026-11-18T13:27:52Z",
   "news": [
    [
     67,
@@ -16462,6 +16462,6 @@
   "errorSince": "2026-11-11T18:46:22.756Z",
   "via": "phone",
   "phoneAt": "2026-11-11T15:43:53Z",
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  }
 }
