@@ -3825,7 +3825,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:26Z",
+  "phoneAt": "2026-11-19T15:38:43Z",
   "news": [
    [
     936,
@@ -5491,7 +5491,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:26Z",
+  "phoneAt": "2026-11-19T15:38:43Z",
   "news": [
    [
     397,
@@ -6253,7 +6253,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:27Z",
+  "phoneAt": "2026-11-19T15:38:44Z",
   "news": [
    [
     182,
@@ -6288,9 +6288,13 @@
  "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi": {
   "title": "Barbarın Fantezi Dünyası",
   "cover": "https:\/\/c3.skycdn.online\/golge\/series-thumbnail\/1790829741_0e102b7da6073e224c3359d329b1048d.webp?w=1024&q=85",
-  "latest": 74,
+  "latest": 75,
   "first": 72,
   "chapters": [
+   [
+    75,
+    "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi\/bolum\/chapter-75"
+   ],
    [
     74,
     "https:\/\/golgebahcesi.com\/manga\/barbarin-fantezi-dunyasi\/bolum\/chapter-74"
@@ -6591,8 +6595,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:26Z",
+  "phoneAt": "2026-11-19T15:38:43Z",
   "news": [
+   [
+    75,
+    "2026-11-19T15:38:43Z"
+   ],
    [
     74,
     "2026-11-12T18:40:09Z"
@@ -6957,7 +6965,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:25Z",
+  "phoneAt": "2026-11-19T15:38:43Z",
   "news": [
    [
     86,
@@ -7271,7 +7279,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:27Z",
+  "phoneAt": "2026-11-19T15:38:44Z",
   "news": [
    [
     69,
@@ -7601,7 +7609,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:28Z"
+  "phoneAt": "2026-11-19T15:38:45Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8145,7 +8153,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:29Z",
+  "phoneAt": "2026-11-19T15:38:45Z",
   "news": [
    [
     128,
@@ -8475,7 +8483,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:28Z"
+  "phoneAt": "2026-11-19T15:38:46Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9879,7 +9887,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:27Z",
+  "phoneAt": "2026-11-19T15:38:44Z",
   "news": [
    [
     348,
@@ -12219,7 +12227,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:28Z"
+  "phoneAt": "2026-11-19T15:38:45Z"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -13239,7 +13247,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:30Z",
+  "phoneAt": "2026-11-19T15:38:46Z",
   "news": [
    [
     250,
@@ -13256,8 +13264,8 @@
   ]
  },
  "https:\/\/mangawt.com\/manga\/yeniden-dogan-murim-lordu": {
-  "title": "Yeniden Dogan Murim Lordu",
-  "cover": null,
+  "title": "Yeniden Doğan Murim Lordu",
+  "cover": "https:\/\/mangawt.com\/uploads\/69c0a40e7861a8fbc18521ed\/cover-1783039679516.webp",
   "latest": 147,
   "first": 145,
   "chapters": [
@@ -13853,7 +13861,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:30Z",
+  "phoneAt": "2026-11-19T15:38:47Z",
   "news": [
    [
     147,
@@ -13866,8 +13874,8 @@
   ]
  },
  "https:\/\/mangawt.com\/manga\/gezgin-sovalyenin-hayatta-kalma-hikayesi": {
-  "title": "Gezgin Sovalyenin Hayatta Kalma Hikayesi",
-  "cover": null,
+  "title": "Gezgin Şövalyenin Hayatta Kalma Hikayesi",
+  "cover": "https:\/\/mangawt.com\/uploads\/69c0a08620a0291102370971\/cover-1783038706926.webp",
   "latest": 68,
   "first": 66,
   "chapters": [
@@ -14147,7 +14155,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:30Z",
+  "phoneAt": "2026-11-19T15:38:48Z",
   "news": [
    [
     68,
@@ -14885,7 +14893,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:29Z",
+  "phoneAt": "2026-11-19T15:38:46Z",
   "news": [
    [
     179,
@@ -15823,7 +15831,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-19T15:12:29Z",
+  "phoneAt": "2026-11-19T15:38:46Z",
   "news": [
    [
     228,
