@@ -2,9 +2,13 @@
  "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru": {
   "title": "Efsanevi Büyü İmparatoru",
   "cover": "https:\/\/uzaymanga.com\/upload\/thumbnail\/1772102042108___6-1\/thumbnail.avif?w=512",
-  "latest": 936,
+  "latest": 937,
   "first": 920,
   "chapters": [
+   [
+    937,
+    "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru\/937-bolum-oku"
+   ],
    [
     936,
     "https:\/\/uzaymanga.com\/manga\/efsanevi-buyu-imparatoru\/936-bolum-oku"
@@ -3825,8 +3829,12 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:31Z",
+  "phoneAt": "2026-11-20T19:10:08Z",
   "news": [
+   [
+    937,
+    "2026-11-20T19:10:08Z"
+   ],
    [
     936,
     "2026-11-15T18:51:19Z"
@@ -5491,7 +5499,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:31Z",
+  "phoneAt": "2026-11-20T19:10:07Z",
   "news": [
    [
     397,
@@ -6257,7 +6265,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:32Z",
+  "phoneAt": "2026-11-20T19:10:09Z",
   "news": [
    [
     183,
@@ -6603,7 +6611,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:31Z",
+  "phoneAt": "2026-11-20T19:10:10Z",
   "news": [
    [
     75,
@@ -6909,7 +6917,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:31Z",
+  "phoneAt": "2026-11-20T19:10:10Z",
   "news": [
    [
     70,
@@ -7243,7 +7251,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:32Z"
+  "phoneAt": "2026-11-20T19:10:11Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -7599,7 +7607,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:30Z",
+  "phoneAt": "2026-11-20T19:10:07Z",
   "news": [
    [
     86,
@@ -7929,7 +7937,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:33Z"
+  "phoneAt": "2026-11-20T19:10:12Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8473,7 +8481,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:33Z",
+  "phoneAt": "2026-11-20T19:10:12Z",
   "news": [
    [
     128,
@@ -9903,7 +9911,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:32Z",
+  "phoneAt": "2026-11-20T19:10:11Z",
   "news": [
    [
     348,
@@ -10821,7 +10829,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:32Z"
+  "phoneAt": "2026-11-20T19:10:11Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -11632,7 +11640,7 @@
     "2026-10-15T16:37:07Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -12243,7 +12251,7 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -13263,7 +13271,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:36Z",
+  "phoneAt": "2026-11-20T19:10:13Z",
   "news": [
    [
     250,
@@ -13877,7 +13885,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:37Z",
+  "phoneAt": "2026-11-20T19:10:14Z",
   "news": [
    [
     147,
@@ -14811,7 +14819,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:36Z",
+  "phoneAt": "2026-11-20T19:10:13Z",
   "news": [
    [
     228,
@@ -15117,7 +15125,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:37Z",
+  "phoneAt": "2026-11-20T19:10:14Z",
   "news": [
    [
     68,
@@ -15855,7 +15863,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T17:51:36Z",
+  "phoneAt": "2026-11-20T19:10:13Z",
   "news": [
    [
     179,
@@ -16502,6 +16510,6 @@
   "errorSince": "2026-11-11T18:46:22.756Z",
   "via": "phone",
   "phoneAt": "2026-11-11T15:43:53Z",
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  }
 }
