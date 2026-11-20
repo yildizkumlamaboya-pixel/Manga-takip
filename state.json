@@ -3829,7 +3829,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:05Z",
+  "phoneAt": "2026-11-20T19:33:57Z",
   "news": [
    [
     937,
@@ -5499,7 +5499,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:04Z",
+  "phoneAt": "2026-11-20T19:33:56Z",
   "news": [
    [
     397,
@@ -6265,7 +6265,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:06Z",
+  "phoneAt": "2026-11-20T19:33:58Z",
   "news": [
    [
     183,
@@ -6611,7 +6611,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:05Z",
+  "phoneAt": "2026-11-20T19:33:57Z",
   "news": [
    [
     75,
@@ -6917,7 +6917,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:05Z",
+  "phoneAt": "2026-11-20T19:33:57Z",
   "news": [
    [
     70,
@@ -7251,7 +7251,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:07Z"
+  "phoneAt": "2026-11-20T19:33:58Z"
  },
  "https:\/\/toontaku.com\/seri\/eunhae-ticaret-hanesinin-genc-varisi": {
   "title": "Tüccar Grubunun En Genç Oğlu",
@@ -7607,7 +7607,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:04Z",
+  "phoneAt": "2026-11-20T19:33:56Z",
   "news": [
    [
     86,
@@ -7937,7 +7937,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:07Z"
+  "phoneAt": "2026-11-20T19:33:59Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -8481,7 +8481,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:07Z",
+  "phoneAt": "2026-11-20T19:33:58Z",
   "news": [
    [
     128,
@@ -9911,7 +9911,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:06Z",
+  "phoneAt": "2026-11-20T19:33:58Z",
   "news": [
    [
     348,
@@ -10829,7 +10829,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:06Z"
+  "phoneAt": "2026-11-20T19:33:58Z"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -11640,7 +11640,7 @@
     "2026-10-15T16:37:07Z"
    ]
   ],
-  "phoneError": "Connection reset"
+  "phoneError": "bölüm bulunamadı"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -12251,7 +12251,7 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "Connection reset"
+  "phoneError": "bölüm bulunamadı"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -13271,7 +13271,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:08Z",
+  "phoneAt": "2026-11-20T19:34:01Z",
   "news": [
    [
     250,
@@ -13885,7 +13885,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:10Z",
+  "phoneAt": "2026-11-20T19:34:02Z",
   "news": [
    [
     147,
@@ -14819,7 +14819,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:08Z",
+  "phoneAt": "2026-11-20T19:34:01Z",
   "news": [
    [
     228,
@@ -15125,7 +15125,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:10Z",
+  "phoneAt": "2026-11-20T19:34:03Z",
   "news": [
    [
     68,
@@ -15863,7 +15863,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-20T19:27:08Z",
+  "phoneAt": "2026-11-20T19:34:01Z",
   "news": [
    [
     179,
@@ -16510,6 +16510,6 @@
   "errorSince": "2026-11-11T18:46:22.756Z",
   "via": "phone",
   "phoneAt": "2026-11-11T15:43:53Z",
-  "phoneError": "Connection reset"
+  "phoneError": "bölüm bulunamadı"
  }
 }
