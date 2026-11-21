@@ -3829,7 +3829,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:38Z",
+  "phoneAt": "2026-11-21T04:19:11Z",
   "news": [
    [
     937,
@@ -5499,7 +5499,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:38Z",
+  "phoneAt": "2026-11-21T04:19:10Z",
   "news": [
    [
     397,
@@ -6265,7 +6265,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:39Z",
+  "phoneAt": "2026-11-21T04:19:11Z",
   "news": [
    [
     183,
@@ -6611,7 +6611,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:38Z",
+  "phoneAt": "2026-11-21T04:19:11Z",
   "news": [
    [
     75,
@@ -6981,7 +6981,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:38Z",
+  "phoneAt": "2026-11-21T04:19:10Z",
   "news": [
    [
     86,
@@ -7299,7 +7299,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:38Z",
+  "phoneAt": "2026-11-21T04:19:11Z",
   "news": [
    [
     70,
@@ -7633,7 +7633,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:39Z"
+  "phoneAt": "2026-11-21T04:19:12Z"
  },
  "https:\/\/tenshimanga.com\/manga\/tanri-arenasinda-bir-oyuncu": {
   "title": "Tanrı Arenasında Bir Oyuncu",
@@ -7937,7 +7937,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:40Z"
+  "phoneAt": "2026-11-21T04:19:12Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9341,7 +9341,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:39Z",
+  "phoneAt": "2026-11-21T04:19:11Z",
   "news": [
    [
     348,
@@ -9903,7 +9903,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:40Z",
+  "phoneAt": "2026-11-21T04:19:13Z",
   "news": [
    [
     128,
@@ -10829,7 +10829,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:39Z"
+  "phoneAt": "2026-11-21T04:19:12Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -11440,7 +11440,7 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -12251,7 +12251,7 @@
     "2026-10-15T16:37:07Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -13271,7 +13271,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:42Z",
+  "phoneAt": "2026-11-21T04:19:14Z",
   "news": [
    [
     250,
@@ -14209,7 +14209,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:42Z",
+  "phoneAt": "2026-11-21T04:19:14Z",
   "news": [
    [
     228,
@@ -14959,7 +14959,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:42Z",
+  "phoneAt": "2026-11-21T04:19:14Z",
   "news": [
    [
     179,
@@ -15257,7 +15257,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:43Z",
+  "phoneAt": "2026-11-21T04:19:15Z",
   "news": [
    [
     68,
@@ -15900,7 +15900,7 @@
   "errorSince": "2026-11-11T18:46:22.756Z",
   "via": "phone",
   "phoneAt": "2026-11-11T15:43:53Z",
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/mangawt.com\/manga\/yeniden-dogan-murim-lordu": {
   "title": "Yeniden Dogan Murim Lordu",
@@ -16500,7 +16500,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-21T04:03:43Z",
+  "phoneAt": "2026-11-21T04:19:15Z",
   "news": [
    [
     147,
