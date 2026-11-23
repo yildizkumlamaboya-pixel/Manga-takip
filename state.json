@@ -3837,7 +3837,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:25Z",
+  "phoneAt": "2026-11-23T23:40:38Z",
   "news": [
    [
     939,
@@ -4227,7 +4227,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:26Z",
+  "phoneAt": "2026-11-23T23:40:39Z",
   "news": [
    [
     75,
@@ -4601,7 +4601,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:24Z",
+  "phoneAt": "2026-11-23T23:40:38Z",
   "news": [
    [
     87,
@@ -6231,7 +6231,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:24Z",
+  "phoneAt": "2026-11-23T23:40:38Z",
   "news": [
    [
     397,
@@ -6997,7 +6997,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:26Z",
+  "phoneAt": "2026-11-23T23:40:39Z",
   "news": [
    [
     183,
@@ -7323,7 +7323,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:26Z",
+  "phoneAt": "2026-11-23T23:40:39Z",
   "news": [
    [
     70,
@@ -7657,7 +7657,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:27Z"
+  "phoneAt": "2026-11-23T23:40:40Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/olumun-oglu": {
   "title": "Ölümün Oğlu",
@@ -9061,7 +9061,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:26Z",
+  "phoneAt": "2026-11-23T23:40:40Z",
   "news": [
    [
     348,
@@ -9979,7 +9979,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:26Z"
+  "phoneAt": "2026-11-23T23:40:40Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -10590,7 +10590,7 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -11134,7 +11134,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:27Z",
+  "phoneAt": "2026-11-23T23:40:41Z",
   "news": [
    [
     128,
@@ -11464,7 +11464,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:27Z"
+  "phoneAt": "2026-11-23T23:40:41Z"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -12484,7 +12484,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:30Z",
+  "phoneAt": "2026-11-23T23:40:42Z",
   "news": [
    [
     250,
@@ -13422,7 +13422,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:29Z",
+  "phoneAt": "2026-11-23T23:40:41Z",
   "news": [
    [
     228,
@@ -14048,7 +14048,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:30Z",
+  "phoneAt": "2026-11-23T23:40:43Z",
   "news": [
    [
     148,
@@ -14794,7 +14794,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:29Z",
+  "phoneAt": "2026-11-23T23:40:42Z",
   "news": [
    [
     180,
@@ -15445,7 +15445,7 @@
   "errorSince": "2026-11-11T18:46:22.756Z",
   "via": "phone",
   "phoneAt": "2026-11-11T15:43:53Z",
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/mangawt.com\/manga\/gezgin-sovalyenin-hayatta-kalma-hikayesi": {
   "title": "Gezgin Sovalyenin Hayatta Kalma Hikayesi",
@@ -15729,7 +15729,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-23T22:43:30Z",
+  "phoneAt": "2026-11-23T23:40:43Z",
   "news": [
    [
     68,
@@ -16550,6 +16550,6 @@
     "2026-10-15T16:37:07Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  }
 }
