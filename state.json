@@ -3837,7 +3837,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:25Z",
+  "phoneAt": "2026-11-24T04:14:56Z",
   "news": [
    [
     939,
@@ -4227,7 +4227,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:25Z",
+  "phoneAt": "2026-11-24T04:14:56Z",
   "news": [
    [
     75,
@@ -4245,7 +4245,7 @@
  },
  "https:\/\/mangawt.com\/manga\/iskelet-asker": {
   "title": "İskelet Asker",
-  "cover": null,
+  "cover": "https:\/\/mangawt.com\/uploads\/69c0a22420a0291102370a3d\/cover-1783071650300.webp",
   "latest": 397,
   "first": 392,
   "chapters": [
@@ -5841,7 +5841,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:25Z",
+  "phoneAt": "2026-11-24T04:14:56Z",
   "news": [
    [
     397,
@@ -6223,7 +6223,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:24Z",
+  "phoneAt": "2026-11-24T04:14:55Z",
   "news": [
    [
     87,
@@ -7323,7 +7323,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:25Z",
+  "phoneAt": "2026-11-24T04:14:57Z",
   "news": [
    [
     70,
@@ -8757,7 +8757,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:26Z",
+  "phoneAt": "2026-11-24T04:14:57Z",
   "news": [
    [
     348,
@@ -9675,7 +9675,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:26Z"
+  "phoneAt": "2026-11-24T04:14:57Z"
  },
  "https:\/\/tenshimanga.com\/manga\/tanri-arenasinda-bir-oyuncu": {
   "title": "Tanrı Arenasında Bir Oyuncu",
@@ -9979,7 +9979,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:27Z"
+  "phoneAt": "2026-11-24T04:14:58Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -10523,7 +10523,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:27Z",
+  "phoneAt": "2026-11-24T04:14:58Z",
   "news": [
    [
     128,
@@ -10853,7 +10853,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:26Z"
+  "phoneAt": "2026-11-24T04:14:57Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/gel-beni-al": {
   "title": "Gel Beni Al",
@@ -11777,7 +11777,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:29Z",
+  "phoneAt": "2026-11-24T04:14:58Z",
   "news": [
    [
     228,
@@ -12610,7 +12610,7 @@
     "2026-10-15T16:37:07Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -13221,7 +13221,7 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -14241,7 +14241,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:29Z",
+  "phoneAt": "2026-11-24T04:14:58Z",
   "news": [
    [
     250,
@@ -14859,7 +14859,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:30Z",
+  "phoneAt": "2026-11-24T04:14:59Z",
   "news": [
    [
     148,
@@ -15157,7 +15157,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:30Z",
+  "phoneAt": "2026-11-24T04:14:59Z",
   "news": [
    [
     68,
@@ -15899,7 +15899,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-24T03:59:29Z",
+  "phoneAt": "2026-11-24T04:14:59Z",
   "news": [
    [
     180,
@@ -16550,6 +16550,6 @@
   "errorSince": "2026-11-11T18:46:22.756Z",
   "via": "phone",
   "phoneAt": "2026-11-11T15:43:53Z",
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  }
 }
