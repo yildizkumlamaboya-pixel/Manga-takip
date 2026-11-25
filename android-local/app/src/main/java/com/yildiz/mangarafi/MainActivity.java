@@ -88,6 +88,7 @@ public class MainActivity extends Activity {
         if (android.os.Build.VERSION.SDK_INT >= 26) web.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false);
         setContentView(web);
         web.loadUrl(APP_URL);
+        main.postDelayed(() -> { if (!isFinishing()) Updater.autoCheck(this); }, 3000);
 
         Checker.ensureChannel(this);
         if (Build.VERSION.SDK_INT >= 33
@@ -129,6 +130,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        Updater.resumePending(this);
         if (web != null) { web.onResume(); web.invalidate(); }
         // Okuyucudan dönünce listeyi tazele (kaldığın yer güncellenmiş olur)
         if (!firstResume) js("window.__nativeCheckDone && window.__nativeCheckDone('')");
@@ -251,6 +253,12 @@ public class MainActivity extends Activity {
 
     /** Arayüzden çağrılan köprü (window.MangaApp). */
     final class Bridge {
+        @JavascriptInterface
+        public String appVersion() { return Updater.installedName(MainActivity.this); }
+
+        @JavascriptInterface
+        public void checkUpdate() { main.post(() -> Updater.check(MainActivity.this, true)); }
+
         @JavascriptInterface
         public boolean isApp() { return true; }
 

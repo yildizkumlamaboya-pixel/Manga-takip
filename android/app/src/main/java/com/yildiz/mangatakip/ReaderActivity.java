@@ -465,7 +465,7 @@ public class ReaderActivity extends Activity {
         + "if(walk(document.body,0))hid=true;"
         + "if(location.hash.indexOf('google_vignette')>=0){history.replaceState(null,'',location.href.split('#')[0]);hid=true;}"
         + "if(hid){document.documentElement.style.overflow='';document.body.style.overflow='';document.body.style.position='';document.documentElement.style.position='';}if(window.__mtWall){[document.documentElement,document.body].forEach(function(x){x.style.setProperty('overflow','auto','important');x.style.setProperty('overflow-y','auto','important');if(getComputedStyle(x).position==='fixed')x.style.setProperty('position','static','important');x.style.removeProperty('filter');x.style.setProperty('pointer-events','auto','important');});}}"
-        + "clean();setInterval(clean,700);var t=0;try{new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=0;clean();},60);}).observe(document.documentElement,{childList:true,subtree:true});}catch(x){}"
+        + "clean();setInterval(clean,700);var t=0;try{new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=0;clean();},60);}).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});}catch(x){}"
         + "addEventListener('hashchange',clean);})()";
 
     private boolean adsBlocked() { return rp == null || rp.getBoolean("r_ads", true); }

@@ -32,6 +32,18 @@ jobs:
           gradle assembleRelease --no-daemon --stacktrace 2>&1 | tee ../build.log
           cp app/build/outputs/apk/release/app-release.apk ../manga-takip.apk
 
+      - name: Sürüm bilgisi (uygulama içi güncelleme için)
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          n = int(os.environ["GITHUB_RUN_NUMBER"])
+          msg = subprocess.check_output(["git", "log", "-1", "--format=%s"]).decode().strip()
+          json.dump({"versionCode": n, "versionName": "1.0.%d" % n, "notes": msg,
+                     "url": "https://github.com/yildizkumlamaboya-pixel/Manga-takip/releases/download/apk/manga-takip.apk"},
+                    open("version.json", "w", encoding="utf-8"), ensure_ascii=False)
+          PY
+          cat version.json
+
       - name: İndirme bağlantısına koy
         uses: softprops/action-gh-release@v2
         with:
@@ -41,7 +53,9 @@ jobs:
             Android uygulaması. Telefona indirip kur; yeni sürüm eskisinin üstüne kurulur.
             Sürüm: 1.0.${{ github.run_number }}
           make_latest: true
-          files: manga-takip.apk
+          files: |
+            manga-takip.apk
+            version.json
 
       - name: Hata kaydını sakla
         if: failure()

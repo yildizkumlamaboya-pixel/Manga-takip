@@ -985,6 +985,14 @@ $('#newsClear').onclick = async () => {
   on.onchange = () => { NATIVE.setSetting('music_on', String(on.checked)); toast(on.checked ? 'Okurken müzik çalacak' : 'Müzik kapalı'); };
 })();
 
+/* ---------- Uygulama güncellemesi ---------- */
+(function setupUpdate() {
+  if (!NATIVE || !NATIVE.checkUpdate) return;
+  $('#updBox').hidden = false;
+  $('#appVer').textContent = 'Sürüm ' + (NATIVE.appVersion() || '') + ' · yeni sürüm çıkınca kendisi sorar';
+  $('#btnUpdate').onclick = () => NATIVE.checkUpdate();
+})();
+
 /* ---------- İndirme durumu, duraklat / devam ---------- */
 function offStatus() {
   try { return JSON.parse((NATIVE && NATIVE.offlineStatus && NATIVE.offlineStatus()) || '{}'); } catch { return {}; }
