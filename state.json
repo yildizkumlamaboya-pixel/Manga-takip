@@ -3837,7 +3837,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:02Z",
+  "phoneAt": "2026-11-25T16:59:46Z",
   "news": [
    [
     939,
@@ -5515,7 +5515,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:02Z",
+  "phoneAt": "2026-11-25T16:59:46Z",
   "news": [
    [
     397,
@@ -5849,7 +5849,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:03Z",
+  "phoneAt": "2026-11-25T16:59:48Z",
   "news": [
    [
     75,
@@ -6607,7 +6607,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:03Z",
+  "phoneAt": "2026-11-25T16:59:48Z",
   "news": [
    [
     183,
@@ -7001,7 +7001,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:02Z",
+  "phoneAt": "2026-11-25T16:59:46Z",
   "news": [
    [
     87,
@@ -7335,7 +7335,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:04Z"
+  "phoneAt": "2026-11-25T16:59:49Z"
  },
  "https:\/\/golgebahcesi.com\/manga\/tang-klaninin-gunceleri": {
   "title": "Tang Klanının Günceleri",
@@ -7627,7 +7627,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:03Z",
+  "phoneAt": "2026-11-25T16:59:48Z",
   "news": [
    [
     70,
@@ -9061,7 +9061,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:03Z",
+  "phoneAt": "2026-11-25T16:59:48Z",
   "news": [
    [
     348,
@@ -9383,7 +9383,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:04Z"
+  "phoneAt": "2026-11-25T16:59:50Z"
  },
  "https:\/\/uzaymanga.com\/manga\/mutlak-geri-donen": {
   "title": "Mutlak Geri Dönüş",
@@ -9931,7 +9931,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:04Z",
+  "phoneAt": "2026-11-25T16:59:51Z",
   "news": [
    [
     129,
@@ -10861,7 +10861,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:04Z"
+  "phoneAt": "2026-11-25T16:59:49Z"
  },
  "https:\/\/merlintoon.com\/seri\/ragnarin-donusu": {
   "title": "Ragnar",
@@ -11472,7 +11472,7 @@
     "2026-10-12T21:17:55Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/merlintoon.com\/seri\/reenkarne-olcunu": {
   "title": "Reenkarne Ölçünü - Standard of Reincarnation",
@@ -12283,7 +12283,7 @@
     "2026-10-15T16:37:07Z"
    ]
   ],
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  },
  "https:\/\/uzaymanga.com\/manga\/kaderin-zirve-noktasi": {
   "title": "Kaderin Zirve Noktası",
@@ -13303,7 +13303,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:09Z",
+  "phoneAt": "2026-11-25T16:59:52Z",
   "news": [
    [
     250,
@@ -14245,7 +14245,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:08Z",
+  "phoneAt": "2026-11-25T16:59:51Z",
   "news": [
    [
     229,
@@ -14875,7 +14875,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:10Z",
+  "phoneAt": "2026-11-25T16:59:52Z",
   "news": [
    [
     148,
@@ -15173,7 +15173,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:10Z",
+  "phoneAt": "2026-11-25T16:59:53Z",
   "news": [
    [
     68,
@@ -15915,7 +15915,7 @@
   "error": null,
   "errorSince": null,
   "via": "phone",
-  "phoneAt": "2026-11-25T16:44:08Z",
+  "phoneAt": "2026-11-25T16:59:52Z",
   "news": [
    [
     180,
@@ -16566,6 +16566,6 @@
   "errorSince": "2026-11-11T18:46:22.756Z",
   "via": "phone",
   "phoneAt": "2026-11-11T15:43:53Z",
-  "phoneError": "bölüm bulunamadı"
+  "phoneError": "Connection reset"
  }
 }
