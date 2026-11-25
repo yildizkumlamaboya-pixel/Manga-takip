@@ -278,3 +278,218 @@ button.row-btn { width: 100%; background: none; border: 0; color: inherit; font:
 .off-progress .bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s; }
 .off-progress .small-btn, .off-status .small-btn { padding: 8px 12px; font-size: 14px; border: 0; border-radius: 10px; background: var(--panel-2); color: var(--text); white-space: nowrap; }
 .off-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg); border-radius: 12px; padding: 10px 12px; margin: 8px 0; font-size: 14px; }
+
+/* ================================================================
+   Yeni tema — "Gece Rafı": koyu mürekkep zemin, mercan→pembe vurgu,
+   cam kartlar, yumuşak ışık ve dokunma tepkileri
+   ================================================================ */
+:root {
+  --bg: #0f0d16;
+  --panel: #1a1724;
+  --panel-2: #262233;
+  --line: #ffffff12;
+  --text: #f4f1fa;
+  --muted: #9d96ae;
+  --accent: #ff6b4a;
+  --accent-2: #ff3d81;
+  --accent-ink: #1b0b0a;
+  --grad: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  --glow: 0 6px 22px -6px #ff4d6aa6;
+  --ok: #4fd6a2;
+  --radius: 18px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+html { background: var(--bg); }
+body {
+  background:
+    radial-gradient(120% 60% at 100% -10%, #ff3d8126 0%, transparent 55%),
+    radial-gradient(90% 50% at -10% 0%, #7c4dff24 0%, transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Üst şerit */
+.top { background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid transparent; transition: border-color .2s; }
+.top h1 {
+  font-size: 24px; font-weight: 800; letter-spacing: -.4px;
+  background: linear-gradient(90deg, #fff 0%, #ffd2c7 55%, #ff9ab9 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.top .muted.small { font-size: 12.5px; margin-top: 1px; }
+.icon-btn {
+  width: 42px; height: 42px; border-radius: 14px;
+  background: #ffffff0d; border: 1px solid #ffffff14;
+  transition: transform .15s var(--ease), background .2s;
+}
+.icon-btn:active { transform: scale(.9); background: #ffffff1c; }
+.icon-btn.spin { background: #ff6b4a22; border-color: #ff6b4a55; }
+.icon-btn.spin svg { stroke: var(--accent); }
+
+/* Arama */
+.search {
+  background: #ffffff0a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239d96ae' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 14px center / 18px;
+  border: 1px solid #ffffff14; border-radius: 16px; padding: 12px 14px 12px 42px;
+  transition: border-color .2s, background-color .2s;
+}
+.search:focus { outline: none; border-color: #ff6b4a88; background-color: #ffffff12; }
+
+/* Sekmeler */
+.filters { gap: 8px; padding: 4px 2px 14px; margin: 0 -2px 2px; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
+.filters::-webkit-scrollbar { display: none; }
+.chip {
+  border: 1px solid #ffffff17; background: #ffffff08; color: var(--muted);
+  padding: 8px 15px; font-weight: 600; font-size: 14px;
+  transition: background .2s, color .2s, transform .15s var(--ease), box-shadow .2s;
+}
+.chip:active { transform: scale(.95); }
+.chip.active { background: var(--grad); color: #fff; border-color: transparent; box-shadow: var(--glow); }
+.chip.active .n { opacity: .85; }
+.chip .count { background: #fff; color: #d02b58; }
+.chip.active .count { background: #ffffffe6; }
+
+/* Kartlar */
+.list { gap: 12px; }
+.card {
+  position: relative; grid-template-columns: 68px 1fr auto; gap: 14px;
+  background: linear-gradient(160deg, #ffffff0d, #ffffff05); border: 1px solid #ffffff10;
+  border-radius: var(--radius); padding: 10px 14px 10px 10px;
+  box-shadow: 0 10px 30px -18px #000;
+  transition: transform .18s var(--ease), border-color .2s, background .2s;
+  animation: cardIn .35s var(--ease) both;
+}
+.card:active { transform: scale(.975); background: linear-gradient(160deg, #ffffff14, #ffffff08); }
+.list > .card:nth-child(2) { animation-delay: .03s; } .list > .card:nth-child(3) { animation-delay: .06s; }
+.list > .card:nth-child(4) { animation-delay: .09s; } .list > .card:nth-child(5) { animation-delay: .12s; }
+.list > .card:nth-child(n+6) { animation-delay: .15s; }
+@keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.card.has-new { border-color: #ff6b4a40; }
+.card.has-new::before {
+  content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0;
+  background: var(--grad);
+}
+.cover { width: 68px; height: 94px; border-radius: 12px; box-shadow: 0 8px 18px -8px #000c, inset 0 0 0 1px #ffffff1a; }
+.cover img { transition: transform .4s var(--ease); }
+.card h3 { font-size: 15.5px; font-weight: 700; letter-spacing: -.1px; }
+.site { font-size: 11.5px; text-transform: lowercase; color: #b9b1c9; opacity: .8; }
+.meta { font-size: 13px; }
+.prog { height: 4px; margin-top: 8px; border-radius: 4px; background: #ffffff12; overflow: hidden; max-width: 180px; }
+.prog i { display: block; height: 100%; width: calc(var(--p, 0) * 1%); background: var(--grad); border-radius: 4px; transition: width .5s var(--ease); }
+.card.done-all .prog i { background: linear-gradient(90deg, #3fcf98, #7ce6c0); }
+
+/* Rozetler */
+.badge {
+  min-width: 36px; height: 36px; font-size: 15px; font-weight: 800;
+  background: var(--grad); color: #fff; box-shadow: var(--glow);
+}
+.badge.zero {
+  background: #4fd6a214; color: var(--ok); box-shadow: none; font-size: 16px;
+  border: 1px solid #4fd6a233;
+}
+.badge.warn { background: #ff5d6c14; box-shadow: none; }
+
+/* Ekle düğmesi */
+.fab {
+  width: 62px; height: 62px; border-radius: 22px; background: var(--grad); color: #fff;
+  font-size: 0; box-shadow: 0 12px 30px -8px #ff3d81aa, inset 0 1px 0 #ffffff55;
+  transition: transform .2s var(--ease), box-shadow .2s;
+}
+.fab::before, .fab::after { content: ""; position: absolute; left: 50%; top: 50%; width: 24px; height: 3px; border-radius: 2px; background: #fff; transform: translate(-50%, -50%); }
+.fab::after { transform: translate(-50%, -50%) rotate(90deg); }
+.fab:active { transform: scale(.9) rotate(90deg); }
+
+/* Düğmeler */
+button.primary, .btn.primary {
+  background: var(--grad); color: #fff; border-radius: 14px; padding: 12px 20px;
+  box-shadow: var(--glow), inset 0 1px 0 #ffffff40; letter-spacing: .1px;
+  transition: transform .15s var(--ease), filter .2s, box-shadow .2s;
+}
+button.primary:active, .btn.primary:active { transform: scale(.96); filter: brightness(1.08); }
+button.ghost, .btn.ghost {
+  background: #ffffff0d; border: 1px solid #ffffff17; border-radius: 14px; color: var(--text);
+  transition: transform .15s var(--ease), background .2s;
+}
+button.ghost:active, .btn.ghost:active { transform: scale(.96); background: #ffffff1a; }
+button.danger { border-radius: 14px; background: #ff5d6c12; border-color: #ff5d6c66; }
+button.danger:active { transform: scale(.96); }
+.link-btn { color: #c6bfd6; text-decoration: none; border-bottom: 1px dashed #c6bfd666; padding: 2px 0; }
+.news-actions .small-btn, .off-progress .small-btn, .off-status .small-btn { background: #ffffff0d; border: 1px solid #ffffff17; }
+
+/* Alttan açılan pencereler */
+dialog.sheet {
+  border-radius: 28px 28px 0 0; padding-top: 26px;
+  background: linear-gradient(180deg, #1f1b2b 0%, #16131f 100%);
+  border-top: 1px solid #ffffff1a; box-shadow: 0 -20px 60px -20px #000;
+  animation: sheetUp .32s var(--ease);
+}
+dialog.sheet::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 2px; background: #ffffff2e; }
+dialog::backdrop { background: #05040acc; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+@keyframes sheetUp { from { transform: translateY(40px); opacity: .4; } to { transform: none; opacity: 1; } }
+dialog h2 { font-size: 20px; font-weight: 800; letter-spacing: -.3px; }
+input, .list-text { background: #ffffff08; border: 1px solid #ffffff17; border-radius: 14px; }
+input:focus, .list-text:focus { outline: none; border-color: #ff6b4a99; box-shadow: 0 0 0 3px #ff6b4a22; }
+
+/* Seri ayrıntısı */
+.detail-head { grid-template-columns: 64px 1fr; gap: 14px; }
+.detail-head .cover { width: 64px; height: 90px; }
+.detail-head h2 { font-size: 21px; line-height: 1.2; }
+.resume {
+  background: linear-gradient(140deg, #ff6b4a1f, #ff3d8114 60%, #7c4dff12);
+  border: 1px solid #ff6b4a33; border-radius: 20px; padding: 14px;
+}
+.resume-label { color: #ff9a80; letter-spacing: .8px; font-size: 11.5px; }
+.resume .btn.ghost { background: #ffffff10; }
+.shelf { background: #ffffff08; border: 1px solid #ffffff10; border-radius: 16px; padding: 4px; }
+.shelf button { border-radius: 12px; transition: background .2s, color .2s; }
+.shelf button.active { background: #ffffff17; box-shadow: inset 0 1px 0 #ffffff14; }
+.offline, .site-help, .inbox-note, .off-status { background: #ffffff08; border: 1px solid #ffffff10; border-radius: 18px; }
+.offline select, .time-row select, .quiet-row select { background: #ffffff12; border: 1px solid #ffffff17; border-radius: 12px; }
+.chapters { border-top-color: #ffffff10; }
+.chapters li a { padding: 13px 6px; border-bottom-color: #ffffff0b; border-radius: 10px; transition: background .15s; }
+.chapters li a:active { background: #ffffff0d; }
+.chapters li.new a { font-weight: 600; }
+.chapters li.new a::after {
+  content: "YENİ"; font-size: 10.5px; font-weight: 800; letter-spacing: .6px;
+  color: #fff; background: var(--grad); padding: 3px 8px; border-radius: 999px; align-self: center;
+}
+.off-progress .bar { height: 8px; border-radius: 4px; background: #ffffff12; }
+.off-progress .bar span { background: var(--grad); border-radius: 4px; }
+
+/* Bildirimler */
+.news-item { background: linear-gradient(160deg, #ffffff0c, #ffffff04); border: 1px solid #ffffff10; border-radius: 16px; padding: 9px 12px 9px 9px; transition: transform .15s var(--ease); }
+.news-item:active { transform: scale(.98); }
+.news-item .dot { background: var(--accent-2); box-shadow: 0 0 10px var(--accent-2); }
+.news-day { color: #b9b1c9; }
+
+/* Ayarlar */
+.set-title { color: #b9b1c9; letter-spacing: .9px; font-size: 11.5px; }
+.set-card { background: #ffffff08; border: 1px solid #ffffff10; border-radius: 20px; }
+.set-card > :not([hidden]) ~ :not([hidden]) { border-top-color: #ffffff0d; }
+.set-row { min-height: 58px; }
+.switch { background: #ffffff1f; width: 50px; height: 30px; border-radius: 15px; box-shadow: inset 0 0 0 1px #ffffff14; }
+input.switch { width: 50px; height: 30px; }
+.switch::after { width: 24px; height: 24px; box-shadow: 0 2px 6px #0006; transition: transform .25s var(--ease); }
+.switch:checked { background: var(--grad); box-shadow: var(--glow); }
+.switch:checked::after { transform: translateX(20px); }
+.switch:focus { outline: none; }
+.off-list, .import-list { background: #ffffff08; border: 1px solid #ffffff10; border-radius: 18px; }
+
+/* Bildirim kutusu (toast) */
+.toast {
+  background: #2a2438f2; color: var(--text); border: 1px solid #ffffff1c; border-radius: 16px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font-weight: 600;
+  animation: toastIn .3s var(--ease);
+}
+@keyframes toastIn { from { transform: translate(-50%, 10px); opacity: 0; } to { transform: translateX(-50%); opacity: 1; } }
+
+.empty { color: #b9b1c9; line-height: 1.6; }
+.banner { background: linear-gradient(140deg, #7c4dff1f, #ff3d8114); border: 1px solid #ffffff14; border-radius: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+.switch:focus, input.switch:focus { border-color: transparent; box-shadow: inset 0 0 0 1px #ffffff14; }
+.switch:checked:focus, input.switch:checked:focus { box-shadow: var(--glow); }
+button:focus:not(:focus-visible), .chip:focus:not(:focus-visible) { outline: none; }
+.fab:focus { outline: none; }

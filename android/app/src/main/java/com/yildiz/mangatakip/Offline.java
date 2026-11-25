@@ -411,31 +411,50 @@ final class Offline {
      * Sonuç şüpheliyse (çok az resim, çok hata) false döner, sayfa olarak kaydedilir.
      */
     private static boolean saveImages(Context ctx, String series, double num, String url, File tmp, JSONObject idx) throws Exception {
-        // Önce hafif yol: sayfayı düz indirip resim adreslerini oradan bul; olmazsa görünmez tarayıcı
-        List<String> imgs = pickImages(grabFast(ctx, url));
-        if (imgs.size() < 3) imgs = pickImages(grab(ctx, url, 45000));
-        if (imgs.size() < 3) return false;
+        // Önce hafif yol: sayfayı düz indirip resim adreslerini oradan bul
+        ImagePick.Result fast = grabFastResult(ctx, url);
+        if (fast.urls.size() >= 3 && fetchImages(ctx, series, num, url, fast.urls, tmp, idx)) return true;
+        if (fast.trusted && fast.urls.size() >= 3) return false; // sitenin kendi listesi bile inmediyse sayfa olarak kaydet
+        // Düz sayfada bölüm resimleri yoktu (sonradan yükleniyor) ya da çıkanlar ikondu: görünmez tarayıcıyla bak
+        for (File old : tmp.listFiles() == null ? new File[0] : tmp.listFiles()) delete(old);
+        List<String> imgs = grab(ctx, url, 45000);
+        if (imgs.size() < 3 || imgs.equals(fast.urls)) return false;
+        return fetchImages(ctx, series, num, url, imgs, tmp, idx);
+    }
+
+    /** Listeyi indirir ve denetler; bölüm olarak güvenilir değilse false. */
+    private static boolean fetchImages(Context ctx, String series, double num, String url, List<String> imgs,
+                                       File tmp, JSONObject idx) throws Exception {
+        imgDone = 0;
         imgTotal = imgs.size();
         String ua = WebSettings.getDefaultUserAgent(ctx);
-        JSONArray names = new JSONArray();
+        List<String> names = new ArrayList<>();
+        List<int[]> sizes = new ArrayList<>();
         int failed = 0;
         for (int i = 0; i < imgs.size(); i++) {
             if (paused(ctx)) throw new IOException("duraklatıldı");
             try {
                 String name = download(ctx, imgs.get(i), url, ua, tmp, i);
                 int[] wh = imageSize(new File(tmp, name));
-                // Bölüm sayfası olamayacak kadar küçük resimleri (ikon, reklam) at
-                if (wh != null && (wh[0] < 250 || wh[1] < 120)) new File(tmp, name).delete();
-                else names.put(baseUrl(series, num) + name);
+                // Bölüm sayfası olamayacak resimleri (ikon, tepki, reklam) at
+                if (wh != null && ImagePick.tooSmall(wh[0], wh[1])) new File(tmp, name).delete();
+                else { names.add(name); sizes.add(wh); }
             } catch (IOException e) {
                 failed++;
             }
             imgDone = i + 1;
             SystemClock.sleep(60); // ağı ve işlemciyi tek seferde boğmamak için
         }
+        // Diğerlerinden çok dar olanlar araya karışmış kapak/ikondur
+        List<Integer> bad = ImagePick.outliers(sizes);
+        JSONArray keep = new JSONArray();
+        for (int i = 0; i < names.size(); i++) {
+            if (bad.contains(i)) new File(tmp, names.get(i)).delete();
+            else keep.put(baseUrl(series, num) + names.get(i));
+        }
         // Resimlerin %15'inden fazlası inmediyse ya da 3'ten az geçerli resim kaldıysa güvenme
-        if (names.length() < 3 || failed > Math.max(1, imgs.size() * 0.15)) return false;
-        idx.put("images", names);
+        if (keep.length() < 3 || failed > Math.max(1, imgs.size() * 0.15)) return false;
+        idx.put("images", keep);
         return true;
     }
 
@@ -581,17 +600,21 @@ final class Offline {
         + "y+=innerHeight;scrollTo(0,y);if(y>document.documentElement.scrollHeight+innerHeight){clearInterval(t);window.__mtGrab=2;}},250);})()";
 
     private static final String COLLECT_JS =
-        "(function(){if(window.__mtGrab!==2)return '';var out=[];document.querySelectorAll('img').forEach(function(i){"
-        + "var c=[i.getAttribute('data-src'),i.getAttribute('data-lazy-src'),i.getAttribute('data-original'),i.currentSrc,i.getAttribute('src')];"
+        "(function(){if(window.__mtGrab!==2)return '';"
+        + "var sel='#readerarea img,.reading-content img,img.wp-manga-chapter-img,img.ts-main-image,#chapter-reader img,#chapter_imgs img,"
+        + "#chapter-images img,.chapter-images img,.reader-area img,.page-break img,#chapterContent img,.chapter-content img,"
+        + ".container-chapter-reader img,#vungdoc img,.vung-doc img,#reader img,.reader-main img,.chapter-container img';"
+        + "var list=document.querySelectorAll(sel);var area=list.length>=3;if(!area)list=document.querySelectorAll('img');var out=[];"
+        + "[].forEach.call(list,function(i){"
+        + "var c=[i.getAttribute('data-src'),i.getAttribute('data-lazy-src'),i.getAttribute('data-original'),i.getAttribute('data-cfsrc'),i.currentSrc,i.getAttribute('src')];"
         + "for(var k=0;k<c.length;k++){var v=c[k];if(v&&v.trim()&&v.indexOf('data:')!==0){try{out.push(new URL(v.trim(),location.href).href);}catch(e){}break;}}});"
-        + "return JSON.stringify(out);})()";
-
-    private static final java.util.regex.Pattern IMG_TAG = java.util.regex.Pattern.compile("<img\\b[^>]*>", java.util.regex.Pattern.CASE_INSENSITIVE);
-    private static final String[] IMG_ATTRS = {"data-src", "data-lazy-src", "data-original", "data-url", "src"};
+        + "return JSON.stringify({area:area,urls:out});})()";
 
     /** Bölüm sayfasını düz HTTP ile indirip <img> adreslerini çıkarır (tarayıcı açmadan). */
-    static List<String> grabFast(Context ctx, String url) {
-        List<String> out = new ArrayList<>();
+    static List<String> grabFast(Context ctx, String url) { return grabFastResult(ctx, url).urls; }
+
+    static ImagePick.Result grabFastResult(Context ctx, String url) {
+        ImagePick.Result out = new ImagePick.Result(new ArrayList<>(), false);
         try {
             HttpURLConnection c = Net.open(ctx, url);
             try {
@@ -605,22 +628,7 @@ final class Offline {
                 if (cookie != null) c.setRequestProperty("Cookie", cookie);
                 if (c.getResponseCode() != 200) return out;
                 String html = Net.readAll(c.getInputStream());
-                java.net.URL base = new java.net.URL(url);
-                java.util.regex.Matcher m = IMG_TAG.matcher(html);
-                while (m.find()) {
-                    String tag = m.group();
-                    for (String a : IMG_ATTRS) {
-                        java.util.regex.Matcher v = java.util.regex.Pattern.compile("\\s" + a + "\\s*=\\s*[\"']([^\"']+)[\"']",
-                            java.util.regex.Pattern.CASE_INSENSITIVE).matcher(tag);
-                        if (v.find()) {
-                            String src = v.group(1).trim().replace("&amp;", "&");
-                            if (!src.isEmpty() && !src.startsWith("data:")) {
-                                try { out.add(new java.net.URL(base, src).toString()); } catch (Exception ignored) { }
-                                break;
-                            }
-                        }
-                    }
-                }
+                out = ImagePick.fromHtml(html, url);
             } finally {
                 c.disconnect();
             }
@@ -680,10 +688,13 @@ final class Offline {
                         w.evaluateJavascript(COLLECT_JS, v -> {
                             String json;
                             try { json = new JSONArray("[" + v + "]").getString(0); } catch (Exception e) { json = ""; }
-                            if (json.startsWith("[")) {
+                            if (json.startsWith("{")) {
                                 try {
-                                    JSONArray a = new JSONArray(json);
-                                    for (int i = 0; i < a.length(); i++) out.add(a.getString(i));
+                                    JSONObject r = new JSONObject(json);
+                                    JSONArray a = r.getJSONArray("urls");
+                                    List<String> raw = new ArrayList<>();
+                                    for (int i = 0; i < a.length(); i++) raw.add(a.getString(i));
+                                    out.addAll(ImagePick.clean(raw, r.optBoolean("area")));
                                 } catch (Exception ignored) { }
                                 done.countDown();
                             } else {
@@ -700,32 +711,6 @@ final class Offline {
         try { done.await(timeoutMs + 8000, TimeUnit.MILLISECONDS); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
         main.post(() -> { if (holder[0] != null) { holder[0].stopLoading(); holder[0].destroy(); } });
         return out;
-    }
-
-    private static final String[] SKIP = {"logo", "avatar", "icon", "favicon", "banner", "/ads", "reklam", "emoji",
-        "gravatar", "/themes/", "thumb", "cover", "loading", "spinner", "placeholder", "button", "sponsor"};
-
-    /**
-     * Sayfadaki resimlerden bölüm sayfalarını seçer: aynı klasörde en çok resmi olan grup
-     * (bölüm resimleri genelde aynı yerdedir), sayfadaki sırasıyla.
-     */
-    static List<String> pickImages(List<String> all) {
-        Map<String, List<String>> groups = new LinkedHashMap<>();
-        for (String u : new LinkedHashSet<>(all)) {
-            String low = u.toLowerCase(Locale.ROOT);
-            if (!low.startsWith("http")) continue;
-            boolean skip = false;
-            for (String k : SKIP) if (low.contains(k)) { skip = true; break; }
-            if (skip) continue;
-            String path = low.split("[?#]")[0];
-            if (!path.matches(".*\\.(jpe?g|png|webp|avif|gif)$") && !low.contains("image")) continue;
-            String dir = u.split("[?#]")[0];
-            dir = dir.substring(0, dir.lastIndexOf('/') + 1);
-            groups.computeIfAbsent(dir, d -> new ArrayList<>()).add(u);
-        }
-        List<String> best = new ArrayList<>();
-        for (List<String> g : groups.values()) if (g.size() > best.size()) best = g;
-        return best;
     }
 
     /* ---------------- Yardımcılar ---------------- */

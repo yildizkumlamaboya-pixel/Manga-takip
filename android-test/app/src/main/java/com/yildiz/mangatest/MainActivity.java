@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(Color.parseColor("#14121a"));
+        root.setBackgroundColor(Color.parseColor("#0f0d16"));
         int pad = dp(16);
         root.setPadding(pad, dp(32), pad, pad);
 

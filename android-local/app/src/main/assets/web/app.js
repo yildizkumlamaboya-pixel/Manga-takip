@@ -54,7 +54,9 @@ function toast(msg, ms = 3000) {
 }
 
 function ago(iso) {
-  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  const t = /^\d+$/.test(String(iso)) ? Number(iso) : new Date(iso).getTime();
+  if (!Number.isFinite(t)) return '';
+  const m = Math.round((Date.now() - t) / 60000);
   if (m < 1) return 'az önce';
   if (m < 60) return `${m} dk önce`;
   const h = Math.round(m / 60);
@@ -108,6 +110,7 @@ function render() {
           <div class="site"></div>
           <h3></h3>
           <div class="meta"></div>
+          <div class="prog" hidden><i></i></div>
           <div class="err-line" hidden></div>
         </div>
         <div class="badge"></div>`;
@@ -125,6 +128,16 @@ function render() {
       else if (r.shelf === 'inbox') { b.textContent = '📥'; b.classList.add('zero'); }
       else if (r.unread) b.textContent = r.unread;
       else { b.textContent = '✓'; b.classList.add('zero'); }
+      // Okuma ilerlemesi: kaldığın bölüm / son bölüm
+      const latest = Number(r.st?.latest), read = Number(r.base);
+      if (r.shelf !== 'inbox' && Number.isFinite(latest) && latest > 0 && Number.isFinite(read)) {
+        const p = Math.max(2, Math.min(100, Math.round((read / latest) * 100)));
+        const bar = li.querySelector('.prog');
+        bar.hidden = false;
+        bar.style.setProperty('--p', p);
+        li.classList.toggle('done-all', p >= 100);
+      }
+      li.classList.toggle('has-new', r.unread > 0 && r.shelf !== 'inbox');
       li.onclick = () => openSeries(r.url);
       return li;
     }),
@@ -949,7 +962,10 @@ function renderOffDetails() {
       btn.onclick = () => { NATIVE.clearOfflineOthers(JSON.stringify(urls)); setTimeout(renderOffDetails, 500); };
       return li;
     }
-    const v = view(list.find((i) => i.url === r.url));
+    const item = list.find((i) => i.url === r.url);
+    if (!item) { li.remove(); return li; }
+    if (!Array.isArray(r.nums)) r.nums = [];
+    const v = view(item);
     setCover(li.querySelector('.cover'), v.st?.cover, v.title);
     li.querySelector('b').textContent = v.title;
     li.querySelector('small').textContent = `${r.nums.length} bölüm · ${mb(r.size)}` + (r.busy ? ' · indiriliyor…' : '');
